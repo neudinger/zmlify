@@ -1,0 +1,1274 @@
+{
+  "lockFileVersion": 24,
+  "registryFileHashes": {
+    "https://bcr.bazel.build/bazel_registry.json": "8a28e4aff06ee60aed2a8c281907fb8bcbf3b753c91fb5a5c57da3215d5b3497",
+    "https://bcr.bazel.build/modules/abseil-cpp/20210324.2/MODULE.bazel": "7cd0312e064fde87c8d1cd79ba06c876bd23630c83466e9500321be55c96ace2",
+    "https://bcr.bazel.build/modules/abseil-cpp/20211102.0/MODULE.bazel": "70390338f7a5106231d20620712f7cccb659cd0e9d073d1991c038eb9fc57589",
+    "https://bcr.bazel.build/modules/abseil-cpp/20230125.1/MODULE.bazel": "89047429cb0207707b2dface14ba7f8df85273d484c2572755be4bab7ce9c3a0",
+    "https://bcr.bazel.build/modules/abseil-cpp/20230802.0.bcr.1/MODULE.bazel": "1c8cec495288dccd14fdae6e3f95f772c1c91857047a098fad772034264cc8cb",
+    "https://bcr.bazel.build/modules/abseil-cpp/20230802.0/MODULE.bazel": "d253ae36a8bd9ee3c5955384096ccb6baf16a1b1e93e858370da0a3b94f77c16",
+    "https://bcr.bazel.build/modules/abseil-cpp/20230802.1/MODULE.bazel": "fa92e2eb41a04df73cdabeec37107316f7e5272650f81d6cc096418fe647b915",
+    "https://bcr.bazel.build/modules/abseil-cpp/20240116.1/MODULE.bazel": "37bcdb4440fbb61df6a1c296ae01b327f19e9bb521f9b8e26ec854b6f97309ed",
+    "https://bcr.bazel.build/modules/abseil-cpp/20240116.2/MODULE.bazel": "73939767a4686cd9a520d16af5ab440071ed75cec1a876bf2fcfaf1f71987a16",
+    "https://bcr.bazel.build/modules/abseil-cpp/20250127.1/MODULE.bazel": "c4a89e7ceb9bf1e25cf84a9f830ff6b817b72874088bf5141b314726e46a57c1",
+    "https://bcr.bazel.build/modules/abseil-cpp/20250512.1/MODULE.bazel": "d209fdb6f36ffaf61c509fcc81b19e81b411a999a934a032e10cd009a0226215",
+    "https://bcr.bazel.build/modules/abseil-cpp/20260107.1/MODULE.bazel": "e33b3801443f5fd64465262084534115db76363df13d2168a42bbfacc747be81",
+    "https://bcr.bazel.build/modules/abseil-cpp/20260107.1/source.json": "7a9a88969b1e79268cf613728ca8ff8fa4bc4b1a9abee9ec1fb5f113ca751971",
+    "https://bcr.bazel.build/modules/apple_support/1.11.1/MODULE.bazel": "1843d7cd8a58369a444fc6000e7304425fba600ff641592161d9f15b179fb896",
+    "https://bcr.bazel.build/modules/apple_support/1.15.1/MODULE.bazel": "a0556fefca0b1bb2de8567b8827518f94db6a6e7e7d632b4c48dc5f865bc7c85",
+    "https://bcr.bazel.build/modules/apple_support/1.23.0/MODULE.bazel": "317d47e3f65b580e7fb4221c160797fda48e32f07d2dfff63d754ef2316dcd25",
+    "https://bcr.bazel.build/modules/apple_support/1.23.1/MODULE.bazel": "53763fed456a968cf919b3240427cf3a9d5481ec5466abc9d5dc51bc70087442",
+    "https://bcr.bazel.build/modules/apple_support/1.24.1/MODULE.bazel": "f46e8ddad60aef170ee92b2f3d00ef66c147ceafea68b6877cb45bd91737f5f8",
+    "https://bcr.bazel.build/modules/apple_support/2.2.0/MODULE.bazel": "5e32bc42e413a4544df7afee7fa4c7aff73e670a44e56e8e45ce1954332034ad",
+    "https://bcr.bazel.build/modules/apple_support/2.2.0/source.json": "368bf1de5dace2a411e792e6df2ea5384eb8db3899680ed51b37eb48b88fd8ac",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.14.0/MODULE.bazel": "2b31ffcc9bdc8295b2167e07a757dbbc9ac8906e7028e5170a3708cecaac119f",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.19.3/MODULE.bazel": "253d739ba126f62a5767d832765b12b59e9f8d2bc88cc1572f4a73e46eb298ca",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.21.2/MODULE.bazel": "276347663a25b0d5bd6cad869252bea3e160c4d980e764b15f3bae7f80b30624",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.22.5/MODULE.bazel": "004ba890363d05372a97248c37205ae64b6fa31047629cd2c0895a9d0c7779e8",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.22.5/source.json": "ac2c3213df8f985785f1d0aeb7f0f73d5324e6e67d593d9b9470fb74a25d4a9b",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.2/MODULE.bazel": "780d1a6522b28f5edb7ea09630748720721dfe27690d65a2d33aa7509de77e07",
+    "https://bcr.bazel.build/modules/aspect_bazel_lib/2.8.1/MODULE.bazel": "812d2dd42f65dca362152101fbec418029cc8fd34cbad1a2fde905383d705838",
+    "https://bcr.bazel.build/modules/aspect_rules_py/1.8.4/MODULE.bazel": "4ab4a78e9d65cf15e755807f7ae504655e1771cefd7c3343ad34dbbb625b9564",
+    "https://bcr.bazel.build/modules/aspect_rules_py/1.8.4/source.json": "7cd80ad811f0c2b3aad3c878506ae602fce2fe53b78487ecfbcc8bcde07d220e",
+    "https://bcr.bazel.build/modules/aspect_tools_telemetry/0.3.2/MODULE.bazel": "598e7fe3b54f5fa64fdbeead1027653963a359cc23561d43680006f3b463d5a4",
+    "https://bcr.bazel.build/modules/aspect_tools_telemetry/0.3.3/MODULE.bazel": "37c764292861c2f70314efa9846bb6dbb44fc0308903b3285da6528305450183",
+    "https://bcr.bazel.build/modules/aspect_tools_telemetry/0.3.3/source.json": "605086bbc197743a0d360f7ddc550a1d4dfa0441bc807236e17170f636153348",
+    "https://bcr.bazel.build/modules/bazel_features/1.1.1/MODULE.bazel": "27b8c79ef57efe08efccbd9dd6ef70d61b4798320b8d3c134fd571f78963dbcd",
+    "https://bcr.bazel.build/modules/bazel_features/1.10.0/MODULE.bazel": "f75e8807570484a99be90abcd52b5e1f390362c258bcb73106f4544957a48101",
+    "https://bcr.bazel.build/modules/bazel_features/1.11.0/MODULE.bazel": "f9382337dd5a474c3b7d334c2f83e50b6eaedc284253334cf823044a26de03e8",
+    "https://bcr.bazel.build/modules/bazel_features/1.15.0/MODULE.bazel": "d38ff6e517149dc509406aca0db3ad1efdd890a85e049585b7234d04238e2a4d",
+    "https://bcr.bazel.build/modules/bazel_features/1.17.0/MODULE.bazel": "039de32d21b816b47bd42c778e0454217e9c9caac4a3cf8e15c7231ee3ddee4d",
+    "https://bcr.bazel.build/modules/bazel_features/1.18.0/MODULE.bazel": "1be0ae2557ab3a72a57aeb31b29be347bcdc5d2b1eb1e70f39e3851a7e97041a",
+    "https://bcr.bazel.build/modules/bazel_features/1.19.0/MODULE.bazel": "59adcdf28230d220f0067b1f435b8537dd033bfff8db21335ef9217919c7fb58",
+    "https://bcr.bazel.build/modules/bazel_features/1.20.0/MODULE.bazel": "8b85300b9c8594752e0721a37210e34879d23adc219ed9dc8f4104a4a1750920",
+    "https://bcr.bazel.build/modules/bazel_features/1.21.0/MODULE.bazel": "675642261665d8eea09989aa3b8afb5c37627f1be178382c320d1b46afba5e3b",
+    "https://bcr.bazel.build/modules/bazel_features/1.24.0/MODULE.bazel": "4796b4c25b47053e9bbffa792b3792d07e228ff66cd0405faef56a978708acd4",
+    "https://bcr.bazel.build/modules/bazel_features/1.27.0/MODULE.bazel": "621eeee06c4458a9121d1f104efb80f39d34deff4984e778359c60eaf1a8cb65",
+    "https://bcr.bazel.build/modules/bazel_features/1.28.0/MODULE.bazel": "4b4200e6cbf8fa335b2c3f43e1d6ef3e240319c33d43d60cc0fbd4b87ece299d",
+    "https://bcr.bazel.build/modules/bazel_features/1.3.0/MODULE.bazel": "cdcafe83ec318cda34e02948e81d790aab8df7a929cec6f6969f13a489ccecd9",
+    "https://bcr.bazel.build/modules/bazel_features/1.30.0/MODULE.bazel": "a14b62d05969a293b80257e72e597c2da7f717e1e69fa8b339703ed6731bec87",
+    "https://bcr.bazel.build/modules/bazel_features/1.32.0/MODULE.bazel": "095d67022a58cb20f7e20e1aefecfa65257a222c18a938e2914fd257b5f1ccdc",
+    "https://bcr.bazel.build/modules/bazel_features/1.33.0/MODULE.bazel": "8b8dc9d2a4c88609409c3191165bccec0e4cb044cd7a72ccbe826583303459f6",
+    "https://bcr.bazel.build/modules/bazel_features/1.34.0/MODULE.bazel": "e8475ad7c8965542e0c7aac8af68eb48c4af904be3d614b6aa6274c092c2ea1e",
+    "https://bcr.bazel.build/modules/bazel_features/1.38.0/MODULE.bazel": "f9b8a9c890ebd216b4049fd12a31d3c2602e3403c7af636b04fbbd7453edc9c9",
+    "https://bcr.bazel.build/modules/bazel_features/1.38.0/source.json": "31ba776c122b54a2885e23651642e32f087a87bf025465f8040751894b571277",
+    "https://bcr.bazel.build/modules/bazel_features/1.4.1/MODULE.bazel": "e45b6bb2350aff3e442ae1111c555e27eac1d915e77775f6fdc4b351b758b5d7",
+    "https://bcr.bazel.build/modules/bazel_features/1.9.0/MODULE.bazel": "885151d58d90d8d9c811eb75e3288c11f850e1d6b481a8c9f766adee4712358b",
+    "https://bcr.bazel.build/modules/bazel_features/1.9.1/MODULE.bazel": "8f679097876a9b609ad1f60249c49d68bfab783dd9be012faf9d82547b14815a",
+    "https://bcr.bazel.build/modules/bazel_lib/3.0.0-beta.1/MODULE.bazel": "407729e232f611c3270005b016b437005daa7b1505826798ea584169a476e878",
+    "https://bcr.bazel.build/modules/bazel_lib/3.0.0-rc.0/MODULE.bazel": "d6e00979a98ac14ada5e31c8794708b41434d461e7e7ca39b59b765e6d233b18",
+    "https://bcr.bazel.build/modules/bazel_lib/3.0.0/MODULE.bazel": "22b70b80ac89ad3f3772526cd9feee2fa412c2b01933fea7ed13238a448d370d",
+    "https://bcr.bazel.build/modules/bazel_lib/3.2.0/MODULE.bazel": "39b50d94b9be6bda507862254e20c263f9b950e3160112348d10a938be9ce2c2",
+    "https://bcr.bazel.build/modules/bazel_lib/3.2.0/source.json": "a6f45a903134bebbf33a6166dd42b4c7ab45169de094b37a85f348ca41170a84",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.0.3/MODULE.bazel": "bcb0fd896384802d1ad283b4e4eb4d718eebd8cb820b0a2c3a347fb971afd9d8",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.1.1/MODULE.bazel": "1add3e7d93ff2e6998f9e118022c84d163917d912f5afafb3058e3d2f1545b5e",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.2.0/MODULE.bazel": "44fe84260e454ed94ad326352a698422dbe372b21a1ac9f3eab76eb531223686",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.2.1/MODULE.bazel": "f35baf9da0efe45fa3da1696ae906eea3d615ad41e2e3def4aeb4e8bc0ef9a7a",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.3.0/MODULE.bazel": "20228b92868bf5cfc41bda7afc8a8ba2a543201851de39d990ec957b513579c5",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.4.1/MODULE.bazel": "a0dcb779424be33100dcae821e9e27e4f2901d9dfd5333efe5ac6a8d7ab75e1d",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.4.2/MODULE.bazel": "3bd40978e7a1fac911d5989e6b09d8f64921865a45822d8b09e815eaa726a651",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.5.0/MODULE.bazel": "32880f5e2945ce6a03d1fbd588e9198c0a959bb42297b2cfaf1685b7bc32e138",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.6.1/MODULE.bazel": "8fdee2dbaace6c252131c00e1de4b165dc65af02ea278476187765e1a617b917",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.7.0/MODULE.bazel": "0db596f4563de7938de764cc8deeabec291f55e8ec15299718b93c4423e9796d",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.7.1/MODULE.bazel": "3120d80c5861aa616222ec015332e5f8d3171e062e3e804a2a0253e1be26e59b",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.8.1/MODULE.bazel": "88ade7293becda963e0e3ea33e7d54d3425127e0a326e0d17da085a5f1f03ff6",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.8.2/MODULE.bazel": "69ad6927098316848b34a9142bcc975e018ba27f08c4ff403f50c1b6e646ca67",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/MODULE.bazel": "72997b29dfd95c3fa0d0c48322d05590418edef451f8db8db5509c57875fb4b7",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/source.json": "7ad77c1e8c1b84222d9b3f3cae016a76639435744c19330b0b37c0a3c9da7dc0",
+    "https://bcr.bazel.build/modules/buildozer/7.1.2/MODULE.bazel": "2e8dd40ede9c454042645fd8d8d0cd1527966aa5c919de86661e62953cd73d84",
+    "https://bcr.bazel.build/modules/buildozer/7.1.2/source.json": "c9028a501d2db85793a6996205c8de120944f50a0d570438fcae0457a5f9d1f8",
+    "https://bcr.bazel.build/modules/gawk/5.3.2.bcr.1/MODULE.bazel": "cdf8cbe5ee750db04b78878c9633cc76e80dcf4416cbe982ac3a9222f80713c8",
+    "https://bcr.bazel.build/modules/gawk/5.3.2.bcr.3/MODULE.bazel": "f1b7bb2dd53e8f2ef984b39485ec8a44e9076dda5c4b8efd2fb4c6a6e856a31d",
+    "https://bcr.bazel.build/modules/gawk/5.3.2.bcr.3/source.json": "ebe931bfe362e4b41e59ee00a528db6074157ff2ced92eb9e970acab2e1089c9",
+    "https://bcr.bazel.build/modules/google_benchmark/1.8.2/MODULE.bazel": "a70cf1bba851000ba93b58ae2f6d76490a9feb74192e57ab8e8ff13c34ec50cb",
+    "https://bcr.bazel.build/modules/googletest/1.11.0/MODULE.bazel": "3a83f095183f66345ca86aa13c58b59f9f94a2f81999c093d4eeaa2d262d12f4",
+    "https://bcr.bazel.build/modules/googletest/1.14.0.bcr.1/MODULE.bazel": "22c31a561553727960057361aa33bf20fb2e98584bc4fec007906e27053f80c6",
+    "https://bcr.bazel.build/modules/googletest/1.14.0/MODULE.bazel": "cfbcbf3e6eac06ef9d85900f64424708cc08687d1b527f0ef65aa7517af8118f",
+    "https://bcr.bazel.build/modules/googletest/1.15.2/MODULE.bazel": "6de1edc1d26cafb0ea1a6ab3f4d4192d91a312fd2d360b63adaa213cd00b2108",
+    "https://bcr.bazel.build/modules/googletest/1.17.0/MODULE.bazel": "dbec758171594a705933a29fcf69293d2468c49ec1f2ebca65c36f504d72df46",
+    "https://bcr.bazel.build/modules/googletest/1.17.0/source.json": "38e4454b25fc30f15439c0378e57909ab1fd0a443158aa35aec685da727cd713",
+    "https://bcr.bazel.build/modules/jq.bzl/0.1.0/MODULE.bazel": "2ce69b1af49952cd4121a9c3055faa679e748ce774c7f1fda9657f936cae902f",
+    "https://bcr.bazel.build/modules/jq.bzl/0.1.0/source.json": "746bf13cac0860f091df5e4911d0c593971cd8796b5ad4e809b2f8e133eee3d5",
+    "https://bcr.bazel.build/modules/jsoncpp/1.9.5/MODULE.bazel": "31271aedc59e815656f5736f282bb7509a97c7ecb43e927ac1a37966e0578075",
+    "https://bcr.bazel.build/modules/jsoncpp/1.9.6/MODULE.bazel": "2f8d20d3b7d54143213c4dfc3d98225c42de7d666011528dc8fe91591e2e17b0",
+    "https://bcr.bazel.build/modules/jsoncpp/1.9.6/source.json": "a04756d367a2126c3541682864ecec52f92cdee80a35735a3cb249ce015ca000",
+    "https://bcr.bazel.build/modules/libpfm/4.11.0/MODULE.bazel": "45061ff025b301940f1e30d2c16bea596c25b176c8b6b3087e92615adbd52902",
+    "https://bcr.bazel.build/modules/nlohmann_json/3.6.1/MODULE.bazel": "6f7b417dcc794d9add9e556673ad25cb3ba835224290f4f848f8e2db1e1fca74",
+    "https://bcr.bazel.build/modules/nlohmann_json/3.6.1/source.json": "f448c6e8963fdfa7eb831457df83ad63d3d6355018f6574fb017e8169deb43a9",
+    "https://bcr.bazel.build/modules/package_metadata/0.0.2/MODULE.bazel": "fb8d25550742674d63d7b250063d4580ca530499f045d70748b1b142081ebb92",
+    "https://bcr.bazel.build/modules/package_metadata/0.0.5/MODULE.bazel": "ef4f9439e3270fdd6b9fd4dbc3d2f29d13888e44c529a1b243f7a31dfbc2e8e4",
+    "https://bcr.bazel.build/modules/package_metadata/0.0.5/source.json": "2326db2f6592578177751c3e1f74786b79382cd6008834c9d01ec865b9126a85",
+    "https://bcr.bazel.build/modules/patchelf/0.18.0.bcr.1/MODULE.bazel": "35320668481400503dea7c75313473b9ffd6dea4e7ba583b96a896199b0088d5",
+    "https://bcr.bazel.build/modules/patchelf/0.18.0.bcr.1/source.json": "d877d271ef5d531407885322054c99c7f0617a9a85ff99c0a70f4ced7f13e13a",
+    "https://bcr.bazel.build/modules/pcre2/10.45/MODULE.bazel": "9bdc838aa2e21be030d7181385e45a5c87b14575bb7ff35d10b5be3d56913bed",
+    "https://bcr.bazel.build/modules/pcre2/10.45/source.json": "c0b10fd1afbfc978aad9a83e84533880b6c533026fa930d73bb95df34291bc4b",
+    "https://bcr.bazel.build/modules/platforms/0.0.10/MODULE.bazel": "8cb8efaf200bdeb2150d93e162c40f388529a25852b332cec879373771e48ed5",
+    "https://bcr.bazel.build/modules/platforms/0.0.11/MODULE.bazel": "0daefc49732e227caa8bfa834d65dc52e8cc18a2faf80df25e8caea151a9413f",
+    "https://bcr.bazel.build/modules/platforms/0.0.4/MODULE.bazel": "9b328e31ee156f53f3c416a64f8491f7eb731742655a47c9eec4703a71644aee",
+    "https://bcr.bazel.build/modules/platforms/0.0.5/MODULE.bazel": "5733b54ea419d5eaf7997054bb55f6a1d0b5ff8aedf0176fef9eea44f3acda37",
+    "https://bcr.bazel.build/modules/platforms/0.0.6/MODULE.bazel": "ad6eeef431dc52aefd2d77ed20a4b353f8ebf0f4ecdd26a807d2da5aa8cd0615",
+    "https://bcr.bazel.build/modules/platforms/0.0.7/MODULE.bazel": "72fd4a0ede9ee5c021f6a8dd92b503e089f46c227ba2813ff183b71616034814",
+    "https://bcr.bazel.build/modules/platforms/0.0.8/MODULE.bazel": "9f142c03e348f6d263719f5074b21ef3adf0b139ee4c5133e2aa35664da9eb2d",
+    "https://bcr.bazel.build/modules/platforms/0.0.9/MODULE.bazel": "4a87a60c927b56ddd67db50c89acaa62f4ce2a1d2149ccb63ffd871d5ce29ebc",
+    "https://bcr.bazel.build/modules/platforms/1.0.0/MODULE.bazel": "f05feb42b48f1b3c225e4ccf351f367be0371411a803198ec34a389fb22aa580",
+    "https://bcr.bazel.build/modules/platforms/1.0.0/source.json": "f4ff1fd412e0246fd38c82328eb209130ead81d62dcd5a9e40910f867f733d96",
+    "https://bcr.bazel.build/modules/protobuf/21.7/MODULE.bazel": "a5a29bb89544f9b97edce05642fac225a808b5b7be74038ea3640fae2f8e66a7",
+    "https://bcr.bazel.build/modules/protobuf/27.0/MODULE.bazel": "7873b60be88844a0a1d8f80b9d5d20cfbd8495a689b8763e76c6372998d3f64c",
+    "https://bcr.bazel.build/modules/protobuf/27.1/MODULE.bazel": "703a7b614728bb06647f965264967a8ef1c39e09e8f167b3ca0bb1fd80449c0d",
+    "https://bcr.bazel.build/modules/protobuf/29.0-rc2/MODULE.bazel": "6241d35983510143049943fc0d57937937122baf1b287862f9dc8590fc4c37df",
+    "https://bcr.bazel.build/modules/protobuf/29.0-rc3/MODULE.bazel": "33c2dfa286578573afc55a7acaea3cada4122b9631007c594bf0729f41c8de92",
+    "https://bcr.bazel.build/modules/protobuf/29.0/MODULE.bazel": "319dc8bf4c679ff87e71b1ccfb5a6e90a6dbc4693501d471f48662ac46d04e4e",
+    "https://bcr.bazel.build/modules/protobuf/29.1/MODULE.bazel": "557c3457560ff49e122ed76c0bc3397a64af9574691cb8201b4e46d4ab2ecb95",
+    "https://bcr.bazel.build/modules/protobuf/3.19.0/MODULE.bazel": "6b5fbb433f760a99a22b18b6850ed5784ef0e9928a72668b66e4d7ccd47db9b0",
+    "https://bcr.bazel.build/modules/protobuf/33.1/MODULE.bazel": "982c8a0cceab4d790076f72b7677faf836b0dfadc2b66a34aab7232116c4ae39",
+    "https://bcr.bazel.build/modules/protobuf/33.1/source.json": "992c237a40899425648213bf79b05f08c6e8dcd619f96cd944b4511b0276fbd8",
+    "https://bcr.bazel.build/modules/pybind11_bazel/2.11.1/MODULE.bazel": "88af1c246226d87e65be78ed49ecd1e6f5e98648558c14ce99176da041dc378e",
+    "https://bcr.bazel.build/modules/pybind11_bazel/2.12.0/MODULE.bazel": "e6f4c20442eaa7c90d7190d8dc539d0ab422f95c65a57cc59562170c58ae3d34",
+    "https://bcr.bazel.build/modules/pybind11_bazel/2.12.0/source.json": "6900fdc8a9e95866b8c0d4ad4aba4d4236317b5c1cd04c502df3f0d33afed680",
+    "https://bcr.bazel.build/modules/re2/2023-09-01/MODULE.bazel": "cb3d511531b16cfc78a225a9e2136007a48cf8a677e4264baeab57fe78a80206",
+    "https://bcr.bazel.build/modules/re2/2024-07-02.bcr.1/MODULE.bazel": "b4963dda9b31080be1905ef085ecd7dd6cd47c05c79b9cdf83ade83ab2ab271a",
+    "https://bcr.bazel.build/modules/re2/2024-07-02.bcr.1/source.json": "2ff292be6ef3340325ce8a045ecc326e92cbfab47c7cbab4bd85d28971b97ac4",
+    "https://bcr.bazel.build/modules/re2/2024-07-02/MODULE.bazel": "0eadc4395959969297cbcf31a249ff457f2f1d456228c67719480205aa306daa",
+    "https://bcr.bazel.build/modules/rules_android/0.1.1/MODULE.bazel": "48809ab0091b07ad0182defb787c4c5328bd3a278938415c00a7b69b50c4d3a8",
+    "https://bcr.bazel.build/modules/rules_android/0.1.1/source.json": "e6986b41626ee10bdc864937ffb6d6bf275bb5b9c65120e6137d56e6331f089e",
+    "https://bcr.bazel.build/modules/rules_apple/3.16.0/MODULE.bazel": "0d1caf0b8375942ce98ea944be754a18874041e4e0459401d925577624d3a54a",
+    "https://bcr.bazel.build/modules/rules_apple/3.16.0/source.json": "d8b5fe461272018cc07cfafce11fe369c7525330804c37eec5a82f84cd475366",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.1/MODULE.bazel": "cb2aa0747f84c6c3a78dad4e2049c154f08ab9d166b1273835a8174940365647",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.10/MODULE.bazel": "ec1705118f7eaedd6e118508d3d26deba2a4e76476ada7e0e3965211be012002",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.13/MODULE.bazel": "0e8529ed7b323dad0775ff924d2ae5af7640b23553dfcd4d34344c7e7a867191",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.14/MODULE.bazel": "5e343a3aac88b8d7af3b1b6d2093b55c347b8eefc2e7d1442f7a02dc8fea48ac",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.15/MODULE.bazel": "6704c35f7b4a72502ee81f61bf88706b54f06b3cbe5558ac17e2e14666cd5dcc",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.16/MODULE.bazel": "7661303b8fc1b4d7f532e54e9d6565771fea666fbdf839e0a86affcd02defe87",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.17/MODULE.bazel": "2ae1d8f4238ec67d7185d8861cb0a2cdf4bc608697c331b95bf990e69b62e64a",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.2/MODULE.bazel": "6915987c90970493ab97393024c156ea8fb9f3bea953b2f3ec05c34f19b5695c",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.6/MODULE.bazel": "abf360251023dfe3efcef65ab9d56beefa8394d4176dd29529750e1c57eaa33f",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.8/MODULE.bazel": "964c85c82cfeb6f3855e6a07054fdb159aced38e99a5eecf7bce9d53990afa3e",
+    "https://bcr.bazel.build/modules/rules_cc/0.0.9/MODULE.bazel": "836e76439f354b89afe6a911a7adf59a6b2518fafb174483ad78a2a2fde7b1c5",
+    "https://bcr.bazel.build/modules/rules_cc/0.1.1/MODULE.bazel": "2f0222a6f229f0bf44cd711dc13c858dad98c62d52bd51d8fc3a764a83125513",
+    "https://bcr.bazel.build/modules/rules_cc/0.1.5/MODULE.bazel": "88dfc9361e8b5ae1008ac38f7cdfd45ad738e4fa676a3ad67d19204f045a1fd8",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.14/MODULE.bazel": "353c99ed148887ee89c54a17d4100ae7e7e436593d104b668476019023b58df8",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.15/MODULE.bazel": "6a0a4a75a57aa6dc888300d848053a58c6b12a29f89d4304e1c41448514ec6e8",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.16/MODULE.bazel": "9242fa89f950c6ef7702801ab53922e99c69b02310c39fb6e62b2bd30df2a1d4",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.16/source.json": "d03d5cde49376d87e14ec14b666c56075e5e3926930327fd5d0484a1ff2ac1cc",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.4/MODULE.bazel": "1ff1223dfd24f3ecf8f028446d4a27608aa43c3f41e346d22838a4223980b8cc",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.8/MODULE.bazel": "f1df20f0bf22c28192a794f29b501ee2018fa37a3862a1a2132ae2940a23a642",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.9/MODULE.bazel": "34263f1dca62ea664265438cef714d7db124c03e1ed55ebb4f1dc860164308d1",
+    "https://bcr.bazel.build/modules/rules_distroless/0.6.2/MODULE.bazel": "eafe8b473c0c78038d9a6e1dbd9278b7bf83457ddc78207297483bfbe1012d56",
+    "https://bcr.bazel.build/modules/rules_distroless/0.6.2/source.json": "830d7a25ce382e571e58791fbed3b47e6da3237805624bab8997ae59d763bdc2",
+    "https://bcr.bazel.build/modules/rules_foreign_cc/0.9.0/MODULE.bazel": "c9e8c682bf75b0e7c704166d79b599f93b72cfca5ad7477df596947891feeef6",
+    "https://bcr.bazel.build/modules/rules_fuzzing/0.5.2/MODULE.bazel": "40c97d1144356f52905566c55811f13b299453a14ac7769dfba2ac38192337a8",
+    "https://bcr.bazel.build/modules/rules_java/4.0.0/MODULE.bazel": "5a78a7ae82cd1a33cef56dc578c7d2a46ed0dca12643ee45edbb8417899e6f74",
+    "https://bcr.bazel.build/modules/rules_java/5.3.5/MODULE.bazel": "a4ec4f2db570171e3e5eb753276ee4b389bae16b96207e9d3230895c99644b86",
+    "https://bcr.bazel.build/modules/rules_java/6.0.0/MODULE.bazel": "8a43b7df601a7ec1af61d79345c17b31ea1fedc6711fd4abfd013ea612978e39",
+    "https://bcr.bazel.build/modules/rules_java/6.3.0/MODULE.bazel": "a97c7678c19f236a956ad260d59c86e10a463badb7eb2eda787490f4c969b963",
+    "https://bcr.bazel.build/modules/rules_java/6.4.0/MODULE.bazel": "e986a9fe25aeaa84ac17ca093ef13a4637f6107375f64667a15999f77db6c8f6",
+    "https://bcr.bazel.build/modules/rules_java/6.5.2/MODULE.bazel": "1d440d262d0e08453fa0c4d8f699ba81609ed0e9a9a0f02cd10b3e7942e61e31",
+    "https://bcr.bazel.build/modules/rules_java/7.10.0/MODULE.bazel": "530c3beb3067e870561739f1144329a21c851ff771cd752a49e06e3dc9c2e71a",
+    "https://bcr.bazel.build/modules/rules_java/7.12.2/MODULE.bazel": "579c505165ee757a4280ef83cda0150eea193eed3bef50b1004ba88b99da6de6",
+    "https://bcr.bazel.build/modules/rules_java/7.2.0/MODULE.bazel": "06c0334c9be61e6cef2c8c84a7800cef502063269a5af25ceb100b192453d4ab",
+    "https://bcr.bazel.build/modules/rules_java/7.3.2/MODULE.bazel": "50dece891cfdf1741ea230d001aa9c14398062f2b7c066470accace78e412bc2",
+    "https://bcr.bazel.build/modules/rules_java/7.6.1/MODULE.bazel": "2f14b7e8a1aa2f67ae92bc69d1ec0fa8d9f827c4e17ff5e5f02e91caa3b2d0fe",
+    "https://bcr.bazel.build/modules/rules_java/8.14.0/MODULE.bazel": "717717ed40cc69994596a45aec6ea78135ea434b8402fb91b009b9151dd65615",
+    "https://bcr.bazel.build/modules/rules_java/8.14.0/source.json": "8a88c4ca9e8759da53cddc88123880565c520503321e2566b4e33d0287a3d4bc",
+    "https://bcr.bazel.build/modules/rules_java/8.3.2/MODULE.bazel": "7336d5511ad5af0b8615fdc7477535a2e4e723a357b6713af439fe8cf0195017",
+    "https://bcr.bazel.build/modules/rules_java/8.5.1/MODULE.bazel": "d8a9e38cc5228881f7055a6079f6f7821a073df3744d441978e7a43e20226939",
+    "https://bcr.bazel.build/modules/rules_java/8.6.0/MODULE.bazel": "9c064c434606d75a086f15ade5edb514308cccd1544c2b2a89bbac4310e41c71",
+    "https://bcr.bazel.build/modules/rules_java/8.6.1/MODULE.bazel": "f4808e2ab5b0197f094cabce9f4b006a27766beb6a9975931da07099560ca9c2",
+    "https://bcr.bazel.build/modules/rules_java/8.8.0/MODULE.bazel": "de589d0880911ac007abd521b9f0ddcd8b0dbd05c8553e6f8124a050b83acf7d",
+    "https://bcr.bazel.build/modules/rules_jvm_external/4.4.2/MODULE.bazel": "a56b85e418c83eb1839819f0b515c431010160383306d13ec21959ac412d2fe7",
+    "https://bcr.bazel.build/modules/rules_jvm_external/5.1/MODULE.bazel": "33f6f999e03183f7d088c9be518a63467dfd0be94a11d0055fe2d210f89aa909",
+    "https://bcr.bazel.build/modules/rules_jvm_external/5.2/MODULE.bazel": "d9351ba35217ad0de03816ef3ed63f89d411349353077348a45348b096615036",
+    "https://bcr.bazel.build/modules/rules_jvm_external/5.3/MODULE.bazel": "bf93870767689637164657731849fb887ad086739bd5d360d90007a581d5527d",
+    "https://bcr.bazel.build/modules/rules_jvm_external/6.1/MODULE.bazel": "75b5fec090dbd46cf9b7d8ea08cf84a0472d92ba3585b476f44c326eda8059c4",
+    "https://bcr.bazel.build/modules/rules_jvm_external/6.3/MODULE.bazel": "c998e060b85f71e00de5ec552019347c8bca255062c990ac02d051bb80a38df0",
+    "https://bcr.bazel.build/modules/rules_jvm_external/6.7/MODULE.bazel": "e717beabc4d091ecb2c803c2d341b88590e9116b8bf7947915eeb33aab4f96dd",
+    "https://bcr.bazel.build/modules/rules_jvm_external/6.7/source.json": "5426f412d0a7fc6b611643376c7e4a82dec991491b9ce5cb1cfdd25fe2e92be4",
+    "https://bcr.bazel.build/modules/rules_kotlin/1.9.0/MODULE.bazel": "ef85697305025e5a61f395d4eaede272a5393cee479ace6686dba707de804d59",
+    "https://bcr.bazel.build/modules/rules_kotlin/1.9.6/MODULE.bazel": "d269a01a18ee74d0335450b10f62c9ed81f2321d7958a2934e44272fe82dcef3",
+    "https://bcr.bazel.build/modules/rules_kotlin/1.9.6/source.json": "2faa4794364282db7c06600b7e5e34867a564ae91bda7cae7c29c64e9466b7d5",
+    "https://bcr.bazel.build/modules/rules_license/0.0.3/MODULE.bazel": "627e9ab0247f7d1e05736b59dbb1b6871373de5ad31c3011880b4133cafd4bd0",
+    "https://bcr.bazel.build/modules/rules_license/0.0.7/MODULE.bazel": "088fbeb0b6a419005b89cf93fe62d9517c0a2b8bb56af3244af65ecfe37e7d5d",
+    "https://bcr.bazel.build/modules/rules_license/1.0.0/MODULE.bazel": "a7fda60eefdf3d8c827262ba499957e4df06f659330bbe6cdbdb975b768bb65c",
+    "https://bcr.bazel.build/modules/rules_license/1.0.0/source.json": "a52c89e54cc311196e478f8382df91c15f7a2bfdf4c6cd0e2675cc2ff0b56efb",
+    "https://bcr.bazel.build/modules/rules_oci/2.2.7/MODULE.bazel": "f6150e4b224d459f7f6523ef65967464ca4efdd266c7fbf2f5a2a51011957e0c",
+    "https://bcr.bazel.build/modules/rules_oci/2.2.7/source.json": "b099f02af330f47f19dc67fc9300ef6e1937a8c86882690db0e7a2fcea8c7f6b",
+    "https://bcr.bazel.build/modules/rules_pkg/0.7.0/MODULE.bazel": "df99f03fc7934a4737122518bb87e667e62d780b610910f0447665a7e2be62dc",
+    "https://bcr.bazel.build/modules/rules_pkg/1.0.1/MODULE.bazel": "5b1df97dbc29623bccdf2b0dcd0f5cb08e2f2c9050aab1092fd39a41e82686ff",
+    "https://bcr.bazel.build/modules/rules_pkg/1.0.1/source.json": "bd82e5d7b9ce2d31e380dd9f50c111d678c3bdaca190cb76b0e1c71b05e1ba8a",
+    "https://bcr.bazel.build/modules/rules_proto/4.0.0/MODULE.bazel": "a7a7b6ce9bee418c1a760b3d84f83a299ad6952f9903c67f19e4edd964894e06",
+    "https://bcr.bazel.build/modules/rules_proto/5.3.0-21.7/MODULE.bazel": "e8dff86b0971688790ae75528fe1813f71809b5afd57facb44dad9e8eca631b7",
+    "https://bcr.bazel.build/modules/rules_proto/6.0.0-rc1/MODULE.bazel": "1e5b502e2e1a9e825eef74476a5a1ee524a92297085015a052510b09a1a09483",
+    "https://bcr.bazel.build/modules/rules_proto/6.0.2/MODULE.bazel": "ce916b775a62b90b61888052a416ccdda405212b6aaeb39522f7dc53431a5e73",
+    "https://bcr.bazel.build/modules/rules_proto/7.0.2/MODULE.bazel": "bf81793bd6d2ad89a37a40693e56c61b0ee30f7a7fdbaf3eabbf5f39de47dea2",
+    "https://bcr.bazel.build/modules/rules_proto/7.1.0/MODULE.bazel": "002d62d9108f75bb807cd56245d45648f38275cb3a99dcd45dfb864c5d74cb96",
+    "https://bcr.bazel.build/modules/rules_proto/7.1.0/source.json": "39f89066c12c24097854e8f57ab8558929f9c8d474d34b2c00ac04630ad8940e",
+    "https://bcr.bazel.build/modules/rules_python/0.10.2/MODULE.bazel": "cc82bc96f2997baa545ab3ce73f196d040ffb8756fd2d66125a530031cd90e5f",
+    "https://bcr.bazel.build/modules/rules_python/0.23.1/MODULE.bazel": "49ffccf0511cb8414de28321f5fcf2a31312b47c40cc21577144b7447f2bf300",
+    "https://bcr.bazel.build/modules/rules_python/0.25.0/MODULE.bazel": "72f1506841c920a1afec76975b35312410eea3aa7b63267436bfb1dd91d2d382",
+    "https://bcr.bazel.build/modules/rules_python/0.28.0/MODULE.bazel": "cba2573d870babc976664a912539b320cbaa7114cd3e8f053c720171cde331ed",
+    "https://bcr.bazel.build/modules/rules_python/0.31.0/MODULE.bazel": "93a43dc47ee570e6ec9f5779b2e64c1476a6ce921c48cc9a1678a91dd5f8fd58",
+    "https://bcr.bazel.build/modules/rules_python/0.33.2/MODULE.bazel": "3e036c4ad8d804a4dad897d333d8dce200d943df4827cb849840055be8d2e937",
+    "https://bcr.bazel.build/modules/rules_python/0.4.0/MODULE.bazel": "9208ee05fd48bf09ac60ed269791cf17fb343db56c8226a720fbb1cdf467166c",
+    "https://bcr.bazel.build/modules/rules_python/0.40.0/MODULE.bazel": "9d1a3cd88ed7d8e39583d9ffe56ae8a244f67783ae89b60caafc9f5cf318ada7",
+    "https://bcr.bazel.build/modules/rules_python/1.0.0/MODULE.bazel": "898a3d999c22caa585eb062b600f88654bf92efb204fa346fb55f6f8edffca43",
+    "https://bcr.bazel.build/modules/rules_python/1.6.0/MODULE.bazel": "7e04ad8f8d5bea40451cf80b1bd8262552aa73f841415d20db96b7241bd027d8",
+    "https://bcr.bazel.build/modules/rules_python/1.8.4/MODULE.bazel": "33e3971e66161a3e955f7a0d411a8d1f291c4ce4c561851512466f3c77ff8ece",
+    "https://bcr.bazel.build/modules/rules_python/1.8.4/source.json": "9fbc0e57bae52cddcc3831d668bce87a47e0c655104a85098d4459dd9a3b0a10",
+    "https://bcr.bazel.build/modules/rules_rs/0.0.28/MODULE.bazel": "3c3830eda824d0476818443dd4a3a2fa0765484589db874d18e94fb6ee50a60f",
+    "https://bcr.bazel.build/modules/rules_rs/0.0.28/source.json": "3480135f6ef8111ec7abe2b7cc164af40354b4eaf8f885170567922a70a2dc99",
+    "https://bcr.bazel.build/modules/rules_rust/0.66.0/MODULE.bazel": "86ef763a582f4739a27029bdcc6c562258ed0ea6f8d58294b049e215ceb251b3",
+    "https://bcr.bazel.build/modules/rules_rust/0.68.1/MODULE.bazel": "8d3332ef4079673385eb81f8bd68b012decc04ac00c9d5a01a40eff90301732c",
+    "https://bcr.bazel.build/modules/rules_rust/0.68.1/source.json": "3378e746f81b62457fdfd37391244fa8ff075ba85c05931ee4f3a20ac1efe963",
+    "https://bcr.bazel.build/modules/rules_shell/0.2.0/MODULE.bazel": "fda8a652ab3c7d8fee214de05e7a9916d8b28082234e8d2c0094505c5268ed3c",
+    "https://bcr.bazel.build/modules/rules_shell/0.3.0/MODULE.bazel": "de4402cd12f4cc8fda2354fce179fdb068c0b9ca1ec2d2b17b3e21b24c1a937b",
+    "https://bcr.bazel.build/modules/rules_shell/0.4.0/MODULE.bazel": "0f8f11bb3cd11755f0b48c1de0bbcf62b4b34421023aa41a2fc74ef68d9584f0",
+    "https://bcr.bazel.build/modules/rules_shell/0.4.1/MODULE.bazel": "00e501db01bbf4e3e1dd1595959092c2fadf2087b2852d3f553b5370f5633592",
+    "https://bcr.bazel.build/modules/rules_shell/0.6.1/MODULE.bazel": "72e76b0eea4e81611ef5452aa82b3da34caca0c8b7b5c0c9584338aa93bae26b",
+    "https://bcr.bazel.build/modules/rules_shell/0.6.1/source.json": "20ec05cd5e592055e214b2da8ccb283c7f2a421ea0dc2acbf1aa792e11c03d0c",
+    "https://bcr.bazel.build/modules/rules_swift/1.16.0/MODULE.bazel": "4a09f199545a60d09895e8281362b1ff3bb08bbde69c6fc87aff5b92fcc916ca",
+    "https://bcr.bazel.build/modules/rules_swift/2.1.1/MODULE.bazel": "494900a80f944fc7aa61500c2073d9729dff0b764f0e89b824eb746959bc1046",
+    "https://bcr.bazel.build/modules/rules_swift/2.1.1/source.json": "40fc69dfaac64deddbb75bd99cdac55f4427d9ca0afbe408576a65428427a186",
+    "https://bcr.bazel.build/modules/stardoc/0.5.1/MODULE.bazel": "1a05d92974d0c122f5ccf09291442580317cdd859f07a8655f1db9a60374f9f8",
+    "https://bcr.bazel.build/modules/stardoc/0.5.3/MODULE.bazel": "c7f6948dae6999bf0db32c1858ae345f112cacf98f174c7a8bb707e41b974f1c",
+    "https://bcr.bazel.build/modules/stardoc/0.5.4/MODULE.bazel": "6569966df04610b8520957cb8e97cf2e9faac2c0309657c537ab51c16c18a2a4",
+    "https://bcr.bazel.build/modules/stardoc/0.5.6/MODULE.bazel": "c43dabc564990eeab55e25ed61c07a1aadafe9ece96a4efabb3f8bf9063b71ef",
+    "https://bcr.bazel.build/modules/stardoc/0.6.2/MODULE.bazel": "7060193196395f5dd668eda046ccbeacebfd98efc77fed418dbe2b82ffaa39fd",
+    "https://bcr.bazel.build/modules/stardoc/0.7.0/MODULE.bazel": "05e3d6d30c099b6770e97da986c53bd31844d7f13d41412480ea265ac9e8079c",
+    "https://bcr.bazel.build/modules/stardoc/0.7.1/MODULE.bazel": "3548faea4ee5dda5580f9af150e79d0f6aea934fc60c1cc50f4efdd9420759e7",
+    "https://bcr.bazel.build/modules/stardoc/0.7.2/MODULE.bazel": "fc152419aa2ea0f51c29583fab1e8c99ddefd5b3778421845606ee628629e0e5",
+    "https://bcr.bazel.build/modules/stardoc/0.7.2/source.json": "58b029e5e901d6802967754adf0a9056747e8176f017cfe3607c0851f4d42216",
+    "https://bcr.bazel.build/modules/swift_argument_parser/1.3.1.1/MODULE.bazel": "5e463fbfba7b1701d957555ed45097d7f984211330106ccd1352c6e0af0dcf91",
+    "https://bcr.bazel.build/modules/swift_argument_parser/1.3.1.1/source.json": "32bd87e5f4d7acc57c5b2ff7c325ae3061d5e242c0c4c214ae87e0f1c13e54cb",
+    "https://bcr.bazel.build/modules/tar.bzl/0.2.1/MODULE.bazel": "52d1c00a80a8cc67acbd01649e83d8dd6a9dc426a6c0b754a04fe8c219c76468",
+    "https://bcr.bazel.build/modules/tar.bzl/0.5.1/MODULE.bazel": "7c2eb3dcfc53b0f3d6f9acdfd911ca803eaf92aadf54f8ca6e4c1f3aee288351",
+    "https://bcr.bazel.build/modules/tar.bzl/0.5.5/MODULE.bazel": "4bfab9bbc7a1966c2c5f7371f5848f5e2d27c465951b4435adc9aaf00ed681da",
+    "https://bcr.bazel.build/modules/tar.bzl/0.6.0/MODULE.bazel": "a3584b4edcfafcabd9b0ef9819808f05b372957bbdff41601429d5fd0aac2e7c",
+    "https://bcr.bazel.build/modules/tar.bzl/0.6.0/source.json": "4a620381df075a16cb3a7ed57bd1d05f7480222394c64a20fa51bdb636fda658",
+    "https://bcr.bazel.build/modules/toolchains_llvm_bootstrapped/0.5.5/MODULE.bazel": "a2f1469b2920fcc9c043c87301b7a207d320231615abecd7771d89e516fc3d0b",
+    "https://bcr.bazel.build/modules/toolchains_llvm_bootstrapped/0.5.5/source.json": "8498c094703da13a859d19dd2a200152f75870fb7f22a9770df99d230a4f50d1",
+    "https://bcr.bazel.build/modules/upb/0.0.0-20220923-a547704/MODULE.bazel": "7298990c00040a0e2f121f6c32544bab27d4452f80d9ce51349b1a28f3005c43",
+    "https://bcr.bazel.build/modules/with_cfg.bzl/0.12.0/MODULE.bazel": "b573395fe63aef4299ba095173e2f62ccfee5ad9bbf7acaa95dba73af9fc2b38",
+    "https://bcr.bazel.build/modules/with_cfg.bzl/0.14.1/MODULE.bazel": "aa0ef3f6c67dd35db7ac38c76785dc02f48b53f34e16b20487e70f51b5324d0a",
+    "https://bcr.bazel.build/modules/with_cfg.bzl/0.14.1/source.json": "4666d3035f69063ecd136f3f0c68e424f1b1dd97ffc9cceb679522c0be38761b",
+    "https://bcr.bazel.build/modules/yq.bzl/0.1.1/MODULE.bazel": "9039681f9bcb8958ee2c87ffc74bdafba9f4369096a2b5634b88abc0eaefa072",
+    "https://bcr.bazel.build/modules/yq.bzl/0.3.1/MODULE.bazel": "9bcb7151b3cd4681b89d350530eaf7b45e32a44dda94843b8932b0cb1cd4594a",
+    "https://bcr.bazel.build/modules/yq.bzl/0.3.1/source.json": "f0b0f204a2a6b0e34b4c9541efe8c04f2ef1af65948daa784eccea738b21dbd2",
+    "https://bcr.bazel.build/modules/zlib/1.2.11/MODULE.bazel": "07b389abc85fdbca459b69e2ec656ae5622873af3f845e1c9d80fe179f3effa0",
+    "https://bcr.bazel.build/modules/zlib/1.3.1.bcr.5/MODULE.bazel": "eec517b5bbe5492629466e11dae908d043364302283de25581e3eb944326c4ca",
+    "https://bcr.bazel.build/modules/zlib/1.3.1.bcr.5/source.json": "22bc55c47af97246cfc093d0acf683a7869377de362b5d1c552c2c2e16b7a806",
+    "https://bcr.bazel.build/modules/zlib/1.3.1/MODULE.bazel": "751c9940dcfe869f5f7274e1295422a34623555916eb98c174c1e945594bf198"
+  },
+  "selectedYankedVersions": {},
+  "moduleExtensions": {
+    "@@aspect_rules_py+//py:extensions.bzl%py_tools": {
+      "general": {
+        "bzlTransitiveDigest": "+bdZo5f9VT6vlSveWPwDBtWKd7DHuOlRMG6ISM9ke64=",
+        "usagesDigest": "9BiP3ASHlGl4doGhzXJwK17taNzv/q6x/IZ4Hb6LxNY=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "rules_py_tools.darwin_amd64": {
+            "repoRuleId": "@@aspect_rules_py+//py/private/toolchain:repo.bzl%prebuilt_tool_repo",
+            "attributes": {
+              "platform": "darwin_amd64"
+            }
+          },
+          "rules_py_tools.darwin_arm64": {
+            "repoRuleId": "@@aspect_rules_py+//py/private/toolchain:repo.bzl%prebuilt_tool_repo",
+            "attributes": {
+              "platform": "darwin_arm64"
+            }
+          },
+          "rules_py_tools.linux_amd64": {
+            "repoRuleId": "@@aspect_rules_py+//py/private/toolchain:repo.bzl%prebuilt_tool_repo",
+            "attributes": {
+              "platform": "linux_amd64"
+            }
+          },
+          "rules_py_tools.linux_arm64": {
+            "repoRuleId": "@@aspect_rules_py+//py/private/toolchain:repo.bzl%prebuilt_tool_repo",
+            "attributes": {
+              "platform": "linux_arm64"
+            }
+          },
+          "rules_py_tools": {
+            "repoRuleId": "@@aspect_rules_py+//py/private/toolchain:repo.bzl%toolchains_repo",
+            "attributes": {
+              "user_repository_name": "rules_py_tools"
+            }
+          },
+          "rules_py_pex_2_3_1": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_file",
+            "attributes": {
+              "urls": [
+                "https://files.pythonhosted.org/packages/e7/d0/fbda2a4d41d62d86ce53f5ae4fbaaee8c34070f75bb7ca009090510ae874/pex-2.3.1-py2.py3-none-any.whl"
+              ],
+              "sha256": "64692a5bf6f298403aab930d22f0d836ae4736c5bc820e262e9092fe8c56f830",
+              "downloaded_file_path": "pex-2.3.1-py2.py3-none-any.whl"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "aspect_rules_py+",
+            "aspect_tools_telemetry_report",
+            "aspect_tools_telemetry++telemetry+aspect_tools_telemetry_report"
+          ],
+          [
+            "aspect_rules_py+",
+            "bazel_skylib",
+            "bazel_skylib+"
+          ],
+          [
+            "aspect_rules_py+",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
+    "@@aspect_tools_telemetry+//:extension.bzl%telemetry": {
+      "general": {
+        "bzlTransitiveDigest": "cl5A2O84vDL6Tt+Qga8FCj1DUDGqn+e7ly5rZ+4xvcc=",
+        "usagesDigest": "73l8h4f8amAmbKge5Ixr/4s4BE7L7fqDBTTAMrNSHHg=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "aspect_tools_telemetry_report": {
+            "repoRuleId": "@@aspect_tools_telemetry+//:extension.bzl%tel_repository",
+            "attributes": {
+              "deps": {
+                "aspect_rules_py": "1.8.4",
+                "rules_rs": "0.0.28",
+                "aspect_tools_telemetry": "0.3.3"
+              }
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "aspect_tools_telemetry+",
+            "bazel_lib",
+            "bazel_lib+"
+          ],
+          [
+            "aspect_tools_telemetry+",
+            "bazel_skylib",
+            "bazel_skylib+"
+          ]
+        ]
+      }
+    },
+    "@@rules_kotlin+//src/main/starlark/core/repositories:bzlmod_setup.bzl%rules_kotlin_extensions": {
+      "general": {
+        "bzlTransitiveDigest": "rL/34P1aFDq2GqVC2zCFgQ8nTuOC6ziogocpvG50Qz8=",
+        "usagesDigest": "QI2z8ZUR+mqtbwsf2fLqYdJAkPOHdOV+tF2yVAUgRzw=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "com_github_jetbrains_kotlin_git": {
+            "repoRuleId": "@@rules_kotlin+//src/main/starlark/core/repositories:compiler.bzl%kotlin_compiler_git_repository",
+            "attributes": {
+              "urls": [
+                "https://github.com/JetBrains/kotlin/releases/download/v1.9.23/kotlin-compiler-1.9.23.zip"
+              ],
+              "sha256": "93137d3aab9afa9b27cb06a824c2324195c6b6f6179d8a8653f440f5bd58be88"
+            }
+          },
+          "com_github_jetbrains_kotlin": {
+            "repoRuleId": "@@rules_kotlin+//src/main/starlark/core/repositories:compiler.bzl%kotlin_capabilities_repository",
+            "attributes": {
+              "git_repository_name": "com_github_jetbrains_kotlin_git",
+              "compiler_version": "1.9.23"
+            }
+          },
+          "com_github_google_ksp": {
+            "repoRuleId": "@@rules_kotlin+//src/main/starlark/core/repositories:ksp.bzl%ksp_compiler_plugin_repository",
+            "attributes": {
+              "urls": [
+                "https://github.com/google/ksp/releases/download/1.9.23-1.0.20/artifacts.zip"
+              ],
+              "sha256": "ee0618755913ef7fd6511288a232e8fad24838b9af6ea73972a76e81053c8c2d",
+              "strip_version": "1.9.23-1.0.20"
+            }
+          },
+          "com_github_pinterest_ktlint": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_file",
+            "attributes": {
+              "sha256": "01b2e0ef893383a50dbeb13970fe7fa3be36ca3e83259e01649945b09d736985",
+              "urls": [
+                "https://github.com/pinterest/ktlint/releases/download/1.3.0/ktlint"
+              ],
+              "executable": true
+            }
+          },
+          "rules_android": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "sha256": "cd06d15dd8bb59926e4d65f9003bfc20f9da4b2519985c27e190cddc8b7a7806",
+              "strip_prefix": "rules_android-0.1.1",
+              "urls": [
+                "https://github.com/bazelbuild/rules_android/archive/v0.1.1.zip"
+              ]
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_kotlin+",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
+    "@@rules_oci+//oci:extensions.bzl%oci": {
+      "general": {
+        "bzlTransitiveDigest": "gwOUQS77BQPmATtuOehde1z+K1YgWMininHA3wFipW4=",
+        "usagesDigest": "Uf6/2LPrT+y1SlftVyrz19poY5MTVjHgUABytLeQnJA=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "distroless_cc_debian12_linux_amd64": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "www_authenticate_challenges": {},
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/cc-debian12",
+              "identifier": "sha256:eccec5274132c1be0ce5d2c8e6fe41033e64af5e987ccee9007826e4c012069d",
+              "platform": "linux/amd64",
+              "target_name": "distroless_cc_debian12_linux_amd64",
+              "bazel_tags": []
+            }
+          },
+          "distroless_cc_debian12": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_alias",
+            "attributes": {
+              "target_name": "distroless_cc_debian12",
+              "www_authenticate_challenges": {},
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/cc-debian12",
+              "identifier": "sha256:eccec5274132c1be0ce5d2c8e6fe41033e64af5e987ccee9007826e4c012069d",
+              "platforms": {
+                "@@platforms//cpu:x86_64": "@distroless_cc_debian12_linux_amd64"
+              },
+              "bzlmod_repository": "distroless_cc_debian12",
+              "reproducible": true
+            }
+          },
+          "oci_crane_darwin_amd64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "darwin_amd64",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_darwin_arm64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "darwin_arm64",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_linux_arm64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "linux_arm64",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_linux_armv6": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "linux_armv6",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_linux_i386": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "linux_i386",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_linux_s390x": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "linux_s390x",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_linux_amd64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "linux_amd64",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_windows_armv6": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "windows_armv6",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_windows_amd64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%crane_repositories",
+            "attributes": {
+              "platform": "windows_amd64",
+              "crane_version": "v0.18.0"
+            }
+          },
+          "oci_crane_toolchains": {
+            "repoRuleId": "@@rules_oci+//oci/private:toolchains_repo.bzl%toolchains_repo",
+            "attributes": {
+              "toolchain_type": "@rules_oci//oci:crane_toolchain_type",
+              "toolchain": "@oci_crane_{platform}//:crane_toolchain"
+            }
+          },
+          "oci_regctl_darwin_amd64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%regctl_repositories",
+            "attributes": {
+              "platform": "darwin_amd64"
+            }
+          },
+          "oci_regctl_darwin_arm64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%regctl_repositories",
+            "attributes": {
+              "platform": "darwin_arm64"
+            }
+          },
+          "oci_regctl_linux_arm64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%regctl_repositories",
+            "attributes": {
+              "platform": "linux_arm64"
+            }
+          },
+          "oci_regctl_linux_s390x": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%regctl_repositories",
+            "attributes": {
+              "platform": "linux_s390x"
+            }
+          },
+          "oci_regctl_linux_amd64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%regctl_repositories",
+            "attributes": {
+              "platform": "linux_amd64"
+            }
+          },
+          "oci_regctl_windows_amd64": {
+            "repoRuleId": "@@rules_oci+//oci:repositories.bzl%regctl_repositories",
+            "attributes": {
+              "platform": "windows_amd64"
+            }
+          },
+          "oci_regctl_toolchains": {
+            "repoRuleId": "@@rules_oci+//oci/private:toolchains_repo.bzl%toolchains_repo",
+            "attributes": {
+              "toolchain_type": "@rules_oci//oci:regctl_toolchain_type",
+              "toolchain": "@oci_regctl_{platform}//:regctl_toolchain"
+            }
+          }
+        },
+        "moduleExtensionMetadata": {
+          "explicitRootModuleDirectDeps": [],
+          "explicitRootModuleDirectDevDeps": [],
+          "useAllRepos": "NO",
+          "reproducible": false
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "aspect_bazel_lib+",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "bazel_features+",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_oci+",
+            "aspect_bazel_lib",
+            "aspect_bazel_lib+"
+          ],
+          [
+            "rules_oci+",
+            "bazel_features",
+            "bazel_features+"
+          ],
+          [
+            "rules_oci+",
+            "bazel_skylib",
+            "bazel_skylib+"
+          ]
+        ]
+      }
+    },
+    "@@rules_python+//python/extensions:config.bzl%config": {
+      "general": {
+        "bzlTransitiveDigest": "uo49IDITNsksO4x76pZ7eYlLKomkU77mK8VTrbCHXZM=",
+        "usagesDigest": "p2al+dDKI5UlCyNvheMVynbWSGbdiji/jMz53fMNfJA=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "rules_python_internal": {
+            "repoRuleId": "@@rules_python+//python/private:internal_config_repo.bzl%internal_config_repo",
+            "attributes": {
+              "transition_setting_generators": {},
+              "transition_settings": []
+            }
+          },
+          "pypi__build": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/e2/03/f3c8ba0a6b6e30d7d18c40faab90807c9bb5e9a1e3b2fe2008af624a9c97/build-1.2.1-py3-none-any.whl",
+              "sha256": "75e10f767a433d9a86e50d83f418e83efc18ede923ee5ff7df93b6cb0306c5d4",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__click": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/00/2e/d53fa4befbf2cfa713304affc7ca780ce4fc1fd8710527771b58311a3229/click-8.1.7-py3-none-any.whl",
+              "sha256": "ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__colorama": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl",
+              "sha256": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__importlib_metadata": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/2d/0a/679461c511447ffaf176567d5c496d1de27cbe34a87df6677d7171b2fbd4/importlib_metadata-7.1.0-py3-none-any.whl",
+              "sha256": "30962b96c0c223483ed6cc7280e7f0199feb01a0e40cfae4d4450fc6fab1f570",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__installer": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/e5/ca/1172b6638d52f2d6caa2dd262ec4c811ba59eee96d54a7701930726bce18/installer-0.7.0-py3-none-any.whl",
+              "sha256": "05d1933f0a5ba7d8d6296bb6d5018e7c94fa473ceb10cf198a92ccea19c27b53",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__more_itertools": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/50/e2/8e10e465ee3987bb7c9ab69efb91d867d93959095f4807db102d07995d94/more_itertools-10.2.0-py3-none-any.whl",
+              "sha256": "686b06abe565edfab151cb8fd385a05651e1fdf8f0a14191e4439283421f8684",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__packaging": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/49/df/1fceb2f8900f8639e278b056416d49134fb8d84c5942ffaa01ad34782422/packaging-24.0-py3-none-any.whl",
+              "sha256": "2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__pep517": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/25/6e/ca4a5434eb0e502210f591b97537d322546e4833dcb4d470a48c375c5540/pep517-0.13.1-py3-none-any.whl",
+              "sha256": "31b206f67165b3536dd577c5c3f1518e8fbaf38cbc57efff8369a392feff1721",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__pip": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/8a/6a/19e9fe04fca059ccf770861c7d5721ab4c2aebc539889e97c7977528a53b/pip-24.0-py3-none-any.whl",
+              "sha256": "ba0d021a166865d2265246961bec0152ff124de910c5cc39f1156ce3fa7c69dc",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__pip_tools": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/0d/dc/38f4ce065e92c66f058ea7a368a9c5de4e702272b479c0992059f7693941/pip_tools-7.4.1-py3-none-any.whl",
+              "sha256": "4c690e5fbae2f21e87843e89c26191f0d9454f362d8acdbd695716493ec8b3a9",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__pyproject_hooks": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/ae/f3/431b9d5fe7d14af7a32340792ef43b8a714e7726f1d7b69cc4e8e7a3f1d7/pyproject_hooks-1.1.0-py3-none-any.whl",
+              "sha256": "7ceeefe9aec63a1064c18d939bdc3adf2d8aa1988a510afec15151578b232aa2",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__setuptools": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/90/99/158ad0609729111163fc1f674a5a42f2605371a4cf036d0441070e2f7455/setuptools-78.1.1-py3-none-any.whl",
+              "sha256": "c3a9c4211ff4c309edb8b8c4f1cbfa7ae324c4ba9f91ff254e3d305b9fd54561",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__tomli": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl",
+              "sha256": "939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__wheel": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/7d/cd/d7460c9a869b16c3dd4e1e403cce337df165368c71d6af229a74699622ce/wheel-0.43.0-py3-none-any.whl",
+              "sha256": "55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__zipp": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/da/55/a03fd7240714916507e1fcf7ae355bd9d9ed2e6db492595f1a67f61681be/zipp-3.18.2-py3-none-any.whl",
+              "sha256": "dce197b859eb796242b0622af1b8beb0a722d52aa2f57133ead08edd5bf5374e",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_python+",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_python+",
+            "pypi__build",
+            "rules_python++config+pypi__build"
+          ],
+          [
+            "rules_python+",
+            "pypi__click",
+            "rules_python++config+pypi__click"
+          ],
+          [
+            "rules_python+",
+            "pypi__colorama",
+            "rules_python++config+pypi__colorama"
+          ],
+          [
+            "rules_python+",
+            "pypi__importlib_metadata",
+            "rules_python++config+pypi__importlib_metadata"
+          ],
+          [
+            "rules_python+",
+            "pypi__installer",
+            "rules_python++config+pypi__installer"
+          ],
+          [
+            "rules_python+",
+            "pypi__more_itertools",
+            "rules_python++config+pypi__more_itertools"
+          ],
+          [
+            "rules_python+",
+            "pypi__packaging",
+            "rules_python++config+pypi__packaging"
+          ],
+          [
+            "rules_python+",
+            "pypi__pep517",
+            "rules_python++config+pypi__pep517"
+          ],
+          [
+            "rules_python+",
+            "pypi__pip",
+            "rules_python++config+pypi__pip"
+          ],
+          [
+            "rules_python+",
+            "pypi__pip_tools",
+            "rules_python++config+pypi__pip_tools"
+          ],
+          [
+            "rules_python+",
+            "pypi__pyproject_hooks",
+            "rules_python++config+pypi__pyproject_hooks"
+          ],
+          [
+            "rules_python+",
+            "pypi__setuptools",
+            "rules_python++config+pypi__setuptools"
+          ],
+          [
+            "rules_python+",
+            "pypi__tomli",
+            "rules_python++config+pypi__tomli"
+          ],
+          [
+            "rules_python+",
+            "pypi__wheel",
+            "rules_python++config+pypi__wheel"
+          ],
+          [
+            "rules_python+",
+            "pypi__zipp",
+            "rules_python++config+pypi__zipp"
+          ]
+        ]
+      }
+    },
+    "@@rules_python+//python/uv:uv.bzl%uv": {
+      "general": {
+        "bzlTransitiveDigest": "zyNsrbgVKwpA0B3zI84imAfuC424VSzYNPgjr/HJy5M=",
+        "usagesDigest": "/HRt5Hw/vpDr9CDrKEPjeDIjxo4307VLxMu8BNAEDWA=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "uv": {
+            "repoRuleId": "@@rules_python+//python/uv/private:uv_toolchains_repo.bzl%uv_toolchains_repo",
+            "attributes": {
+              "toolchain_type": "'@@rules_python+//python/uv:uv_toolchain_type'",
+              "toolchain_names": [
+                "none"
+              ],
+              "toolchain_implementations": {
+                "none": "'@@rules_python+//python:none'"
+              },
+              "toolchain_compatible_with": {
+                "none": [
+                  "@platforms//:incompatible"
+                ]
+              },
+              "toolchain_target_settings": {}
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_python+",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_python+",
+            "platforms",
+            "platforms"
+          ]
+        ]
+      }
+    },
+    "@@rules_zig+//zig:extensions.bzl%zig": {
+      "general": {
+        "bzlTransitiveDigest": "UgOGMri7Ezc+fxIEsGl2Yi8r2eye623ogad36uEeuys=",
+        "usagesDigest": "rGF9fvQ1LFrwarI5/dbx2xyr9C/Wn9Haw2NgEavWjFM=",
+        "recordedFileInputs": {
+          "@@rules_zig+//zig/private/versions.json": "3afa7e1c4af939bdb64eff3f65908bb57f2b0e46b5636e6ed15ad79256c9436f",
+          "@@zml+//bazel/zig_index.json": "9464d476f7cb08dcf5ecc2fdf71aaa8b4113ad529c4a5bbb19d650408b27c38d"
+        },
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "zig_0.16.0-dev.2611_Pf996d2866_aarch64-linux": {
+            "repoRuleId": "@@rules_zig+//zig/private/repo:zig_repository.bzl%zig_repository",
+            "attributes": {
+              "url": "https://ziglang.org/builds/zig-aarch64-linux-0.16.0-dev.2611+f996d2866.tar.xz",
+              "mirrors": [
+                "https://pkg.machengine.org/zig",
+                "https://zigmirror.hryx.net/zig",
+                "https://zig.linus.dev/zig",
+                "https://zig.squirl.dev",
+                "https://zig.florent.dev",
+                "https://zig.mirror.mschae23.de/zig",
+                "https://zigmirror.meox.dev",
+                "https://ziglang.freetls.fastly.net",
+                "https://zig.tilok.dev",
+                "https://zig-mirror.tsimnet.eu/zig",
+                "https://zig.karearl.com/zig",
+                "https://pkg.earth/zig",
+                "https://fs.liujiacai.net/zigbuilds",
+                "https://ziglang.org/builds/"
+              ],
+              "sha256": "d4219908cded6efb97a7326e4159f82607e3956d6d56efb1580187bf0872603e",
+              "zig_version": "0.16.0-dev.2611+f996d2866",
+              "platform": "aarch64-linux"
+            }
+          },
+          "zig_0.16.0-dev.2611_Pf996d2866_aarch64-macos": {
+            "repoRuleId": "@@rules_zig+//zig/private/repo:zig_repository.bzl%zig_repository",
+            "attributes": {
+              "url": "https://ziglang.org/builds/zig-aarch64-macos-0.16.0-dev.2611+f996d2866.tar.xz",
+              "mirrors": [
+                "https://pkg.machengine.org/zig",
+                "https://zigmirror.hryx.net/zig",
+                "https://zig.linus.dev/zig",
+                "https://zig.squirl.dev",
+                "https://zig.florent.dev",
+                "https://zig.mirror.mschae23.de/zig",
+                "https://zigmirror.meox.dev",
+                "https://ziglang.freetls.fastly.net",
+                "https://zig.tilok.dev",
+                "https://zig-mirror.tsimnet.eu/zig",
+                "https://zig.karearl.com/zig",
+                "https://pkg.earth/zig",
+                "https://fs.liujiacai.net/zigbuilds",
+                "https://ziglang.org/builds/"
+              ],
+              "sha256": "1eb526bb948c1c1bffdb5be318c044fc0216457be28b0d92aa2d92294b9d32c9",
+              "zig_version": "0.16.0-dev.2611+f996d2866",
+              "platform": "aarch64-macos"
+            }
+          },
+          "zig_0.16.0-dev.2611_Pf996d2866_aarch64-windows": {
+            "repoRuleId": "@@rules_zig+//zig/private/repo:zig_repository.bzl%zig_repository",
+            "attributes": {
+              "url": "https://ziglang.org/builds/zig-aarch64-windows-0.16.0-dev.2611+f996d2866.zip",
+              "mirrors": [
+                "https://pkg.machengine.org/zig",
+                "https://zigmirror.hryx.net/zig",
+                "https://zig.linus.dev/zig",
+                "https://zig.squirl.dev",
+                "https://zig.florent.dev",
+                "https://zig.mirror.mschae23.de/zig",
+                "https://zigmirror.meox.dev",
+                "https://ziglang.freetls.fastly.net",
+                "https://zig.tilok.dev",
+                "https://zig-mirror.tsimnet.eu/zig",
+                "https://zig.karearl.com/zig",
+                "https://pkg.earth/zig",
+                "https://fs.liujiacai.net/zigbuilds",
+                "https://ziglang.org/builds/"
+              ],
+              "sha256": "42a612662453e47ad4001eb19c1d219dec6f254913988e2ebe6c95e4b5da3e82",
+              "zig_version": "0.16.0-dev.2611+f996d2866",
+              "platform": "aarch64-windows"
+            }
+          },
+          "zig_0.16.0-dev.2611_Pf996d2866_x86_64-linux": {
+            "repoRuleId": "@@rules_zig+//zig/private/repo:zig_repository.bzl%zig_repository",
+            "attributes": {
+              "url": "https://ziglang.org/builds/zig-x86_64-linux-0.16.0-dev.2611+f996d2866.tar.xz",
+              "mirrors": [
+                "https://pkg.machengine.org/zig",
+                "https://zigmirror.hryx.net/zig",
+                "https://zig.linus.dev/zig",
+                "https://zig.squirl.dev",
+                "https://zig.florent.dev",
+                "https://zig.mirror.mschae23.de/zig",
+                "https://zigmirror.meox.dev",
+                "https://ziglang.freetls.fastly.net",
+                "https://zig.tilok.dev",
+                "https://zig-mirror.tsimnet.eu/zig",
+                "https://zig.karearl.com/zig",
+                "https://pkg.earth/zig",
+                "https://fs.liujiacai.net/zigbuilds",
+                "https://ziglang.org/builds/"
+              ],
+              "sha256": "0188a70a3f84fe1918ac391a8b64bd241eb4c028c44ea023e853743cbecd3009",
+              "zig_version": "0.16.0-dev.2611+f996d2866",
+              "platform": "x86_64-linux"
+            }
+          },
+          "zig_0.16.0-dev.2611_Pf996d2866_x86_64-macos": {
+            "repoRuleId": "@@rules_zig+//zig/private/repo:zig_repository.bzl%zig_repository",
+            "attributes": {
+              "url": "https://ziglang.org/builds/zig-x86_64-macos-0.16.0-dev.2611+f996d2866.tar.xz",
+              "mirrors": [
+                "https://pkg.machengine.org/zig",
+                "https://zigmirror.hryx.net/zig",
+                "https://zig.linus.dev/zig",
+                "https://zig.squirl.dev",
+                "https://zig.florent.dev",
+                "https://zig.mirror.mschae23.de/zig",
+                "https://zigmirror.meox.dev",
+                "https://ziglang.freetls.fastly.net",
+                "https://zig.tilok.dev",
+                "https://zig-mirror.tsimnet.eu/zig",
+                "https://zig.karearl.com/zig",
+                "https://pkg.earth/zig",
+                "https://fs.liujiacai.net/zigbuilds",
+                "https://ziglang.org/builds/"
+              ],
+              "sha256": "5ba0c08bd2e9c74d18c6ea25483226a8f8922f4e50d09d9219be842894b41334",
+              "zig_version": "0.16.0-dev.2611+f996d2866",
+              "platform": "x86_64-macos"
+            }
+          },
+          "zig_0.16.0-dev.2611_Pf996d2866_x86_64-windows": {
+            "repoRuleId": "@@rules_zig+//zig/private/repo:zig_repository.bzl%zig_repository",
+            "attributes": {
+              "url": "https://ziglang.org/builds/zig-x86_64-windows-0.16.0-dev.2611+f996d2866.zip",
+              "mirrors": [
+                "https://pkg.machengine.org/zig",
+                "https://zigmirror.hryx.net/zig",
+                "https://zig.linus.dev/zig",
+                "https://zig.squirl.dev",
+                "https://zig.florent.dev",
+                "https://zig.mirror.mschae23.de/zig",
+                "https://zigmirror.meox.dev",
+                "https://ziglang.freetls.fastly.net",
+                "https://zig.tilok.dev",
+                "https://zig-mirror.tsimnet.eu/zig",
+                "https://zig.karearl.com/zig",
+                "https://pkg.earth/zig",
+                "https://fs.liujiacai.net/zigbuilds",
+                "https://ziglang.org/builds/"
+              ],
+              "sha256": "3ec5cac4b74b5fe6e04f092ffb6e025993538ecf07970a428919d638efafa542",
+              "zig_version": "0.16.0-dev.2611+f996d2866",
+              "platform": "x86_64-windows"
+            }
+          },
+          "zig_toolchains": {
+            "repoRuleId": "@@rules_zig+//zig/private/repo:toolchains_repo.bzl%toolchains_repo",
+            "attributes": {
+              "names": [
+                "zig_0.16.0-dev.2611_Pf996d2866_aarch64-linux",
+                "zig_0.16.0-dev.2611_Pf996d2866_aarch64-macos",
+                "zig_0.16.0-dev.2611_Pf996d2866_aarch64-windows",
+                "zig_0.16.0-dev.2611_Pf996d2866_x86_64-linux",
+                "zig_0.16.0-dev.2611_Pf996d2866_x86_64-macos",
+                "zig_0.16.0-dev.2611_Pf996d2866_x86_64-windows"
+              ],
+              "labels": [
+                "@zig_0.16.0-dev.2611_Pf996d2866_aarch64-linux//:zig_toolchain",
+                "@zig_0.16.0-dev.2611_Pf996d2866_aarch64-macos//:zig_toolchain",
+                "@zig_0.16.0-dev.2611_Pf996d2866_aarch64-windows//:zig_toolchain",
+                "@zig_0.16.0-dev.2611_Pf996d2866_x86_64-linux//:zig_toolchain",
+                "@zig_0.16.0-dev.2611_Pf996d2866_x86_64-macos//:zig_toolchain",
+                "@zig_0.16.0-dev.2611_Pf996d2866_x86_64-windows//:zig_toolchain"
+              ],
+              "zig_versions": [
+                "0.16.0-dev.2611+f996d2866",
+                "0.16.0-dev.2611+f996d2866",
+                "0.16.0-dev.2611+f996d2866",
+                "0.16.0-dev.2611+f996d2866",
+                "0.16.0-dev.2611+f996d2866",
+                "0.16.0-dev.2611+f996d2866"
+              ],
+              "exec_lengths": [
+                2,
+                2,
+                2,
+                2,
+                2,
+                2
+              ],
+              "exec_constraints": [
+                "@platforms//os:linux",
+                "@platforms//cpu:aarch64",
+                "@platforms//os:macos",
+                "@platforms//cpu:aarch64",
+                "@platforms//os:windows",
+                "@platforms//cpu:aarch64",
+                "@platforms//os:linux",
+                "@platforms//cpu:x86_64",
+                "@platforms//os:macos",
+                "@platforms//cpu:x86_64",
+                "@platforms//os:windows",
+                "@platforms//cpu:x86_64"
+              ]
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_zig+",
+            "bazel_skylib",
+            "bazel_skylib+"
+          ],
+          [
+            "rules_zig+",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
+    "@@yq.bzl+//yq:extensions.bzl%yq": {
+      "general": {
+        "bzlTransitiveDigest": "61Uz+o5PnlY0jJfPZEUNqsKxnM/UCLeWsn5VVCc8u5Y=",
+        "usagesDigest": "J3TR36exv3ePI9O2y+uqrzTDmT6s6ADkTsROB++nm6I=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "yq_darwin_amd64": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "darwin_amd64",
+              "version": "4.45.1"
+            }
+          },
+          "yq_darwin_arm64": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "darwin_arm64",
+              "version": "4.45.1"
+            }
+          },
+          "yq_linux_amd64": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "linux_amd64",
+              "version": "4.45.1"
+            }
+          },
+          "yq_linux_arm64": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "linux_arm64",
+              "version": "4.45.1"
+            }
+          },
+          "yq_linux_s390x": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "linux_s390x",
+              "version": "4.45.1"
+            }
+          },
+          "yq_linux_riscv64": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "linux_riscv64",
+              "version": "4.45.1"
+            }
+          },
+          "yq_linux_ppc64le": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "linux_ppc64le",
+              "version": "4.45.1"
+            }
+          },
+          "yq_windows_amd64": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:platforms.bzl%yq_platform_repo",
+            "attributes": {
+              "platform": "windows_amd64",
+              "version": "4.45.1"
+            }
+          },
+          "yq_toolchains": {
+            "repoRuleId": "@@yq.bzl+//yq/toolchain:toolchain.bzl%yq_toolchains_repo",
+            "attributes": {
+              "user_repository_name": "yq"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
+      }
+    }
+  },
+  "facts": {
+    "@@rules_rs+//rs:extensions.bzl%crate": {
+      "ahash_0.8.12": "{\"dependencies\":[{\"name\":\"cfg-if\",\"req\":\"^1.0\"},{\"name\":\"const-random\",\"optional\":true,\"req\":\"^0.1.17\"},{\"features\":[\"html_reports\"],\"kind\":\"dev\",\"name\":\"criterion\",\"req\":\"^0.3.2\"},{\"kind\":\"dev\",\"name\":\"fnv\",\"req\":\"^1.0.5\"},{\"kind\":\"dev\",\"name\":\"fxhash\",\"req\":\"^0.2.1\"},{\"name\":\"getrandom\",\"optional\":true,\"req\":\"^0.3.1\"},{\"kind\":\"dev\",\"name\":\"hashbrown\",\"req\":\"^0.14.3\"},{\"kind\":\"dev\",\"name\":\"hex\",\"req\":\"^0.4.2\"},{\"kind\":\"dev\",\"name\":\"no-panic\",\"req\":\"^0.1.10\"},{\"default_features\":false,\"features\":[\"alloc\"],\"name\":\"once_cell\",\"req\":\"^1.18.0\",\"target\":\"cfg(not(all(target_arch = \\\"arm\\\", target_os = \\\"none\\\")))\"},{\"kind\":\"dev\",\"name\":\"pcg-mwc\",\"req\":\"^0.2.1\"},{\"name\":\"portable-atomic\",\"optional\":true,\"req\":\"^1.0.0\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8.5\"},{\"kind\":\"dev\",\"name\":\"seahash\",\"req\":\"^4.0\"},{\"name\":\"serde\",\"optional\":true,\"req\":\"^1.0.117\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1.0.59\"},{\"kind\":\"dev\",\"name\":\"smallvec\",\"req\":\"^1.13.1\"},{\"kind\":\"build\",\"name\":\"version_check\",\"req\":\"^0.9.4\"},{\"default_features\":false,\"features\":[\"simd\"],\"name\":\"zerocopy\",\"req\":\"^0.8.24\"}],\"features\":{\"atomic-polyfill\":[\"dep:portable-atomic\",\"once_cell/critical-section\"],\"compile-time-rng\":[\"const-random\"],\"default\":[\"std\",\"runtime-rng\"],\"nightly-arm-aes\":[],\"no-rng\":[],\"runtime-rng\":[\"getrandom\"],\"std\":[]}}",
+      "aho-corasick_1.1.3": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"doc-comment\",\"req\":\"^0.3.3\"},{\"name\":\"log\",\"optional\":true,\"req\":\"^0.4.17\"},{\"default_features\":false,\"name\":\"memchr\",\"optional\":true,\"req\":\"^2.4.0\"}],\"features\":{\"default\":[\"std\",\"perf-literal\"],\"logging\":[\"dep:log\"],\"perf-literal\":[\"dep:memchr\"],\"std\":[\"memchr?/std\"]}}",
+      "base64_0.13.1": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"criterion\",\"req\":\"=0.3.2\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.6.1\"},{\"kind\":\"dev\",\"name\":\"structopt\",\"req\":\"^0.3\"}],\"features\":{\"alloc\":[],\"default\":[\"std\"],\"std\":[]}}",
+      "bitflags_2.9.1": "{\"dependencies\":[{\"name\":\"arbitrary\",\"optional\":true,\"req\":\"^1.0\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"arbitrary\",\"req\":\"^1.0\"},{\"name\":\"bytemuck\",\"optional\":true,\"req\":\"^1.12\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"bytemuck\",\"req\":\"^1.12.2\"},{\"name\":\"compiler_builtins\",\"optional\":true,\"req\":\"^0.1.2\"},{\"name\":\"core\",\"optional\":true,\"package\":\"rustc-std-workspace-core\",\"req\":\"^1.0.0\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0\"},{\"default_features\":false,\"name\":\"serde\",\"optional\":true,\"req\":\"^1.0.103\"},{\"kind\":\"dev\",\"name\":\"serde_derive\",\"req\":\"^1.0.103\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"serde_test\",\"req\":\"^1.0.19\"},{\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.18\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"zerocopy\",\"req\":\"^0.8\"}],\"features\":{\"example_generated\":[],\"rustc-dep-of-std\":[\"core\",\"compiler_builtins\"],\"std\":[]}}",
+      "byteorder_1.5.0": "{\"dependencies\":[{\"default_features\":false,\"kind\":\"dev\",\"name\":\"quickcheck\",\"req\":\"^0.9.2\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.7\"}],\"features\":{\"default\":[\"std\"],\"i128\":[],\"std\":[]}}",
+      "castaway_0.2.4": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"paste\",\"req\":\"^1\"},{\"name\":\"rustversion\",\"req\":\"^1\"}],\"features\":{\"alloc\":[],\"default\":[\"std\"],\"std\":[\"alloc\"]}}",
+      "cc_1.2.33": "{\"dependencies\":[{\"default_features\":false,\"name\":\"jobserver\",\"optional\":true,\"req\":\"^0.1.30\"},{\"default_features\":false,\"name\":\"libc\",\"optional\":true,\"req\":\"^0.2.62\",\"target\":\"cfg(unix)\"},{\"name\":\"shlex\",\"req\":\"^1.3.0\"},{\"kind\":\"dev\",\"name\":\"tempfile\",\"req\":\"^3\"}],\"features\":{\"jobserver\":[],\"parallel\":[\"dep:libc\",\"dep:jobserver\"]}}",
+      "cfg-if_1.0.0": "{\"dependencies\":[{\"name\":\"compiler_builtins\",\"optional\":true,\"req\":\"^0.1.2\"},{\"name\":\"core\",\"optional\":true,\"package\":\"rustc-std-workspace-core\",\"req\":\"^1.0.0\"}],\"features\":{\"rustc-dep-of-std\":[\"core\",\"compiler_builtins\"]}}",
+      "compact_str_0.9.0": "{\"dependencies\":[{\"default_features\":false,\"name\":\"arbitrary\",\"optional\":true,\"req\":\"^1\"},{\"name\":\"borsh\",\"optional\":true,\"req\":\"^1\"},{\"name\":\"bytes\",\"optional\":true,\"req\":\"^1\"},{\"default_features\":false,\"features\":[\"alloc\"],\"name\":\"castaway\",\"req\":\"^0.2.3\"},{\"name\":\"cfg-if\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"cfg-if\",\"req\":\"^1\"},{\"default_features\":false,\"name\":\"diesel\",\"optional\":true,\"req\":\"^2\"},{\"name\":\"itoa\",\"req\":\"^1\"},{\"default_features\":false,\"name\":\"markup\",\"optional\":true,\"req\":\"^0.15\"},{\"default_features\":false,\"features\":[\"std\"],\"name\":\"proptest\",\"optional\":true,\"req\":\"^1\"},{\"default_features\":false,\"features\":[\"std\"],\"kind\":\"dev\",\"name\":\"proptest\",\"req\":\"^1\"},{\"default_features\":false,\"name\":\"quickcheck\",\"optional\":true,\"req\":\"^1\"},{\"default_features\":false,\"kind\":\"dev\",\"name\":\"quickcheck\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"quickcheck_macros\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"rayon\",\"req\":\"^1\"},{\"default_features\":false,\"name\":\"rkyv\",\"optional\":true,\"req\":\"^0.8\"},{\"kind\":\"dev\",\"name\":\"rkyv\",\"req\":\"^0.8.8\"},{\"name\":\"rustversion\",\"req\":\"^1\"},{\"name\":\"ryu\",\"req\":\"^1\"},{\"default_features\":false,\"features\":[\"derive\",\"alloc\"],\"name\":\"serde\",\"optional\":true,\"req\":\"^1\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"serde\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1\"},{\"features\":[\"union\"],\"name\":\"smallvec\",\"optional\":true,\"req\":\"^1\"},{\"default_features\":false,\"name\":\"sqlx\",\"optional\":true,\"req\":\"^0.8\"},{\"name\":\"static_assertions\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"test-case\",\"req\":\"^3\"},{\"kind\":\"dev\",\"name\":\"test-strategy\",\"req\":\"^0.3\"},{\"default_features\":false,\"name\":\"zeroize\",\"optional\":true,\"req\":\"^1\"}],\"features\":{\"arbitrary\":[\"dep:arbitrary\"],\"borsh\":[\"dep:borsh\"],\"bytes\":[\"dep:bytes\"],\"default\":[\"std\"],\"diesel\":[\"dep:diesel\"],\"markup\":[\"dep:markup\"],\"proptest\":[\"dep:proptest\"],\"quickcheck\":[\"dep:quickcheck\"],\"rkyv\":[\"dep:rkyv\"],\"serde\":[\"dep:serde\"],\"smallvec\":[\"dep:smallvec\"],\"sqlx\":[\"dep:sqlx\",\"std\"],\"sqlx-mysql\":[\"sqlx\",\"sqlx/mysql\"],\"sqlx-postgres\":[\"sqlx\",\"sqlx/postgres\"],\"sqlx-sqlite\":[\"sqlx\",\"sqlx/sqlite\"],\"std\":[],\"zeroize\":[\"dep:zeroize\"]}}",
+      "crossbeam-deque_0.8.6": "{\"dependencies\":[{\"default_features\":false,\"name\":\"crossbeam-epoch\",\"req\":\"^0.9.17\"},{\"default_features\":false,\"name\":\"crossbeam-utils\",\"req\":\"^0.8.18\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"}],\"features\":{\"default\":[\"std\"],\"std\":[\"crossbeam-epoch/std\",\"crossbeam-utils/std\"]}}",
+      "crossbeam-epoch_0.9.18": "{\"dependencies\":[{\"default_features\":false,\"name\":\"crossbeam-utils\",\"req\":\"^0.8.18\"},{\"name\":\"loom-crate\",\"optional\":true,\"package\":\"loom\",\"req\":\"^0.7.1\",\"target\":\"cfg(crossbeam_loom)\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"}],\"features\":{\"alloc\":[],\"default\":[\"std\"],\"loom\":[\"loom-crate\",\"crossbeam-utils/loom\"],\"nightly\":[\"crossbeam-utils/nightly\"],\"std\":[\"alloc\",\"crossbeam-utils/std\"]}}",
+      "crossbeam-utils_0.8.21": "{\"dependencies\":[{\"name\":\"loom\",\"optional\":true,\"req\":\"^0.7.1\",\"target\":\"cfg(crossbeam_loom)\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"}],\"features\":{\"default\":[\"std\"],\"nightly\":[],\"std\":[]}}",
+      "darling_0.20.10": "{\"dependencies\":[{\"name\":\"darling_core\",\"req\":\"=0.20.10\"},{\"name\":\"darling_macro\",\"req\":\"=0.20.10\"},{\"kind\":\"dev\",\"name\":\"proc-macro2\",\"req\":\"^1.0.37\"},{\"kind\":\"dev\",\"name\":\"quote\",\"req\":\"^1.0.18\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0.9\",\"target\":\"cfg(compiletests)\"},{\"kind\":\"dev\",\"name\":\"syn\",\"req\":\"^2.0.15\"},{\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.38\",\"target\":\"cfg(compiletests)\"}],\"features\":{\"default\":[\"suggestions\"],\"diagnostics\":[\"darling_core/diagnostics\"],\"suggestions\":[\"darling_core/suggestions\"]}}",
+      "darling_core_0.20.10": "{\"dependencies\":[{\"name\":\"fnv\",\"req\":\"^1.0.7\"},{\"name\":\"ident_case\",\"req\":\"^1.0.1\"},{\"name\":\"proc-macro2\",\"req\":\"^1.0.37\"},{\"name\":\"quote\",\"req\":\"^1.0.18\"},{\"name\":\"strsim\",\"optional\":true,\"req\":\"^0.11.1\"},{\"features\":[\"full\",\"extra-traits\"],\"name\":\"syn\",\"req\":\"^2.0.15\"}],\"features\":{\"diagnostics\":[],\"suggestions\":[\"strsim\"]}}",
+      "darling_macro_0.20.10": "{\"dependencies\":[{\"name\":\"darling_core\",\"req\":\"=0.20.10\"},{\"name\":\"quote\",\"req\":\"^1.0.18\"},{\"name\":\"syn\",\"req\":\"^2.0.15\"}],\"features\":{}}",
+      "dary_heap_0.3.7": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"},{\"kind\":\"dev\",\"name\":\"rand_xorshift\",\"req\":\"^0.3\"},{\"default_features\":false,\"features\":[\"alloc\"],\"name\":\"serde\",\"optional\":true,\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"serde_test\",\"req\":\"^1\"}],\"features\":{\"extra\":[],\"unstable\":[],\"unstable_nightly\":[]}}",
+      "derive_builder_0.20.2": "{\"dependencies\":[{\"name\":\"derive_builder_macro\",\"req\":\"=0.20.2\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0.4\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"serde\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.38\",\"target\":\"cfg(compiletests)\"}],\"features\":{\"alloc\":[\"derive_builder_macro/alloc\"],\"clippy\":[\"derive_builder_macro/clippy\"],\"default\":[\"std\"],\"std\":[\"derive_builder_macro/lib_has_std\"]}}",
+      "derive_builder_core_0.20.2": "{\"dependencies\":[{\"name\":\"darling\",\"req\":\"^0.20.10\"},{\"name\":\"proc-macro2\",\"req\":\"^1.0.37\"},{\"name\":\"quote\",\"req\":\"^1.0.35\"},{\"features\":[\"full\",\"extra-traits\"],\"name\":\"syn\",\"req\":\"^2.0.15\"}],\"features\":{\"alloc\":[],\"clippy\":[],\"lib_has_std\":[]}}",
+      "derive_builder_macro_0.20.2": "{\"dependencies\":[{\"name\":\"derive_builder_core\",\"req\":\"=0.20.2\"},{\"features\":[\"full\",\"extra-traits\"],\"name\":\"syn\",\"req\":\"^2.0.15\"}],\"features\":{\"alloc\":[\"derive_builder_core/alloc\"],\"clippy\":[\"derive_builder_core/clippy\"],\"lib_has_std\":[\"derive_builder_core/lib_has_std\"]}}",
+      "either_1.13.0": "{\"dependencies\":[{\"features\":[\"derive\"],\"name\":\"serde\",\"optional\":true,\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1.0.0\"}],\"features\":{\"default\":[\"use_std\"],\"use_std\":[]}}",
+      "esaxx-rs_0.1.10": "{\"dependencies\":[{\"kind\":\"build\",\"name\":\"cc\",\"optional\":true,\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"criterion\",\"req\":\"^0.5\"}],\"features\":{\"cpp\":[\"cc\"],\"default\":[\"cpp\"]}}",
+      "fnv_1.0.7": "{\"dependencies\":[],\"features\":{\"default\":[\"std\"],\"std\":[]}}",
+      "getrandom_0.3.3": "{\"dependencies\":[{\"name\":\"cfg-if\",\"req\":\"^1\"},{\"name\":\"compiler_builtins\",\"optional\":true,\"req\":\"^0.1\"},{\"name\":\"core\",\"optional\":true,\"package\":\"rustc-std-workspace-core\",\"req\":\"^1.0\"},{\"default_features\":false,\"name\":\"js-sys\",\"optional\":true,\"req\":\"^0.3.77\",\"target\":\"cfg(all(target_arch = \\\"wasm32\\\", any(target_os = \\\"unknown\\\", target_os = \\\"none\\\"), target_feature = \\\"atomics\\\"))\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(all(any(target_os = \\\"linux\\\", target_os = \\\"android\\\"), not(any(all(target_os = \\\"linux\\\", target_env = \\\"\\\"), getrandom_backend = \\\"custom\\\", getrandom_backend = \\\"linux_raw\\\", getrandom_backend = \\\"rdrand\\\", getrandom_backend = \\\"rndr\\\"))))\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(any(target_os = \\\"dragonfly\\\", target_os = \\\"freebsd\\\", target_os = \\\"hurd\\\", target_os = \\\"illumos\\\", target_os = \\\"cygwin\\\", all(target_os = \\\"horizon\\\", target_arch = \\\"arm\\\")))\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(any(target_os = \\\"haiku\\\", target_os = \\\"redox\\\", target_os = \\\"nto\\\", target_os = \\\"aix\\\"))\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(any(target_os = \\\"ios\\\", target_os = \\\"visionos\\\", target_os = \\\"watchos\\\", target_os = \\\"tvos\\\"))\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(any(target_os = \\\"macos\\\", target_os = \\\"openbsd\\\", target_os = \\\"vita\\\", target_os = \\\"emscripten\\\"))\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(target_os = \\\"netbsd\\\")\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(target_os = \\\"solaris\\\")\"},{\"default_features\":false,\"name\":\"libc\",\"req\":\"^0.2.154\",\"target\":\"cfg(target_os = \\\"vxworks\\\")\"},{\"default_features\":false,\"name\":\"r-efi\",\"req\":\"^5.1\",\"target\":\"cfg(all(target_os = \\\"uefi\\\", getrandom_backend = \\\"efi_rng\\\"))\"},{\"default_features\":false,\"name\":\"wasi\",\"req\":\"^0.14\",\"target\":\"cfg(all(target_arch = \\\"wasm32\\\", target_os = \\\"wasi\\\", target_env = \\\"p2\\\"))\"},{\"default_features\":false,\"name\":\"wasm-bindgen\",\"optional\":true,\"req\":\"^0.2.98\",\"target\":\"cfg(all(target_arch = \\\"wasm32\\\", any(target_os = \\\"unknown\\\", target_os = \\\"none\\\")))\"},{\"kind\":\"dev\",\"name\":\"wasm-bindgen-test\",\"req\":\"^0.3\",\"target\":\"cfg(all(target_arch = \\\"wasm32\\\", any(target_os = \\\"unknown\\\", target_os = \\\"none\\\")))\"}],\"features\":{\"rustc-dep-of-std\":[\"dep:compiler_builtins\",\"dep:core\"],\"std\":[],\"wasm_js\":[\"dep:wasm-bindgen\",\"dep:js-sys\"]}}",
+      "ident_case_1.0.1": "{\"dependencies\":[],\"features\":{}}",
+      "itertools_0.14.0": "{\"dependencies\":[{\"features\":[\"html_reports\"],\"kind\":\"dev\",\"name\":\"criterion\",\"req\":\"^0.4.0\"},{\"default_features\":false,\"name\":\"either\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"paste\",\"req\":\"^1.0.0\"},{\"kind\":\"dev\",\"name\":\"permutohedron\",\"req\":\"^0.2\"},{\"default_features\":false,\"kind\":\"dev\",\"name\":\"quickcheck\",\"req\":\"^0.9\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.7\"}],\"features\":{\"default\":[\"use_std\"],\"use_alloc\":[],\"use_std\":[\"use_alloc\",\"either/use_std\"]}}",
+      "itoa_1.0.14": "{\"dependencies\":[{\"name\":\"no-panic\",\"optional\":true,\"req\":\"^0.1\"}],\"features\":{}}",
+      "libc_0.2.169": "{\"dependencies\":[{\"name\":\"rustc-std-workspace-core\",\"optional\":true,\"req\":\"^1.0.0\"}],\"features\":{\"align\":[],\"const-extern-fn\":[],\"default\":[\"std\"],\"extra_traits\":[],\"rustc-dep-of-std\":[\"align\",\"rustc-std-workspace-core\"],\"std\":[],\"use_std\":[\"std\"]}}",
+      "log_0.4.22": "{\"dependencies\":[{\"default_features\":false,\"kind\":\"dev\",\"name\":\"proc-macro2\",\"req\":\"^1.0.63\"},{\"default_features\":false,\"name\":\"serde\",\"optional\":true,\"req\":\"^1.0\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"serde\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"serde_test\",\"req\":\"^1.0\"},{\"default_features\":false,\"name\":\"sval\",\"optional\":true,\"req\":\"^2.1\"},{\"kind\":\"dev\",\"name\":\"sval\",\"req\":\"^2.1\"},{\"kind\":\"dev\",\"name\":\"sval_derive\",\"req\":\"^2.1\"},{\"default_features\":false,\"name\":\"sval_ref\",\"optional\":true,\"req\":\"^2.1\"},{\"default_features\":false,\"features\":[\"inline-i128\"],\"name\":\"value-bag\",\"optional\":true,\"req\":\"^1.7\"},{\"features\":[\"test\"],\"kind\":\"dev\",\"name\":\"value-bag\",\"req\":\"^1.7\"}],\"features\":{\"kv\":[],\"kv_serde\":[\"kv_std\",\"value-bag/serde\",\"serde\"],\"kv_std\":[\"std\",\"kv\",\"value-bag/error\"],\"kv_sval\":[\"kv\",\"value-bag/sval\",\"sval\",\"sval_ref\"],\"kv_unstable\":[\"kv\",\"value-bag\"],\"kv_unstable_serde\":[\"kv_serde\",\"kv_unstable_std\"],\"kv_unstable_std\":[\"kv_std\",\"kv_unstable\"],\"kv_unstable_sval\":[\"kv_sval\",\"kv_unstable\"],\"max_level_debug\":[],\"max_level_error\":[],\"max_level_info\":[],\"max_level_off\":[],\"max_level_trace\":[],\"max_level_warn\":[],\"release_max_level_debug\":[],\"release_max_level_error\":[],\"release_max_level_info\":[],\"release_max_level_off\":[],\"release_max_level_trace\":[],\"release_max_level_warn\":[],\"std\":[]}}",
+      "macro_rules_attribute-proc_macro_0.2.0": "{\"dependencies\":[],\"features\":{\"verbose-expansions\":[]}}",
+      "macro_rules_attribute_0.2.0": "{\"dependencies\":[{\"name\":\"macro_rules_attribute-proc_macro\",\"req\":\"^0.2.0\"},{\"kind\":\"dev\",\"name\":\"once_cell\",\"req\":\"^1.10.0\"},{\"name\":\"paste\",\"req\":\"^1.0.7\"},{\"kind\":\"dev\",\"name\":\"pin-project-lite\",\"req\":\"^0.2.8\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"serde\",\"req\":\"^1.0.136\"}],\"features\":{\"better-docs\":[],\"default\":[],\"verbose-expansions\":[\"macro_rules_attribute-proc_macro/verbose-expansions\"]}}",
+      "memchr_2.7.4": "{\"dependencies\":[{\"name\":\"compiler_builtins\",\"optional\":true,\"req\":\"^0.1.2\"},{\"name\":\"core\",\"optional\":true,\"package\":\"rustc-std-workspace-core\",\"req\":\"^1.0.0\"},{\"name\":\"log\",\"optional\":true,\"req\":\"^0.4.20\"},{\"default_features\":false,\"kind\":\"dev\",\"name\":\"quickcheck\",\"req\":\"^1.0.3\"}],\"features\":{\"alloc\":[],\"default\":[\"std\"],\"libc\":[],\"logging\":[\"dep:log\"],\"rustc-dep-of-std\":[\"core\",\"compiler_builtins\"],\"std\":[\"alloc\"],\"use_std\":[\"std\"]}}",
+      "minimal-lexical_0.2.1": "{\"dependencies\":[],\"features\":{\"alloc\":[],\"compact\":[],\"default\":[\"std\"],\"lint\":[],\"nightly\":[],\"std\":[]}}",
+      "monostate-impl_0.1.13": "{\"dependencies\":[{\"name\":\"proc-macro2\",\"req\":\"^1.0.80\"},{\"name\":\"quote\",\"req\":\"^1.0.35\"},{\"default_features\":false,\"features\":[\"parsing\",\"proc-macro\"],\"name\":\"syn\",\"req\":\"^2.0.59\"}],\"features\":{}}",
+      "monostate_0.1.13": "{\"dependencies\":[{\"name\":\"monostate-impl\",\"req\":\"=0.1.13\"},{\"default_features\":false,\"name\":\"serde\",\"req\":\"^1.0.166\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"serde\",\"req\":\"^1.0.166\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1.0.99\"}],\"features\":{}}",
+      "nom_7.1.3": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"doc-comment\",\"req\":\"^0.3\"},{\"default_features\":false,\"name\":\"memchr\",\"req\":\"^2.3\"},{\"default_features\":false,\"name\":\"minimal-lexical\",\"req\":\"^0.2.0\"},{\"kind\":\"dev\",\"name\":\"proptest\",\"req\":\"^1.0.0\"}],\"features\":{\"alloc\":[],\"default\":[\"std\"],\"docsrs\":[],\"std\":[\"alloc\",\"memchr/std\",\"minimal-lexical/std\"]}}",
+      "once_cell_1.20.2": "{\"dependencies\":[{\"name\":\"critical-section\",\"optional\":true,\"req\":\"^1.1.3\"},{\"features\":[\"std\"],\"kind\":\"dev\",\"name\":\"critical-section\",\"req\":\"^1.1.3\"},{\"default_features\":false,\"name\":\"parking_lot_core\",\"optional\":true,\"req\":\"^0.9.10\"},{\"default_features\":false,\"name\":\"portable-atomic\",\"optional\":true,\"req\":\"^1.8\"},{\"kind\":\"dev\",\"name\":\"regex\",\"req\":\"^1.10.6\"}],\"features\":{\"alloc\":[\"race\"],\"atomic-polyfill\":[\"critical-section\"],\"critical-section\":[\"dep:critical-section\",\"portable-atomic\"],\"default\":[\"std\"],\"parking_lot\":[\"dep:parking_lot_core\"],\"portable-atomic\":[\"dep:portable-atomic\"],\"race\":[],\"std\":[\"alloc\"],\"unstable\":[]}}",
+      "onig_6.5.1": "{\"dependencies\":[{\"name\":\"bitflags\",\"req\":\"^2.4.0\"},{\"name\":\"libc\",\"req\":\"^0.2\",\"target\":\"cfg(windows)\"},{\"name\":\"once_cell\",\"req\":\"^1.12\"},{\"default_features\":false,\"name\":\"onig_sys\",\"req\":\"^69.9.1\"}],\"features\":{\"default\":[\"generate\"],\"generate\":[\"onig_sys/generate\"],\"posix-api\":[\"onig_sys/posix-api\"],\"print-debug\":[\"onig_sys/print-debug\"],\"std-pattern\":[]}}",
+      "onig_sys_69.9.1": "{\"dependencies\":[{\"features\":[\"runtime\"],\"kind\":\"build\",\"name\":\"bindgen\",\"optional\":true,\"req\":\"^0.71\"},{\"kind\":\"build\",\"name\":\"cc\",\"req\":\"^1.0\"},{\"kind\":\"build\",\"name\":\"pkg-config\",\"req\":\"^0.3.16\"}],\"features\":{\"default\":[\"generate\"],\"generate\":[\"bindgen\"],\"posix-api\":[],\"print-debug\":[]}}",
+      "paste_1.0.15": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"paste-test-suite\",\"req\":\"^0\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.49\"}],\"features\":{}}",
+      "pkg-config_0.3.32": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"lazy_static\",\"req\":\"^1\"}],\"features\":{}}",
+      "ppv-lite86_0.2.20": "{\"dependencies\":[{\"features\":[\"simd\",\"derive\"],\"name\":\"zerocopy\",\"req\":\"^0.7\"}],\"features\":{\"default\":[\"std\"],\"no_simd\":[],\"simd\":[],\"std\":[]}}",
+      "proc-macro2_1.0.92": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"flate2\",\"req\":\"^1.0\"},{\"default_features\":false,\"kind\":\"dev\",\"name\":\"quote\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"rayon\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"tar\",\"req\":\"^0.4\"},{\"name\":\"unicode-ident\",\"req\":\"^1.0\"}],\"features\":{\"default\":[\"proc-macro\"],\"nightly\":[],\"proc-macro\":[],\"span-locations\":[]}}",
+      "quote_1.0.37": "{\"dependencies\":[{\"default_features\":false,\"name\":\"proc-macro2\",\"req\":\"^1.0.80\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.66\"}],\"features\":{\"default\":[\"proc-macro\"],\"proc-macro\":[\"proc-macro2/proc-macro\"]}}",
+      "r-efi_5.3.0": "{\"dependencies\":[{\"name\":\"core\",\"optional\":true,\"package\":\"rustc-std-workspace-core\",\"req\":\"^1.0.0\"}],\"features\":{\"efiapi\":[],\"examples\":[\"native\"],\"native\":[],\"rustc-dep-of-std\":[\"core\"]}}",
+      "rand_0.9.1": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"bincode\",\"req\":\"^1.2.1\"},{\"name\":\"log\",\"optional\":true,\"req\":\"^0.4.4\"},{\"default_features\":false,\"name\":\"rand_chacha\",\"optional\":true,\"req\":\"^0.9.0\"},{\"default_features\":false,\"name\":\"rand_core\",\"req\":\"^0.9.0\"},{\"kind\":\"dev\",\"name\":\"rand_pcg\",\"req\":\"^0.9.0\"},{\"kind\":\"dev\",\"name\":\"rayon\",\"req\":\"^1.7\"},{\"features\":[\"derive\"],\"name\":\"serde\",\"optional\":true,\"req\":\"^1.0.103\"}],\"features\":{\"alloc\":[],\"default\":[\"std\",\"std_rng\",\"os_rng\",\"small_rng\",\"thread_rng\"],\"log\":[\"dep:log\"],\"nightly\":[],\"os_rng\":[\"rand_core/os_rng\"],\"serde\":[\"dep:serde\",\"rand_core/serde\"],\"simd_support\":[],\"small_rng\":[],\"std\":[\"rand_core/std\",\"rand_chacha?/std\",\"alloc\"],\"std_rng\":[\"dep:rand_chacha\"],\"thread_rng\":[\"std\",\"std_rng\",\"os_rng\"],\"unbiased\":[]}}",
+      "rand_chacha_0.9.0": "{\"dependencies\":[{\"default_features\":false,\"features\":[\"simd\"],\"name\":\"ppv-lite86\",\"req\":\"^0.2.14\"},{\"name\":\"rand_core\",\"req\":\"^0.9.0\"},{\"features\":[\"os_rng\"],\"kind\":\"dev\",\"name\":\"rand_core\",\"req\":\"^0.9.0\"},{\"features\":[\"derive\"],\"name\":\"serde\",\"optional\":true,\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1.0\"}],\"features\":{\"default\":[\"std\"],\"os_rng\":[\"rand_core/os_rng\"],\"serde\":[\"dep:serde\"],\"std\":[\"ppv-lite86/std\",\"rand_core/std\"]}}",
+      "rand_core_0.9.3": "{\"dependencies\":[{\"name\":\"getrandom\",\"optional\":true,\"req\":\"^0.3.0\"},{\"features\":[\"derive\"],\"name\":\"serde\",\"optional\":true,\"req\":\"^1\"}],\"features\":{\"os_rng\":[\"dep:getrandom\"],\"serde\":[\"dep:serde\"],\"std\":[\"getrandom?/std\"]}}",
+      "rayon-cond_0.4.0": "{\"dependencies\":[{\"name\":\"either\",\"req\":\"^1.6\"},{\"name\":\"itertools\",\"req\":\"^0.14\"},{\"name\":\"rayon\",\"req\":\"^1.7\"}],\"features\":{}}",
+      "rayon-core_1.12.1": "{\"dependencies\":[{\"name\":\"crossbeam-deque\",\"req\":\"^0.8.1\"},{\"name\":\"crossbeam-utils\",\"req\":\"^0.8.0\"},{\"kind\":\"dev\",\"name\":\"libc\",\"req\":\"^0.2\",\"target\":\"cfg(unix)\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"},{\"kind\":\"dev\",\"name\":\"rand_xorshift\",\"req\":\"^0.3\"},{\"kind\":\"dev\",\"name\":\"scoped-tls\",\"req\":\"^1.0\"},{\"name\":\"wasm_sync\",\"optional\":true,\"req\":\"^0.1.0\"}],\"features\":{\"web_spin_lock\":[\"dep:wasm_sync\"]}}",
+      "rayon_1.10.0": "{\"dependencies\":[{\"default_features\":false,\"name\":\"either\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"},{\"kind\":\"dev\",\"name\":\"rand_xorshift\",\"req\":\"^0.3\"},{\"name\":\"rayon-core\",\"req\":\"^1.12.1\"},{\"name\":\"wasm_sync\",\"optional\":true,\"req\":\"^0.1.0\"}],\"features\":{\"web_spin_lock\":[\"dep:wasm_sync\",\"rayon-core/web_spin_lock\"]}}",
+      "regex-automata_0.4.9": "{\"dependencies\":[{\"default_features\":false,\"name\":\"aho-corasick\",\"optional\":true,\"req\":\"^1.0.0\"},{\"kind\":\"dev\",\"name\":\"anyhow\",\"req\":\"^1.0.69\"},{\"default_features\":false,\"features\":[\"std\"],\"kind\":\"dev\",\"name\":\"bstr\",\"req\":\"^1.3.0\"},{\"kind\":\"dev\",\"name\":\"doc-comment\",\"req\":\"^0.3.3\"},{\"default_features\":false,\"features\":[\"atty\",\"humantime\",\"termcolor\"],\"kind\":\"dev\",\"name\":\"env_logger\",\"req\":\"^0.9.3\"},{\"name\":\"log\",\"optional\":true,\"req\":\"^0.4.14\"},{\"default_features\":false,\"name\":\"memchr\",\"optional\":true,\"req\":\"^2.6.0\"},{\"default_features\":false,\"kind\":\"dev\",\"name\":\"quickcheck\",\"req\":\"^1.0.3\"},{\"default_features\":false,\"name\":\"regex-syntax\",\"optional\":true,\"req\":\"^0.8.5\"},{\"kind\":\"dev\",\"name\":\"regex-test\",\"req\":\"^0.1.0\"}],\"features\":{\"alloc\":[],\"default\":[\"std\",\"syntax\",\"perf\",\"unicode\",\"meta\",\"nfa\",\"dfa\",\"hybrid\"],\"dfa\":[\"dfa-build\",\"dfa-search\",\"dfa-onepass\"],\"dfa-build\":[\"nfa-thompson\",\"dfa-search\"],\"dfa-onepass\":[\"nfa-thompson\"],\"dfa-search\":[],\"hybrid\":[\"alloc\",\"nfa-thompson\"],\"internal-instrument\":[\"internal-instrument-pikevm\"],\"internal-instrument-pikevm\":[\"logging\",\"std\"],\"logging\":[\"dep:log\",\"aho-corasick?/logging\",\"memchr?/logging\"],\"meta\":[\"syntax\",\"nfa-pikevm\"],\"nfa\":[\"nfa-thompson\",\"nfa-pikevm\",\"nfa-backtrack\"],\"nfa-backtrack\":[\"nfa-thompson\"],\"nfa-pikevm\":[\"nfa-thompson\"],\"nfa-thompson\":[\"alloc\"],\"perf\":[\"perf-inline\",\"perf-literal\"],\"perf-inline\":[],\"perf-literal\":[\"perf-literal-substring\",\"perf-literal-multisubstring\"],\"perf-literal-multisubstring\":[\"std\",\"dep:aho-corasick\"],\"perf-literal-substring\":[\"aho-corasick?/perf-literal\",\"dep:memchr\"],\"std\":[\"regex-syntax?/std\",\"memchr?/std\",\"aho-corasick?/std\",\"alloc\"],\"syntax\":[\"dep:regex-syntax\",\"alloc\"],\"unicode\":[\"unicode-age\",\"unicode-bool\",\"unicode-case\",\"unicode-gencat\",\"unicode-perl\",\"unicode-script\",\"unicode-segment\",\"unicode-word-boundary\",\"regex-syntax?/unicode\"],\"unicode-age\":[\"regex-syntax?/unicode-age\"],\"unicode-bool\":[\"regex-syntax?/unicode-bool\"],\"unicode-case\":[\"regex-syntax?/unicode-case\"],\"unicode-gencat\":[\"regex-syntax?/unicode-gencat\"],\"unicode-perl\":[\"regex-syntax?/unicode-perl\"],\"unicode-script\":[\"regex-syntax?/unicode-script\"],\"unicode-segment\":[\"regex-syntax?/unicode-segment\"],\"unicode-word-boundary\":[]}}",
+      "regex-syntax_0.8.5": "{\"dependencies\":[{\"features\":[\"derive\"],\"name\":\"arbitrary\",\"optional\":true,\"req\":\"^1.3.0\"}],\"features\":{\"arbitrary\":[\"dep:arbitrary\"],\"default\":[\"std\",\"unicode\"],\"std\":[],\"unicode\":[\"unicode-age\",\"unicode-bool\",\"unicode-case\",\"unicode-gencat\",\"unicode-perl\",\"unicode-script\",\"unicode-segment\"],\"unicode-age\":[],\"unicode-bool\":[],\"unicode-case\":[],\"unicode-gencat\":[],\"unicode-perl\":[],\"unicode-script\":[],\"unicode-segment\":[]}}",
+      "regex_1.11.1": "{\"dependencies\":[{\"default_features\":false,\"name\":\"aho-corasick\",\"optional\":true,\"req\":\"^1.0.0\"},{\"kind\":\"dev\",\"name\":\"anyhow\",\"req\":\"^1.0.69\"},{\"kind\":\"dev\",\"name\":\"doc-comment\",\"req\":\"^0.3\"},{\"default_features\":false,\"features\":[\"atty\",\"humantime\",\"termcolor\"],\"kind\":\"dev\",\"name\":\"env_logger\",\"req\":\"^0.9.3\"},{\"default_features\":false,\"name\":\"memchr\",\"optional\":true,\"req\":\"^2.6.0\"},{\"kind\":\"dev\",\"name\":\"once_cell\",\"req\":\"^1.17.1\"},{\"default_features\":false,\"kind\":\"dev\",\"name\":\"quickcheck\",\"req\":\"^1.0.3\"},{\"default_features\":false,\"features\":[\"alloc\",\"syntax\",\"meta\",\"nfa-pikevm\"],\"name\":\"regex-automata\",\"req\":\"^0.4.8\"},{\"default_features\":false,\"name\":\"regex-syntax\",\"req\":\"^0.8.5\"},{\"kind\":\"dev\",\"name\":\"regex-test\",\"req\":\"^0.1.0\"}],\"features\":{\"default\":[\"std\",\"perf\",\"unicode\",\"regex-syntax/default\"],\"logging\":[\"aho-corasick?/logging\",\"memchr?/logging\",\"regex-automata/logging\"],\"pattern\":[],\"perf\":[\"perf-cache\",\"perf-dfa\",\"perf-onepass\",\"perf-backtrack\",\"perf-inline\",\"perf-literal\"],\"perf-backtrack\":[\"regex-automata/nfa-backtrack\"],\"perf-cache\":[],\"perf-dfa\":[\"regex-automata/hybrid\"],\"perf-dfa-full\":[\"regex-automata/dfa-build\",\"regex-automata/dfa-search\"],\"perf-inline\":[\"regex-automata/perf-inline\"],\"perf-literal\":[\"dep:aho-corasick\",\"dep:memchr\",\"regex-automata/perf-literal\"],\"perf-onepass\":[\"regex-automata/dfa-onepass\"],\"std\":[\"aho-corasick?/std\",\"memchr?/std\",\"regex-automata/std\",\"regex-syntax/std\"],\"unicode\":[\"unicode-age\",\"unicode-bool\",\"unicode-case\",\"unicode-gencat\",\"unicode-perl\",\"unicode-script\",\"unicode-segment\",\"regex-automata/unicode\",\"regex-syntax/unicode\"],\"unicode-age\":[\"regex-automata/unicode-age\",\"regex-syntax/unicode-age\"],\"unicode-bool\":[\"regex-automata/unicode-bool\",\"regex-syntax/unicode-bool\"],\"unicode-case\":[\"regex-automata/unicode-case\",\"regex-syntax/unicode-case\"],\"unicode-gencat\":[\"regex-automata/unicode-gencat\",\"regex-syntax/unicode-gencat\"],\"unicode-perl\":[\"regex-automata/unicode-perl\",\"regex-automata/unicode-word-boundary\",\"regex-syntax/unicode-perl\"],\"unicode-script\":[\"regex-automata/unicode-script\",\"regex-syntax/unicode-script\"],\"unicode-segment\":[\"regex-automata/unicode-segment\",\"regex-syntax/unicode-segment\"],\"unstable\":[\"pattern\"],\"use_std\":[\"std\"]}}",
+      "rustversion_1.0.21": "{\"dependencies\":[{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.49\"}],\"features\":{}}",
+      "ryu_1.0.18": "{\"dependencies\":[{\"name\":\"no-panic\",\"optional\":true,\"req\":\"^0.1\"},{\"kind\":\"dev\",\"name\":\"num_cpus\",\"req\":\"^1.8\"},{\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"},{\"kind\":\"dev\",\"name\":\"rand_xorshift\",\"req\":\"^0.3\"}],\"features\":{\"small\":[]}}",
+      "serde_1.0.216": "{\"dependencies\":[{\"name\":\"serde_derive\",\"req\":\"=1.0.216\",\"target\":\"cfg(any())\"},{\"name\":\"serde_derive\",\"optional\":true,\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"serde_derive\",\"req\":\"^1\"}],\"features\":{\"alloc\":[],\"default\":[\"std\"],\"derive\":[\"serde_derive\"],\"rc\":[],\"std\":[],\"unstable\":[]}}",
+      "serde_derive_1.0.216": "{\"dependencies\":[{\"default_features\":false,\"features\":[\"proc-macro\"],\"name\":\"proc-macro2\",\"req\":\"^1.0.74\"},{\"default_features\":false,\"features\":[\"proc-macro\"],\"name\":\"quote\",\"req\":\"^1.0.35\"},{\"kind\":\"dev\",\"name\":\"serde\",\"req\":\"^1\"},{\"default_features\":false,\"features\":[\"clone-impls\",\"derive\",\"parsing\",\"printing\",\"proc-macro\"],\"name\":\"syn\",\"req\":\"^2.0.81\"}],\"features\":{\"default\":[],\"deserialize_in_place\":[]}}",
+      "serde_json_1.0.134": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"automod\",\"req\":\"^1.0.11\"},{\"name\":\"indexmap\",\"optional\":true,\"req\":\"^2.2.3\"},{\"kind\":\"dev\",\"name\":\"indoc\",\"req\":\"^2.0.2\"},{\"name\":\"itoa\",\"req\":\"^1.0\"},{\"default_features\":false,\"name\":\"memchr\",\"req\":\"^2\"},{\"kind\":\"dev\",\"name\":\"ref-cast\",\"req\":\"^1.0.18\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0.13\"},{\"name\":\"ryu\",\"req\":\"^1.0\"},{\"default_features\":false,\"name\":\"serde\",\"req\":\"^1.0.194\"},{\"features\":[\"derive\"],\"kind\":\"dev\",\"name\":\"serde\",\"req\":\"^1.0.194\"},{\"kind\":\"dev\",\"name\":\"serde_bytes\",\"req\":\"^0.11.10\"},{\"kind\":\"dev\",\"name\":\"serde_derive\",\"req\":\"^1.0.166\"},{\"kind\":\"dev\",\"name\":\"serde_stacker\",\"req\":\"^0.1.8\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.81\"}],\"features\":{\"alloc\":[\"serde/alloc\"],\"arbitrary_precision\":[],\"default\":[\"std\"],\"float_roundtrip\":[],\"preserve_order\":[\"indexmap\",\"std\"],\"raw_value\":[],\"std\":[\"memchr/std\",\"serde/std\"],\"unbounded_depth\":[]}}",
+      "shlex_1.3.0": "{\"dependencies\":[],\"features\":{\"default\":[\"std\"],\"std\":[]}}",
+      "smallvec_1.13.2": "{\"dependencies\":[{\"name\":\"arbitrary\",\"optional\":true,\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"bincode\",\"req\":\"^1.0.1\"},{\"kind\":\"dev\",\"name\":\"debugger_test\",\"req\":\"^0.1.0\"},{\"kind\":\"dev\",\"name\":\"debugger_test_parser\",\"req\":\"^0.1.0\"},{\"default_features\":false,\"name\":\"serde\",\"optional\":true,\"req\":\"^1\"}],\"features\":{\"const_generics\":[],\"const_new\":[\"const_generics\"],\"debugger_visualizer\":[],\"drain_filter\":[],\"drain_keep_rest\":[\"drain_filter\"],\"may_dangle\":[],\"specialization\":[],\"union\":[],\"write\":[]}}",
+      "spm_precompiled_0.1.4": "{\"dependencies\":[{\"name\":\"base64\",\"req\":\"^0.13\"},{\"name\":\"nom\",\"req\":\"^7.1.1\"},{\"features\":[\"derive\"],\"name\":\"serde\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"serde_json\",\"req\":\"^1.0\"},{\"name\":\"unicode-segmentation\",\"req\":\"^1.9\"}],\"features\":{}}",
+      "static_assertions_1.1.0": "{\"dependencies\":[],\"features\":{\"nightly\":[]}}",
+      "strsim_0.11.1": "{\"dependencies\":[],\"features\":{}}",
+      "syn_2.0.91": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"anyhow\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"automod\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"flate2\",\"req\":\"^1\",\"target\":\"cfg(not(miri))\"},{\"kind\":\"dev\",\"name\":\"insta\",\"req\":\"^1\"},{\"default_features\":false,\"name\":\"proc-macro2\",\"req\":\"^1.0.91\"},{\"default_features\":false,\"name\":\"quote\",\"optional\":true,\"req\":\"^1.0.35\"},{\"kind\":\"dev\",\"name\":\"rayon\",\"req\":\"^1\",\"target\":\"cfg(not(miri))\"},{\"kind\":\"dev\",\"name\":\"ref-cast\",\"req\":\"^1\"},{\"features\":[\"blocking\"],\"kind\":\"dev\",\"name\":\"reqwest\",\"req\":\"^0.12\",\"target\":\"cfg(not(miri))\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"syn-test-suite\",\"req\":\"^0\"},{\"kind\":\"dev\",\"name\":\"tar\",\"req\":\"^0.4.16\",\"target\":\"cfg(not(miri))\"},{\"kind\":\"dev\",\"name\":\"termcolor\",\"req\":\"^1\"},{\"name\":\"unicode-ident\",\"req\":\"^1\"},{\"kind\":\"dev\",\"name\":\"walkdir\",\"req\":\"^2.3.2\",\"target\":\"cfg(not(miri))\"}],\"features\":{\"clone-impls\":[],\"default\":[\"derive\",\"parsing\",\"printing\",\"clone-impls\",\"proc-macro\"],\"derive\":[],\"extra-traits\":[],\"fold\":[],\"full\":[],\"parsing\":[],\"printing\":[\"dep:quote\"],\"proc-macro\":[\"proc-macro2/proc-macro\",\"quote?/proc-macro\"],\"test\":[\"syn-test-suite/all-features\"],\"visit\":[],\"visit-mut\":[]}}",
+      "thiserror-impl_2.0.12": "{\"dependencies\":[{\"name\":\"proc-macro2\",\"req\":\"^1.0.74\"},{\"name\":\"quote\",\"req\":\"^1.0.35\"},{\"name\":\"syn\",\"req\":\"^2.0.87\"}],\"features\":{}}",
+      "thiserror_2.0.12": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"anyhow\",\"req\":\"^1.0.73\"},{\"kind\":\"dev\",\"name\":\"ref-cast\",\"req\":\"^1.0.18\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0.13\"},{\"name\":\"thiserror-impl\",\"req\":\"=2.0.12\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"^1.0.81\"}],\"features\":{\"default\":[\"std\"],\"std\":[]}}",
+      "tokenizers_0.22.2": "{\"dependencies\":[{\"features\":[\"serde\"],\"name\":\"ahash\",\"req\":\"^0.8.11\"},{\"name\":\"aho-corasick\",\"req\":\"^1.1\"},{\"kind\":\"dev\",\"name\":\"assert_approx_eq\",\"req\":\"^1.1\"},{\"features\":[\"serde\"],\"name\":\"compact_str\",\"req\":\"^0.9\"},{\"kind\":\"dev\",\"name\":\"criterion\",\"req\":\"^0.6\"},{\"features\":[\"serde\"],\"name\":\"dary_heap\",\"req\":\"^0.3.6\"},{\"name\":\"derive_builder\",\"req\":\"^0.20\"},{\"default_features\":false,\"name\":\"esaxx-rs\",\"req\":\"^0.1.10\"},{\"name\":\"fancy-regex\",\"optional\":true,\"req\":\"^0.14\"},{\"name\":\"getrandom\",\"req\":\"^0.3\"},{\"default_features\":false,\"features\":[\"ureq\"],\"name\":\"hf-hub\",\"optional\":true,\"req\":\"^0.4.1\"},{\"name\":\"indicatif\",\"optional\":true,\"req\":\"^0.18\"},{\"name\":\"itertools\",\"req\":\"^0.14\"},{\"name\":\"log\",\"req\":\"^0.4\"},{\"name\":\"macro_rules_attribute\",\"req\":\"^0.2.0\"},{\"name\":\"monostate\",\"req\":\"^0.1.12\"},{\"default_features\":false,\"name\":\"onig\",\"optional\":true,\"req\":\"^6.5.1\"},{\"name\":\"paste\",\"req\":\"^1.0.14\"},{\"name\":\"rand\",\"req\":\"^0.9\"},{\"name\":\"rayon\",\"req\":\"^1.10\"},{\"name\":\"rayon-cond\",\"req\":\"^0.4\"},{\"name\":\"regex\",\"req\":\"^1.10\"},{\"name\":\"regex-syntax\",\"req\":\"^0.8\"},{\"features\":[\"derive\"],\"name\":\"serde\",\"req\":\"^1.0\"},{\"name\":\"serde_json\",\"req\":\"^1.0\"},{\"name\":\"spm_precompiled\",\"req\":\"^0.1.3\"},{\"kind\":\"dev\",\"name\":\"tempfile\",\"req\":\"^3.10\"},{\"name\":\"thiserror\",\"req\":\"^2\"},{\"kind\":\"dev\",\"name\":\"tracing\",\"req\":\"^0.1\"},{\"kind\":\"dev\",\"name\":\"tracing-subscriber\",\"req\":\"^0.3.18\"},{\"name\":\"unicode-normalization-alignments\",\"req\":\"^0.1\"},{\"name\":\"unicode-segmentation\",\"req\":\"^1.11\"},{\"name\":\"unicode_categories\",\"req\":\"^0.1\"}],\"features\":{\"default\":[\"progressbar\",\"onig\",\"esaxx_fast\"],\"esaxx_fast\":[\"esaxx-rs/cpp\"],\"http\":[\"hf-hub\"],\"progressbar\":[\"indicatif\"],\"rustls-tls\":[\"hf-hub?/rustls-tls\"],\"unstable_wasm\":[\"fancy-regex\",\"getrandom/wasm_js\"]}}",
+      "unicode-ident_1.0.14": "{\"dependencies\":[{\"default_features\":false,\"kind\":\"dev\",\"name\":\"criterion\",\"req\":\"^0.5\"},{\"kind\":\"dev\",\"name\":\"fst\",\"req\":\"^0.4\"},{\"features\":[\"small_rng\"],\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8\"},{\"kind\":\"dev\",\"name\":\"roaring\",\"req\":\"^0.10\"},{\"default_features\":false,\"kind\":\"dev\",\"name\":\"ucd-trie\",\"req\":\"^0.1\"},{\"kind\":\"dev\",\"name\":\"unicode-xid\",\"req\":\"^0.2.6\"}],\"features\":{}}",
+      "unicode-normalization-alignments_0.1.12": "{\"dependencies\":[{\"name\":\"smallvec\",\"req\":\"^1.0\"}],\"features\":{}}",
+      "unicode-segmentation_1.12.0": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"criterion\",\"req\":\"^0.5\"},{\"kind\":\"dev\",\"name\":\"quickcheck\",\"req\":\"^0.7\"}],\"features\":{\"no_std\":[]}}",
+      "unicode_categories_0.1.1": "{\"dependencies\":[],\"features\":{}}",
+      "version_check_0.9.5": "{\"dependencies\":[],\"features\":{}}",
+      "wasi_0.14.2+wasi-0.2.4": "{\"dependencies\":[{\"name\":\"compiler_builtins\",\"optional\":true,\"req\":\"^0.1\"},{\"name\":\"core\",\"optional\":true,\"package\":\"rustc-std-workspace-core\",\"req\":\"^1.0\"},{\"name\":\"rustc-std-workspace-alloc\",\"optional\":true,\"req\":\"^1.0\"},{\"features\":[\"bitflags\"],\"name\":\"wit-bindgen-rt\",\"req\":\"^0.39.0\"}],\"features\":{\"default\":[\"std\"],\"rustc-dep-of-std\":[\"compiler_builtins\",\"core\",\"rustc-std-workspace-alloc\"],\"std\":[]}}",
+      "wit-bindgen-rt_0.39.0": "{\"dependencies\":[{\"name\":\"bitflags\",\"optional\":true,\"req\":\"^2.3.3\"},{\"name\":\"futures\",\"optional\":true,\"req\":\"^0.3.30\"},{\"name\":\"once_cell\",\"optional\":true,\"req\":\"^1.19.0\"}],\"features\":{\"async\":[\"dep:futures\",\"dep:once_cell\"]}}",
+      "zerocopy-derive_0.7.35": "{\"dependencies\":[{\"name\":\"proc-macro2\",\"req\":\"^1.0.1\"},{\"name\":\"quote\",\"req\":\"^1.0.10\"},{\"kind\":\"dev\",\"name\":\"static_assertions\",\"req\":\"^1.1\"},{\"name\":\"syn\",\"req\":\"^2.0.31\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"=1.0.85\"}],\"features\":{}}",
+      "zerocopy-derive_0.8.26": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"dissimilar\",\"req\":\"^1.0.9\"},{\"kind\":\"dev\",\"name\":\"libc\",\"req\":\"=0.2.163\"},{\"kind\":\"dev\",\"name\":\"once_cell\",\"req\":\"=1.9\"},{\"kind\":\"dev\",\"name\":\"prettyplease\",\"req\":\"=0.2.17\"},{\"name\":\"proc-macro2\",\"req\":\"^1.0.1\"},{\"name\":\"quote\",\"req\":\"^1.0.10\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"static_assertions\",\"req\":\"^1.1\"},{\"features\":[\"full\"],\"name\":\"syn\",\"req\":\"^2.0.46\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"=1.0.89\"}],\"features\":{}}",
+      "zerocopy_0.7.35": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"assert_matches\",\"req\":\"^1.5\"},{\"default_features\":false,\"name\":\"byteorder\",\"optional\":true,\"req\":\"^1.3\"},{\"kind\":\"dev\",\"name\":\"elain\",\"req\":\"^0.3.0\"},{\"kind\":\"dev\",\"name\":\"itertools\",\"req\":\"^0.11\"},{\"features\":[\"small_rng\"],\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8.5\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"static_assertions\",\"req\":\"^1.1\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"=1.0.85\"},{\"name\":\"zerocopy-derive\",\"req\":\"=0.7.35\",\"target\":\"cfg(any())\"},{\"name\":\"zerocopy-derive\",\"optional\":true,\"req\":\"=0.7.35\"},{\"kind\":\"dev\",\"name\":\"zerocopy-derive\",\"req\":\"=0.7.35\"}],\"features\":{\"__internal_use_only_features_that_work_on_stable\":[\"alloc\",\"derive\",\"simd\"],\"alloc\":[],\"default\":[\"byteorder\"],\"derive\":[\"zerocopy-derive\"],\"simd\":[],\"simd-nightly\":[\"simd\"]}}",
+      "zerocopy_0.8.26": "{\"dependencies\":[{\"kind\":\"dev\",\"name\":\"either\",\"req\":\"=1.13.0\"},{\"kind\":\"dev\",\"name\":\"elain\",\"req\":\"^0.3.0\"},{\"kind\":\"dev\",\"name\":\"itertools\",\"req\":\"^0.11\"},{\"default_features\":false,\"features\":[\"small_rng\"],\"kind\":\"dev\",\"name\":\"rand\",\"req\":\"^0.8.5\"},{\"kind\":\"dev\",\"name\":\"rustversion\",\"req\":\"^1.0\"},{\"kind\":\"dev\",\"name\":\"static_assertions\",\"req\":\"^1.1\"},{\"features\":[\"diff\"],\"kind\":\"dev\",\"name\":\"trybuild\",\"req\":\"=1.0.89\"},{\"name\":\"zerocopy-derive\",\"req\":\"=0.8.26\",\"target\":\"cfg(any())\"},{\"name\":\"zerocopy-derive\",\"optional\":true,\"req\":\"=0.8.26\"},{\"kind\":\"dev\",\"name\":\"zerocopy-derive\",\"req\":\"=0.8.26\"}],\"features\":{\"__internal_use_only_features_that_work_on_stable\":[\"alloc\",\"derive\",\"simd\",\"std\"],\"alloc\":[],\"derive\":[\"zerocopy-derive\"],\"float-nightly\":[],\"simd\":[],\"simd-nightly\":[\"simd\"],\"std\":[\"alloc\"]}}"
+    }
+  }
+}

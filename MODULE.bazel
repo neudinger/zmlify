@@ -1,0 +1,40 @@
+module(
+    name = "simple",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "rules_zig", version = "0.12.2")
+bazel_dep(name = "zml", version = "0.0.0")
+bazel_dep(name = "rules_cc", version = "0.2.14")
+bazel_dep(name = "toolchains_llvm_bootstrapped", version = "0.5.5")
+
+git_override(
+    module_name = "rules_zig",
+    remote = "https://github.com/zml/rules_zig.git",
+    commit = "6c5d6a07b4ef48be894e7418bcae37bac54e1c2e",
+)
+
+git_override(
+    module_name = "zml",
+    remote = "https://github.com/zml/zml.git",
+    # branch = "zml/v2",
+    commit = "6636093cb474d861601f572ce76b07f72001a3be",
+)
+
+non_module_deps = use_extension("@zml//:third_party/non_module_deps.bzl", "non_module_deps")
+use_repo(
+    non_module_deps,
+    "translate-c",
+    "xla",
+)
+
+zls = use_extension("@zml//third_party/zls:zls_toolchain.bzl", "zls_toolchains")
+use_repo(zls, "zls_toolchains")
+register_toolchains("@zls_toolchains//:all")
+
+
+### LLVM Bootstrapped toolchains
+register_toolchains(
+    "@toolchains_llvm_bootstrapped//toolchain:all",
+)
+###
