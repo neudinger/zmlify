@@ -178,9 +178,4 @@ bazel run //zk-resnet -- --model=$HOME/models/resnet-18 --image=$HOME/dataset/ca
 ```
 
 ### 🧪 Testing Submodules
-Unit tests for the standalone cryptography logic are located inside the `@zk-crypto` Bazel directory:
-
-```bash
-bazel test //zk-crypto:fiat_shamir_test //zk-crypto:ntt_test_bin //zk-crypto:labrador_test_bin
-```
-
+Unit tests for the standalone cryptography logic are located inside the `@zk-crypto` Bazel directory

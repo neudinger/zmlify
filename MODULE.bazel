@@ -72,8 +72,8 @@ git_override(
     module_name = "zml",
     remote = "https://github.com/zml/zml.git",
     commit = "6be028f873dba5683f131f549c153e8081c9db39",
-    # patches = ["//:zml.patch"],
-    # patch_strip = 1,
+    patches = ["//:zml.patch"],
+    patch_strip = 1,
 )
 
 # Keep for local development
