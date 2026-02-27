@@ -34,3 +34,6 @@ venv
 
 *.tmp*
 __pycache__/
+
+# Directories in construction
+docs/

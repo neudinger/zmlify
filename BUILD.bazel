@@ -1,9 +1,19 @@
 load("@zml//third_party/zls:zls_completion.bzl", "zls_completion")
 
+exports_files([
+    "iree_zig.patch",
+    "zml.patch",
+    "rules_zig.patch",
+])
+
 zls_completion(
     name = "completion",
     visibility = ["//visibility:public"],
     deps = [
         "//simple",
+        "//resnet-18",
+        "//zk-resnet",
+        "//zk-crypto",
+        "//zerkerus",
     ],
 )

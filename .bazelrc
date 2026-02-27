@@ -18,14 +18,16 @@ common --action_env=TMPDIR=/var/tmp
 common --@rules_zig//zig/settings:use_cc_common_link=True
 common --@rules_zig//zig/settings:zigopt=-fllvm
 
-common          --@toolchains_llvm_bootstrapped//config:experimental_stub_libgcc_s=True
-common          --macos_minimum_os=13.0
-common          --@rules_cc//cc/toolchains/args/archiver_flags:use_libtool_on_macos=false
-common          --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
-common          --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
+common --@toolchains_llvm_bootstrapped//config:experimental_stub_libgcc_s=True
+common --macos_minimum_os=13.0
+common --@rules_cc//cc/toolchains/args/archiver_flags:use_libtool_on_macos=false
+common --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
+common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
 
 # --config=native builds everything optimized for the local CPU
 common:native   --copt=-march=native
 common:native   --@rules_zig//zig/settings:zigopt=-mcpu=native
 common:native   --@rules_rust//rust/settings:extra_rustc_flag=-Ctarget-cpu=native
 
+build --action_env=ZIG_LOCAL_CACHE_DIR=/tmp/zig
+build --action_env=ZIG_GLOBAL_CACHE_DIR=/tmp/zig

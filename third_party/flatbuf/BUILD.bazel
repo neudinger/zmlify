@@ -1,0 +1,15 @@
+exports_files(["flatcc.BUILD"])
+
+load("//third_party/flatbuf:defs.bzl", "flatcc_library")
+
+flatcc_library(
+    name = "test_fbs",
+    src = "test.fbs",
+    outs = [
+        "test_builder.h",
+        "test_reader.h",
+        "test_verifier.h",
+        "test_json_parser.h",
+        "test_json_printer.h",
+    ],
+)

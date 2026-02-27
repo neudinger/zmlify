@@ -1,0 +1,56 @@
+diff --git a/zml/module.zig b/zml/module.zig
+index 3163785..14d35cb 100644
+--- a/zml/module.zig
++++ b/zml/module.zig
+@@ -305,7 +305,7 @@ fn collectInputInfo(allocator: std.mem.Allocator, v: anytype) !InputInfo {
+     };
+ }
+ 
+-const EmitMlirResult = struct {
++pub const EmitMlirResult = struct {
+     func: *mlir.Operation,
+     input_info: InputInfo,
+     output_info: OutputInfo,
+@@ -319,7 +319,7 @@ fn finalizeAttributeList(allocator_: std.mem.Allocator, mlir_ctx: *mlir.Context,
+     return res;
+ }
+ 
+-fn emitMlir(compilation_context: *CompilationContext, comptime func: anytype, args: stdx.meta.FnArgs(func)) !EmitMlirResult {
++pub fn emitMlir(compilation_context: *CompilationContext, comptime func: anytype, args: stdx.meta.FnArgs(func)) !EmitMlirResult {
+     var arena = std.heap.ArenaAllocator.init(compilation_context.allocator);
+     defer arena.deinit();
+ 
+@@ -434,7 +434,7 @@ fn setXlaOverrideFlag(map: *c.upb_Map, flag: []const u8, value: anytype, upb_are
+     }
+ }
+ 
+-fn compileModuleToPjrtExecutable(arena: std.mem.Allocator, io: std.Io, platform: *const Platform, module: *const mlir.Module, xla_dump_to_: ?[]const u8) !*pjrt.LoadedExecutable {
++pub fn compileModuleToPjrtExecutable(arena: std.mem.Allocator, io: std.Io, platform: *const Platform, module: *const mlir.Module, xla_dump_to_: ?[]const u8) !*pjrt.LoadedExecutable {
+     //const tracer = Tracer.init("ai.zml.compilation");
+     //const compile_frame = tracer.frameStart("pjrt compilation");
+     //defer tracer.frameEnd(compile_frame, "pjrt compilation");
+diff --git a/zml/tensor.zig b/zml/tensor.zig
+index 1b2f873..e78e950 100644
+--- a/zml/tensor.zig
++++ b/zml/tensor.zig
+@@ -62,6 +62,9 @@ pub const Tensor = struct {
+         return self._shape.byteSize();
+     }
+ 
++    pub var global_tracer: ?*std.ArrayListUnmanaged(Tensor) = null;
++    pub var global_tracer_allocator: ?std.mem.Allocator = null;
++
+     /// Internal use
+     ///
+     /// Creates a tensor from a Shape and an mlir.Value.
+@@ -78,6 +81,10 @@ pub const Tensor = struct {
+             stdx.debug.internalAssert(sh.eql(other._shape), "Created a {f} from Mlir value but expected {f}", .{ other._shape, res._shape });
+         }
+ 
++        if (global_tracer) |tracer| {
++            tracer.append(global_tracer_allocator.?, res) catch @panic("OOM in global trace");
++        }
++
+         return res;
+     }
+ 

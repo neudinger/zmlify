@@ -1,0 +1,10 @@
+// Commitment phase of the Labrador ZKP sigma protocol
+// Prover sends w = A*y mod Q
+namespace zerkerus;
+
+table Commitment {
+    w: [ulong];                // Commitment vector w (M elements, u64)
+    attempt: uint;             // Attempt number (rejection sampling iteration)
+}
+
+root_type Commitment;

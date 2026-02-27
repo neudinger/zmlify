@@ -1,0 +1,57 @@
+load("@rules_zig//zig:defs.bzl", "zig_binary")
+load("//third_party/flatbuf:defs.bzl", "flatcc_library")
+
+flatcc_library(
+    name = "zerkerus_fbs",
+    src = "idl/proof.fbs",
+    schema_deps = [
+        "idl/registration.fbs",
+        "idl/commitment.fbs",
+        "idl/challenge.fbs",
+    ],
+    outs = [
+        "registration_builder.h",
+        "registration_reader.h",
+        "registration_verifier.h",
+        "registration_json_parser.h",
+        "registration_json_printer.h",
+        "commitment_builder.h",
+        "commitment_reader.h",
+        "commitment_verifier.h",
+        "commitment_json_parser.h",
+        "commitment_json_printer.h",
+        "challenge_builder.h",
+        "challenge_reader.h",
+        "challenge_verifier.h",
+        "challenge_json_parser.h",
+        "challenge_json_printer.h",
+        "proof_builder.h",
+        "proof_reader.h",
+        "proof_verifier.h",
+        "proof_json_parser.h",
+        "proof_json_printer.h",
+        "flatbuffers_common_builder.h",
+        "flatbuffers_common_reader.h",
+    ],
+)
+
+zig_binary(
+    name = "zerkerus",
+    main = "main.zig",
+    deps = [
+        "//zk-crypto",
+        "@zml//zml",
+        ":zerkerus_fbs",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+zig_binary(
+    name = "test_iree",
+    main = "test_iree.zig",
+    deps = [
+        "@iree_core//runtime/src/iree/hal:hal",
+        "@iree_core//runtime/src/iree/base:base",
+    ],
+    tags = ["local", "no-sandbox"],
+)

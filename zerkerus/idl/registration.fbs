@@ -1,0 +1,10 @@
+// Registration phase of the Labrador ZKP sigma protocol
+// Client sends public key t = A*s mod Q with the seed for matrix A
+namespace zerkerus;
+
+table Registration {
+    public_seed: [ubyte];       // 32-byte seed to derive public matrix A
+    public_key_t: [ulong];     // Public key vector t (M elements, u64)
+}
+
+root_type Registration;

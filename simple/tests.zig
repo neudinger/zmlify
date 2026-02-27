@@ -2,6 +2,7 @@ const std = @import("std");
 const ref = @import("reference.zig");
 const opt = @import("optimized.zig");
 
+/// Helper function to assert that two floating-point slices are approximately equal within an epsilon.
 fn expectApproxEq(expected: []const f32, actual: []const f32, epsilon: f32) !void {
     if (expected.len != actual.len) return error.LengthMismatch;
     for (expected, actual) |e, a| {
@@ -12,6 +13,7 @@ fn expectApproxEq(expected: []const f32, actual: []const f32, epsilon: f32) !voi
     }
 }
 
+/// Helper function to assert that two integer slices are exactly equal.
 fn expectEq(expected: []const i32, actual: []const i32) !void {
     if (expected.len != actual.len) return error.LengthMismatch;
     for (expected, actual) |e, a| {
@@ -22,6 +24,8 @@ fn expectEq(expected: []const i32, actual: []const i32) !void {
     }
 }
 
+// Validates standard matrix multiplication comparing reference and optimized.
+// Formula: $$C_{i,j} = \sum_{k} A_{i,k} B_{k,j}$$
 test "matmul" {
     const allocator = std.testing.allocator;
     var rng = std.Random.DefaultPrng.init(0);
@@ -48,6 +52,8 @@ test "matmul" {
     try expectApproxEq(ref_out_matmul, opt_out_matmul, 1e-4);
 }
 
+// Validates single-precision scalar multiplication and vector addition (SAXPY) comparing reference and optimized.
+// Formula: $$Z_i = a \cdot X_i + Y_i$$
 test "saxpy" {
     const allocator = std.testing.allocator;
     var rng = std.Random.DefaultPrng.init(0);
@@ -72,6 +78,8 @@ test "saxpy" {
     try expectApproxEq(ref_out_saxpy, opt_out_saxpy, 1e-4);
 }
 
+// Validates integer matrix multiplication with modulo $Q = 3329$ operation comparing reference and optimized.
+// Formula: $$C_{i,j} = \left( \sum_{k} A_{i,k} B_{k,j} \right) \pmod{Q}$$
 test "mod_matmul" {
     const allocator = std.testing.allocator;
     var rng = std.Random.DefaultPrng.init(0);
@@ -129,6 +137,8 @@ test "mod_matmul" {
     try std.testing.expectEqual(@as(i32, 50), out_small[3]);
 }
 
+// Validates a 2D heat transfer simulation comparing reference and optimized.
+// Formula: $$U_{i,j}^{(t+1)} = \frac{1}{4} \left( U_{i-1,j}^{(t)} + U_{i+1,j}^{(t)} + U_{i,j-1}^{(t)} + U_{i,j+1}^{(t)} \right)$$
 test "heat_transfer" {
     const allocator = std.testing.allocator;
     const H = 4;

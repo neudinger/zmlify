@@ -7,30 +7,93 @@ bazel_dep(name = "rules_zig", version = "0.12.2")
 bazel_dep(name = "zml", version = "0.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.14")
 bazel_dep(name = "toolchains_llvm_bootstrapped", version = "0.5.5")
+bazel_dep(name = "iree_core", version = "0.0.1")
+
+git_override(
+    module_name = "iree_core",
+    remote = "https://github.com/iree-org/iree.git",
+    commit = "ae97779f59a81bc56f804927be57749bb22548fa",
+    patches = ["//:iree_zig.patch"],
+    patch_strip = 1,
+)
+
+# IREE uses this but local_path_override is ignored in dependencies
+# See https://github.com/bazelbuild/bazel/issues/21033 etc.
+# But we can't use local_path_override pointing to a non-local directory directly,
+# unless we download it ourselves or use a git_override mapped correctly.
+bazel_dep(name = "llvm-project-overlay", version = "main")
+archive_override(
+    module_name = "llvm-project-overlay",
+    urls = ["https://github.com/llvm/llvm-project/archive/12d80f913c5a0f13f54610e9b0524137301665e3.tar.gz"],
+    strip_prefix = "llvm-project-12d80f913c5a0f13f54610e9b0524137301665e3/utils/bazel",
+)
+
+# IREE expects the root module to provide llvm-raw (the massive LLVM submodule)
+# We map it directly to the submodule checkout in the IREE repository.
+# However, `llvm-raw` is not a Bazel module, it's just a raw repo added via `new_local_repository`.
+# So we can define it using an extension just like IREE does, or `local_repository`.
+# Actually, since it has no MODULE.bazel, we can't `bazel_dep` it. We must inject it via extension.
 
 git_override(
     module_name = "rules_zig",
     remote = "https://github.com/zml/rules_zig.git",
-    commit = "6c5d6a07b4ef48be894e7418bcae37bac54e1c2e",
+    commit = "553e22f8dcbd7c472ce8fc256c0d06580cd70630",
+    patches = ["//:rules_zig.patch"],
+    patch_strip = 1,
 )
+
+### Zig toolchain
+zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
+zig.index(file = "//bazel:zig_index.json")
+zig.toolchain(zig_version = "0.16.0-dev.2611+f996d2866")
+zig.mirrors(urls = [
+    "https://pkg.machengine.org/zig",
+    "https://zigmirror.hryx.net/zig",
+    "https://zig.linus.dev/zig",
+    "https://zig.squirl.dev",
+    "https://zig.florent.dev",
+    "https://zig.mirror.mschae23.de/zig",
+    "https://zigmirror.meox.dev",
+    "https://ziglang.freetls.fastly.net",
+    "https://zig.tilok.dev",
+    "https://zig-mirror.tsimnet.eu/zig",
+    "https://zig.karearl.com/zig",
+    "https://pkg.earth/zig",
+    "https://fs.liujiacai.net/zigbuilds",
+    "https://ziglang.org/builds/",
+])
+use_repo(zig, "zig_toolchains")
+
+register_toolchains("@rules_zig//zig/target:all")
+register_toolchains("@zig_toolchains//:all")
+###
 
 git_override(
     module_name = "zml",
     remote = "https://github.com/zml/zml.git",
-    # branch = "zml/v2",
-    commit = "6636093cb474d861601f572ce76b07f72001a3be",
+    commit = "6be028f873dba5683f131f549c153e8081c9db39",
+    # patches = ["//:zml.patch"],
+    # patch_strip = 1,
 )
 
-non_module_deps = use_extension("@zml//:third_party/non_module_deps.bzl", "non_module_deps")
+# Keep for local development
+# local_path_override(
+#     module_name = "zml",
+#     path = "zml-local",
+# )
+
+zml_non_module_deps = use_extension("@zml//:third_party/non_module_deps.bzl", "non_module_deps")
 use_repo(
-    non_module_deps,
-    "translate-c",
-    "xla",
+    zml_non_module_deps,
+    "translate-c"
 )
 
 zls = use_extension("@zml//third_party/zls:zls_toolchain.bzl", "zls_toolchains")
 use_repo(zls, "zls_toolchains")
 register_toolchains("@zls_toolchains//:all")
+
+non_module_deps = use_extension("//:third_party/non_module_deps.bzl", "non_module_deps")
+use_repo(non_module_deps, "stb", "flatcc", "llvm-raw")
 
 
 ### LLVM Bootstrapped toolchains

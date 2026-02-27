@@ -1,5 +1,7 @@
 const std = @import("std");
 
+/// Computes standard matrix multiplication.
+/// Formula: $$C_{i,j} = \sum_{k} A_{i,k} B_{k,j}$$
 pub fn matmul(M: usize, K: usize, N: usize, lhs: []const f32, rhs: []const f32, out: []f32) void {
     for (0..M) |m| {
         for (0..N) |n| {
@@ -12,12 +14,16 @@ pub fn matmul(M: usize, K: usize, N: usize, lhs: []const f32, rhs: []const f32, 
     }
 }
 
+/// Single-precision scalar multiplication and vector addition.
+/// Formula: $$Z_i = a \cdot X_i + Y_i$$
 pub fn saxpy(n: usize, a: f32, x: []const f32, y: []const f32, out: []f32) void {
     for (0..n) |i| {
         out[i] = a * x[i] + y[i];
     }
 }
 
+/// Integer matrix multiplication with modulo $Q = 3329$ operation.
+/// Formula: $$C_{i,j} = \left( \sum_{k} A_{i,k} B_{k,j} \right) \pmod{Q}$$
 pub fn mod_matmul(M: usize, K: usize, N: usize, lhs: []const i32, rhs: []const i32, out: []i32) void {
     const Q: i64 = 3329;
     for (0..M) |m| {
@@ -33,6 +39,8 @@ pub fn mod_matmul(M: usize, K: usize, N: usize, lhs: []const i32, rhs: []const i
     }
 }
 
+/// Simulates 2D heat transfer across a grid step.
+/// Formula: $$U_{i,j}^{(t+1)} = \frac{1}{4} \left( U_{i-1,j}^{(t)} + U_{i+1,j}^{(t)} + U_{i,j-1}^{(t)} + U_{i,j+1}^{(t)} \right)$$
 pub fn heat_transfer(H: usize, W: usize, grid: []const f32, out: []f32) void {
     @memcpy(out, grid);
     for (1..H - 1) |i| {
@@ -46,6 +54,8 @@ pub fn heat_transfer(H: usize, W: usize, grid: []const f32, out: []f32) void {
     }
 }
 
+/// Calculates the standard normal cumulative distribution function.
+/// This approximation uses an error function defined by polynomial constants.
 fn std_normal_cdf(x: f32) f32 {
     const p = 0.3275911;
     const a1 = 0.254829592;
@@ -67,6 +77,11 @@ fn std_normal_cdf(x: f32) f32 {
     return 0.5 * (1.0 + erf);
 }
 
+/// Evaluates the Black-Scholes pricing model for physical options.
+/// Formulas for European call:
+/// $$C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)$$
+/// $$d_1 = \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma \sqrt{T}}$$
+/// $$d_2 = d_1 - \sigma \sqrt{T}$$
 pub fn black_scholes(n: usize, s: []const f32, k: []const f32, t: []const f32, r: []const f32, sigma: []const f32, call: []f32, put: []f32) void {
     for (0..n) |i| {
         const sqrt_t = @sqrt(t[i]);

@@ -1,0 +1,433 @@
+diff --git a/build_tools/bazel/enforce_glob.bzl b/build_tools/bazel/enforce_glob.bzl
+index 48b104f135..96586cf493 100644
+--- a/build_tools/bazel/enforce_glob.bzl
++++ b/build_tools/bazel/enforce_glob.bzl
+@@ -26,6 +26,8 @@ def enforce_glob(files, **kwargs):
+     Returns:
+         files. The input argument unchanged
+     """
++    # Default allow_empty to True to avoid bazel crashes on unpopulated git trees
++    kwargs["allow_empty"] = kwargs.get("allow_empty", True)
+     glob_result = native.glob(**kwargs)
+     for skip_file in ["CMakeLists.txt"]:
+         if skip_file in glob_result:
+diff --git a/build_tools/bazel/extensions.bzl b/build_tools/bazel/extensions.bzl
+index a9ecad1cb9..2d921fbbde 100644
+--- a/build_tools/bazel/extensions.bzl
++++ b/build_tools/bazel/extensions.bzl
+@@ -8,18 +8,18 @@
+ 
+ load("@bazel_tools//tools/build_defs/repo:local.bzl", "local_repository", "new_local_repository")
+ load("//build_tools/bazel:workspace.bzl", "cuda_auto_configure")
++load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+ 
+ def _iree_extension_impl(module_ctx):
+     """Implementation of the IREE module extension."""
+ 
+-    # Create llvm-raw only when IREE is the root module.
+-    # This allows downstream consumers to provide their own LLVM.
+-    if any([m.is_root and m.name == "iree_core" for m in module_ctx.modules]):
+-        new_local_repository(
+-            name = "llvm-raw",
+-            build_file_content = "# empty",
+-            path = "third_party/llvm-project",
+-        )
++    # Create llvm-raw unconditionally via archive for downstream
++    http_archive(
++        name = "llvm-raw",
++        build_file_content = "# empty",
++        url = "https://github.com/llvm/llvm-project/archive/12d80f913c5a0f13f54610e9b0524137301665e3.tar.gz",
++        strip_prefix = "llvm-project-12d80f913c5a0f13f54610e9b0524137301665e3",
++    )
+ 
+     # Googletest
+     local_repository(
+diff --git a/llvm-external-projects/iree-dialects/BUILD.bazel b/llvm-external-projects/iree-dialects/BUILD.bazel
+index 2dd253482e..4e603f19f6 100644
+--- a/llvm-external-projects/iree-dialects/BUILD.bazel
++++ b/llvm-external-projects/iree-dialects/BUILD.bazel
+@@ -7,9 +7,9 @@ package(
+     licenses = ["notice"],
+ )
+ 
+-exports_files(glob(["include/iree-dialects/Dialect/Input/*.td"]))
++exports_files(glob(["include/iree-dialects/Dialect/Input/*.td"], allow_empty = True))
+ 
+-exports_files(glob(["python/*.cpp"]))
++exports_files(glob(["python/*.cpp"], allow_empty = True))
+ 
+ ################################################################################
+ # Package-by-package filegroup exports.
+@@ -18,7 +18,7 @@ exports_files(glob(["python/*.cpp"]))
+ 
+ filegroup(
+     name = "python_dialects",
+-    srcs = glob(["python/iree/compiler/dialects/**/*.py"]),
++    srcs = glob(["python/iree/compiler/dialects/**/*.py"], allow_empty = True),
+ )
+ 
+ ################################################################################
+@@ -29,7 +29,7 @@ filegroup(
+     name = "TdFilegroup",
+     srcs = glob([
+         "include/iree-dialects/Dialect/Input/*.td",
+-    ]),
++    ], allow_empty = True),
+ )
+ 
+ td_library(
+@@ -38,7 +38,7 @@ td_library(
+         "include/iree-dialects/Dialect/Input/*.td",
+         "include/iree-dialects/Dialect/LinalgTransform/*.td",
+         "python/iree/compiler/dialects/*.td",
+-    ]),
++    ], allow_empty = True),
+     includes = ["include"],
+     deps = [
+         "@llvm-project//mlir:BuiltinDialectTdFiles",
+@@ -58,10 +58,10 @@ cc_library(
+     name = "IREEDialectsTransforms",
+     srcs = glob([
+         "lib/Transforms/*.cpp",
+-    ]),
++    ], allow_empty = True),
+     hdrs = glob([
+         "include/iree-dialects/Transforms/*.h",
+-    ]),
++    ], allow_empty = True),
+     includes = ["include"],
+     deps = [
+         "@llvm-project//llvm:Support",
+@@ -109,10 +109,10 @@ cc_library(
+     srcs = glob([
+         "lib/Dialect/LinalgTransform/IR/*.cpp",
+         "lib/Dialect/LinalgTransform/IR/*.h",
+-    ]),
++    ], allow_empty = True),
+     hdrs = glob([
+         "include/iree-dialects/Dialect/LinalgTransform/*.h",
+-    ]),
++    ], allow_empty = True),
+     includes = ["include"],
+     deps = [
+         ":IREEDialectsTransforms",
+@@ -181,7 +181,7 @@ cc_library(
+     name = "IREELinalgTransformDialectPasses",
+     srcs = glob([
+         "lib/Dialect/LinalgTransform/Passes/*.cpp",
+-    ]),
++    ], allow_empty = True),
+     deps = [
+         ":IREEDialectsTransforms",
+         ":IREELinalgTransformDialect",
+@@ -230,8 +230,8 @@ cc_library(
+ 
+ cc_library(
+     name = "CAPI",
+-    srcs = glob(["lib/CAPI/*.cpp"]),
+-    hdrs = glob(["include/iree-dialects-c/*.h"]),
++    srcs = glob(["lib/CAPI/*.cpp"], allow_empty = True),
++    hdrs = glob(["include/iree-dialects-c/*.h"], allow_empty = True),
+     includes = ["include"],
+     deps = [
+         ":IREELinalgTransformDialect",
+@@ -252,7 +252,7 @@ cc_library(
+     name = "IREEDialectsTest",
+     srcs = glob([
+         "test/lib/**/*.cpp",
+-    ]),
++    ], allow_empty = True),
+     deps = [
+         ":IREEDialectsTransforms",
+         ":IREELinalgTransformDialect",
+diff --git a/runtime/src/iree/base/internal/atomics_clang.h b/runtime/src/iree/base/internal/atomics_clang.h
+index afa7a33520..0cf40be204 100644
+--- a/runtime/src/iree/base/internal/atomics_clang.h
++++ b/runtime/src/iree/base/internal/atomics_clang.h
+@@ -31,6 +31,13 @@ typedef enum iree_memory_order_e {
+ 
+ #define IREE_ATOMIC_VAR_INIT(value) (value)
+ 
++#if defined(__zig__) || defined(_ZIG_TRANSLATE_C)
++typedef int32_t iree_atomic_int32_t;
++typedef int64_t iree_atomic_int64_t;
++typedef uint32_t iree_atomic_uint32_t;
++typedef uint64_t iree_atomic_uint64_t;
++typedef intptr_t iree_atomic_intptr_t;
++#else
+ typedef _Atomic int32_t iree_atomic_int32_t;
+ typedef _Atomic int64_t iree_atomic_int64_t;
+ typedef _Atomic uint32_t iree_atomic_uint32_t;
+@@ -38,6 +45,7 @@ typedef _Atomic uint64_t iree_atomic_uint64_t;
+ // TODO(#3453): check for __int128 support before using
+ // typedef _Atomic __int128 iree_atomic_int128_t;
+ typedef _Atomic intptr_t iree_atomic_intptr_t;
++#endif
+ 
+ #define iree_atomic_thread_fence(order) __c11_atomic_thread_fence(order)
+ 
+diff --git a/runtime/src/iree/base/internal/atomics_disabled.h b/runtime/src/iree/base/internal/atomics_disabled.h
+index 5dbb272f47..9dcb37f8ac 100644
+--- a/runtime/src/iree/base/internal/atomics_disabled.h
++++ b/runtime/src/iree/base/internal/atomics_disabled.h
+@@ -27,6 +27,13 @@ typedef enum iree_memory_order_e {
+ 
+ #define IREE_ATOMIC_VAR_INIT(value) (value)
+ 
++#ifdef __zig__
++typedef int32_t iree_atomic_int32_t;
++typedef int64_t iree_atomic_int64_t;
++typedef uint32_t iree_atomic_uint32_t;
++typedef uint64_t iree_atomic_uint64_t;
++typedef intptr_t iree_atomic_intptr_t;
++#else
+ typedef int32_t iree_atomic_int32_t;
+ typedef int64_t iree_atomic_int64_t;
+ typedef uint32_t iree_atomic_uint32_t;
+@@ -34,6 +41,7 @@ typedef uint64_t iree_atomic_uint64_t;
+ // TODO(#3453): check for __int128 support before using
+ // typedef __int128 iree_atomic_int128_t;
+ typedef intptr_t iree_atomic_intptr_t;
++#endif
+ 
+ #define iree_atomic_thread_fence(order)
+ 
+@@ -43,6 +51,29 @@ extern "C++" {
+ 
+ #define iree_atomic_load(object, order) (*(object))
+ #define iree_atomic_store(object, desired, order) (*(object) = (desired))
++
++#ifdef __zig__
++// Simplified macros for Zig's C translation which struggles with _Generic
++#define iree_atomic_fetch_add(object, operand, order) (*(object) += (operand))
++#define iree_atomic_fetch_sub(object, operand, order) (*(object) -= (operand))
++#define iree_atomic_fetch_and(object, operand, order) (*(object) &= (operand))
++#define iree_atomic_fetch_or(object, operand, order) (*(object) |= (operand))
++#define iree_atomic_fetch_xor(object, operand, order) (*(object) ^= (operand))
++
++// The exchange and compare-exchange aren't simple expressions,
++// but Zig translation usually only hits the basic ref counting (add/sub/load).
++#define iree_atomic_exchange(object, desired, order) (*(object) = (desired))
++#define iree_atomic_compare_exchange_strong(object, expected, desired, \
++                                            order_succ, order_fail)    \
++  (*(object) == *(expected) ? (*(object) = (desired), true)            \
++                            : (*(expected) = *(object), false))
++#define iree_atomic_compare_exchange_weak iree_atomic_compare_exchange_strong
++
++#endif  // __zig__
++
++
++#else
++
+ #define iree_atomic_fetch_add(object, operand, order) \
+   iree_atomic_fetch_add_impl((object), (operand))
+ #define iree_atomic_fetch_sub(object, operand, order) \
+@@ -60,6 +91,9 @@ extern "C++" {
+   iree_atomic_compare_exchange_impl((object), (expected), (desired))
+ #define iree_atomic_compare_exchange_weak iree_atomic_compare_exchange_strong
+ 
++#endif  // __zig__
++
++
+ template <typename T, typename V>
+ static inline T iree_atomic_fetch_add_impl(volatile T* object, V operand) {
+   T original = *object;
+@@ -120,6 +154,29 @@ static inline bool iree_atomic_compare_exchange_impl(volatile T* object,
+ 
+ #define iree_atomic_load(object, order) (*(object))
+ #define iree_atomic_store(object, desired, order) (*(object) = (desired))
++
++#ifdef __zig__
++// Simplified macros for Zig's C translation which struggles with _Generic
++#define iree_atomic_fetch_add(object, operand, order) (*(object) += (operand))
++#define iree_atomic_fetch_sub(object, operand, order) (*(object) -= (operand))
++#define iree_atomic_fetch_and(object, operand, order) (*(object) &= (operand))
++#define iree_atomic_fetch_or(object, operand, order) (*(object) |= (operand))
++#define iree_atomic_fetch_xor(object, operand, order) (*(object) ^= (operand))
++
++// The exchange and compare-exchange aren't simple expressions,
++// but Zig translation usually only hits the basic ref counting (add/sub/load).
++#define iree_atomic_exchange(object, desired, order) (*(object) = (desired))
++#define iree_atomic_compare_exchange_strong(object, expected, desired, \
++                                            order_succ, order_fail)    \
++  (*(object) == *(expected) ? (*(object) = (desired), true)            \
++                            : (*(expected) = *(object), false))
++#define iree_atomic_compare_exchange_weak iree_atomic_compare_exchange_strong
++
++#endif  // __zig__
++
++
++#else
++
+ #define iree_atomic_fetch_add(object, operand, order)                     \
+   _Generic((object),                                                      \
+       iree_atomic_int32_t *: iree_atomic_fetch_add_int32_impl(            \
+@@ -221,6 +278,9 @@ static inline bool iree_atomic_compare_exchange_impl(volatile T* object,
+                                 (int64_t*)(expected), (int64_t)(desired)))
+ #define iree_atomic_compare_exchange_weak iree_atomic_compare_exchange_strong
+ 
++#endif  // __zig__
++
++
+ static inline int32_t iree_atomic_fetch_add_int32_impl(
+     volatile iree_atomic_int32_t* object, int32_t operand) {
+   int32_t original = *object;
+diff --git a/runtime/src/iree/hal/buffer.c b/runtime/src/iree/hal/buffer.c
+index b712e6692b..eadda54e91 100644
+--- a/runtime/src/iree/hal/buffer.c
++++ b/runtime/src/iree/hal/buffer.c
+@@ -851,7 +851,7 @@ IREE_API_EXPORT iree_status_t iree_hal_buffer_map_range(
+       buffer, mapping_mode, memory_access, out_buffer_mapping);
+   if (!iree_status_is_ok(status)) {
+     // Scoped mappings retain the buffer until unmapped.
+-    if (!out_buffer_mapping->impl.is_persistent) iree_hal_buffer_retain(buffer);
++    if (!(out_buffer_mapping->impl.flags & 1)) iree_hal_buffer_retain(buffer);
+     memset(out_buffer_mapping, 0, sizeof(*out_buffer_mapping));
+   }
+   return status;
+@@ -897,7 +897,7 @@ IREE_API_EXPORT iree_status_t iree_hal_buffer_prepare_map_range(
+ 
+   out_buffer_mapping->buffer = buffer;
+   out_buffer_mapping->impl.allowed_access = memory_access;
+-  out_buffer_mapping->impl.is_persistent = is_persistent ? 1 : 0;
++  out_buffer_mapping->impl.flags = is_persistent ? 1 : 0;
+   out_buffer_mapping->impl.byte_offset = local_byte_offset;
+   out_buffer_mapping->contents = iree_make_byte_span(NULL, local_byte_length);
+ 
+@@ -933,7 +933,7 @@ iree_hal_buffer_unmap_range(iree_hal_buffer_mapping_t* buffer_mapping) {
+         buffer_mapping->contents.data_length, buffer_mapping);
+   }
+ 
+-  if (!buffer_mapping->impl.is_persistent) {
++  if (!(buffer_mapping->impl.flags & 1)) {
+     iree_hal_buffer_release(buffer);
+   }
+   memset(buffer_mapping, 0, sizeof(*buffer_mapping));
+diff --git a/runtime/src/iree/hal/buffer.h b/runtime/src/iree/hal/buffer.h
+index 96a6ed189e..9d46973a7f 100644
+--- a/runtime/src/iree/hal/buffer.h
++++ b/runtime/src/iree/hal/buffer.h
+@@ -615,14 +615,13 @@ static inline iree_hal_buffer_params_t iree_hal_buffer_params_with_usage(
+ //===----------------------------------------------------------------------===//
+ 
+ // Implementation-specific private mapping data.
+-typedef struct iree_hal_buffer_mapping_impl_t {
++typedef struct {
+   // Byte offset within the buffer where the mapped data begins.
+   iree_device_size_t byte_offset;
+   // Used for validation only.
+   iree_hal_memory_access_t allowed_access;
+-  // Tracking flags.
+-  uint32_t is_persistent : 1;
+-  uint32_t reserved_flags : 31;
++  // Tracking flags and reserved space.
++  uint32_t flags;
+   // Backing implementation data.
+   // For backends that require additional tracking (shadow data structures/etc)
+   // this can be used to store references to them for the duration of the
+@@ -631,7 +630,7 @@ typedef struct iree_hal_buffer_mapping_impl_t {
+ } iree_hal_buffer_mapping_impl_t;
+ 
+ // Reference to a buffer's mapped memory.
+-typedef struct iree_hal_buffer_mapping_t {
++typedef struct {
+   // Contents of the buffer. Behavior is undefined if an access is performed
+   // whose type was not specified during mapping.
+   //
+diff --git a/runtime/src/iree/hal/command_buffer.h b/runtime/src/iree/hal/command_buffer.h
+index 679d4292c6..57bfc8d10a 100644
+--- a/runtime/src/iree/hal/command_buffer.h
++++ b/runtime/src/iree/hal/command_buffer.h
+@@ -100,12 +100,13 @@ typedef uint32_t iree_hal_command_category_t;
+ // be applied at the time the binding is recording into the command buffer.
+ //
+ // Roughly maps to VkDescriptorSetBinding.
+-typedef struct iree_hal_buffer_ref_t {
++typedef struct {
+   // Currently unused and should be 0.
+-  uint32_t reserved : 8;
+   // Binding table slot the buffer will be sourced from if buffer is NULL.
+   // Only valid on command buffers that support indirect execution.
+-  uint32_t buffer_slot : 24;
++  // Bits 0-7: reserved, Bits 8-31: buffer_slot
++  uint32_t flags_and_slot;
++
+   // Buffer bound to the binding number.
+   // If NULL then the buffer_slot will be used to resolve the buffer at command
+   // buffer execution time from the binding table.
+@@ -125,8 +126,7 @@ static inline iree_hal_buffer_ref_t iree_hal_make_buffer_ref(
+     iree_hal_buffer_t* buffer, iree_device_size_t offset,
+     iree_device_size_t length) {
+   iree_hal_buffer_ref_t buffer_ref = {0};
+-  buffer_ref.reserved = 0;
+-  buffer_ref.buffer_slot = 0;
++  buffer_ref.flags_and_slot = 0;
+   buffer_ref.buffer = buffer;
+   buffer_ref.offset = offset;
+   buffer_ref.length = length;
+@@ -137,8 +137,7 @@ static inline iree_hal_buffer_ref_t iree_hal_make_indirect_buffer_ref(
+     uint32_t buffer_slot, iree_device_size_t offset,
+     iree_device_size_t length) {
+   iree_hal_buffer_ref_t buffer_ref = {0};
+-  buffer_ref.reserved = 0;
+-  buffer_ref.buffer_slot = buffer_slot;
++  buffer_ref.flags_and_slot = buffer_slot << 8;
+   buffer_ref.buffer = NULL;
+   buffer_ref.offset = offset;
+   buffer_ref.length = length;
+@@ -671,7 +670,7 @@ static inline iree_status_t iree_hal_buffer_binding_table_resolve_ref(
+     // NULL buffer reference.
+     memset(out_resolved_ref, 0, sizeof(*out_resolved_ref));
+     return iree_ok_status();
+-  } else if (IREE_UNLIKELY(buffer_ref.buffer_slot >= binding_table.count)) {
++  } else if (IREE_UNLIKELY((buffer_ref.flags_and_slot >> 8) >= binding_table.count)) {
+     // Out of bounds slot (validation should have caught). May be worth removing
+     // this case as this is a hot path.
+     // NOTE: this asserts that all incoming buffers must not be NULL. That may
+@@ -679,14 +678,13 @@ static inline iree_status_t iree_hal_buffer_binding_table_resolve_ref(
+     return iree_make_status(IREE_STATUS_OUT_OF_RANGE,
+                             "buffer binding %u out of range of binding table "
+                             "with capacity %" PRIhsz,
+-                            buffer_ref.buffer_slot, binding_table.count);
++                            (buffer_ref.flags_and_slot >> 8), binding_table.count);
+   } else {
+     // Indirect buffer reference - need to combine the final range based on
+     // the binding table range and the range of the reference.
+     const iree_hal_buffer_binding_t* binding =
+-        &binding_table.bindings[buffer_ref.buffer_slot];
+-    out_resolved_ref->reserved = buffer_ref.reserved;
+-    out_resolved_ref->buffer_slot = 0;
++        &binding_table.bindings[(buffer_ref.flags_and_slot >> 8)];
++    out_resolved_ref->flags_and_slot = buffer_ref.flags_and_slot & 0xFF;
+     out_resolved_ref->buffer = binding->buffer;
+     const iree_device_size_t max_length =
+         binding->length != IREE_HAL_WHOLE_BUFFER
+diff --git a/runtime/src/iree/hal/command_buffer_validation.c b/runtime/src/iree/hal/command_buffer_validation.c
+index 64f698a2ac..9aef6fe8c6 100644
+--- a/runtime/src/iree/hal/command_buffer_validation.c
++++ b/runtime/src/iree/hal/command_buffer_validation.c
+@@ -176,20 +176,20 @@ static iree_status_t iree_hal_command_buffer_validate_buffer_requirements(
+   // Ensure the buffer binding table slot is within range. Note that the
+   // binding table provided may have more bindings than required so we only
+   // verify against the declared command buffer capacity.
+-  if (IREE_UNLIKELY(buffer_ref.buffer_slot >=
++  if (IREE_UNLIKELY((buffer_ref.flags_and_slot >> 8) >=
+                     command_buffer->binding_capacity)) {
+     return iree_make_status(
+         IREE_STATUS_OUT_OF_RANGE,
+         "indirect buffer reference slot %u is out range of the declared "
+         "binding capacity of the command buffer %u",
+-        buffer_ref.buffer_slot, command_buffer->binding_capacity);
++        (buffer_ref.flags_and_slot >> 8), command_buffer->binding_capacity);
+   }
+   command_buffer->binding_count =
+-      iree_max(command_buffer->binding_count, buffer_ref.buffer_slot + 1);
++      iree_max(command_buffer->binding_count, (buffer_ref.flags_and_slot >> 8) + 1);
+ 
+   // Merge the binding requirements into the table.
+   iree_hal_buffer_binding_requirements_t* table_requirements =
+-      &validation_state->binding_requirements[buffer_ref.buffer_slot];
++      &validation_state->binding_requirements[(buffer_ref.flags_and_slot >> 8)];
+   table_requirements->required_compatibility |=
+       requirements.required_compatibility;
+   table_requirements->usage |= requirements.usage;

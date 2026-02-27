@@ -1,0 +1,50 @@
+load("@rules_zig//zig:defs.bzl", "zig_library")
+
+zig_library(
+    name = "zk-crypto",
+    main = "crypto.zig",
+    srcs = [
+        "crypto.zig",
+        "fiat_shamir.zig",
+        "labrador.zig",
+        "ntt.zig",
+    ],
+    deps = [
+        "@zml//zml",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+load("@rules_zig//zig:defs.bzl", "zig_test", "zig_binary")
+
+zig_test(
+    name = "fiat_shamir_test",
+    main = "fiat_shamir_test.zig",
+    srcs = ["fiat_shamir.zig"],
+    deps = [
+        "@zml//zml",
+    ],
+)
+
+zig_binary(
+    name = "ntt_test_bin",
+    main = "ntt_test.zig",
+    srcs = ["ntt.zig", "crypto.zig", "fiat_shamir.zig", "labrador.zig"],
+    deps = [
+        "@zml//zml",
+    ],
+)
+
+zig_binary(
+    name = "labrador_test_bin",
+    main = "labrador_test.zig",
+    srcs = [
+        "crypto.zig",
+        "labrador.zig",
+        "ntt.zig",
+        "fiat_shamir.zig",
+    ],
+    deps = [
+        "@zml//zml",
+    ],
+)

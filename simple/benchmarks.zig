@@ -7,6 +7,7 @@ const SimpleModel = @import("model.zig").SimpleModel;
 const ref = @import("reference.zig");
 const opt = @import("optimized.zig");
 
+/// Helper function to assert that two floating-point slices are approximately equal within an epsilon.
 fn expectApproxEq(expected: []const f32, actual: []const f32, epsilon: f32) !void {
     if (expected.len != actual.len) return error.LengthMismatch;
     for (expected, actual) |e, a| {
@@ -17,6 +18,7 @@ fn expectApproxEq(expected: []const f32, actual: []const f32, epsilon: f32) !voi
     }
 }
 
+/// Helper function to assert that two integer slices are exactly equal.
 fn expectEq(expected: []const i32, actual: []const i32) !void {
     if (expected.len != actual.len) return error.LengthMismatch;
     for (expected, actual) |e, a| {
@@ -27,6 +29,8 @@ fn expectEq(expected: []const i32, actual: []const i32) !void {
     }
 }
 
+/// Benchmarks standard matrix multiplication comparing reference, optimized, and ZML implementations.
+/// Formula: $$C_{i,j} = \sum_{k} A_{i,k} B_{k,j}$$
 pub fn matmul(ctx: *Context) !void {
     const M = 1024;
     const K = 1024;
@@ -98,6 +102,8 @@ pub fn matmul(ctx: *Context) !void {
     log.info("✅ MatMul Verified. Zig(Ref): {d:.2}ms, Zig(Opt): {d:.2}ms, ZML: {d:.2}ms", .{ ref_ms, opt_ms, zml_ms });
 }
 
+/// Benchmarks single-precision scalar multiplication and vector addition (SAXPY) comparing reference, optimized, and ZML implementations.
+/// Formula: $$Z_i = a \cdot X_i + Y_i$$
 pub fn saxpy(ctx: *Context) !void {
     const N = 10_000_000;
     log.info("\nBenchmarking SAXPY ({d} elements)...", .{N});
@@ -170,6 +176,8 @@ pub fn saxpy(ctx: *Context) !void {
     log.info("✅ SAXPY Verified. Zig(Ref): {d:.2}ms, Zig(Opt): {d:.2}ms, ZML: {d:.2}ms", .{ ref_ms, opt_ms, zml_ms });
 }
 
+/// Benchmarks integer matrix multiplication with modulo $Q = 3329$ operation comparing reference, optimized, and ZML implementations.
+/// Formula: $$C_{i,j} = \left( \sum_{k} A_{i,k} B_{k,j} \right) \pmod{Q}$$
 pub fn mod_matmul(ctx: *Context) !void {
     const K = 1024;
     log.info("\nBenchmarking ModMatMul ({d}x{d} x {d}x{d})...", .{ K, K, K, K });
@@ -240,6 +248,8 @@ pub fn mod_matmul(ctx: *Context) !void {
     log.info("✅ ModMatMul Verified. Zig(Ref): {d:.2}ms, Zig(Opt): {d:.2}ms, ZML: {d:.2}ms", .{ ref_ms, opt_ms, zml_ms });
 }
 
+/// Benchmarks a 2D heat transfer simulation comparing reference, optimized, and ZML implementations.
+/// Formula: $$U_{i,j}^{(t+1)} = \frac{1}{4} \left( U_{i-1,j}^{(t)} + U_{i+1,j}^{(t)} + U_{i,j-1}^{(t)} + U_{i,j+1}^{(t)} \right)$$
 pub fn heat_transfer(ctx: *Context) !void {
     const H = 256;
     const W = 256;
@@ -322,6 +332,11 @@ pub fn heat_transfer(ctx: *Context) !void {
     log.info("✅ Heat Transfer Verified. Zig(Ref): {d:.2}ms, Zig(Opt): {d:.2}ms, ZML: {d:.2}ms", .{ ref_ms, opt_ms, zml_ms });
 }
 
+/// Benchmarks the Black-Scholes option pricing model comparing reference, optimized, and ZML implementations.
+/// Formulas for European call:
+/// $$C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)$$
+/// $$d_1 = \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma \sqrt{T}}$$
+/// $$d_2 = d_1 - \sigma \sqrt{T}$$
 pub fn black_scholes(ctx: *Context) !void {
     const N: usize = 1_000_000;
     log.info("\nBenchmarking Black-Scholes ({d} options)...", .{N});

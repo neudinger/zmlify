@@ -1,0 +1,10 @@
+// Challenge phase of the Labrador ZKP sigma protocol
+// Verifier sends challenge scalar c derived from Fiat-Shamir transcript
+namespace zerkerus;
+
+table Challenge {
+    c: ulong;                  // Challenge scalar (binary: 0 or 1)
+    transcript_hash: [ubyte];  // Fiat-Shamir transcript hash (32 bytes)
+}
+
+root_type Challenge;

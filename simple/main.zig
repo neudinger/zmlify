@@ -3,7 +3,7 @@ const Context = @import("context.zig").Context;
 const bench = @import("benchmarks.zig");
 
 pub const std_options: std.Options = .{
-    .log_level = .debug,
+    .log_level = .info,
 };
 
 pub fn main(init: std.process.Init) !void {

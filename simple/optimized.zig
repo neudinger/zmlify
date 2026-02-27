@@ -6,6 +6,8 @@ fn getNumThreads() usize {
     return std.Thread.getCpuCount() catch 1;
 }
 
+/// Multi-threaded single-precision scalar multiplication and vector addition.
+/// Formula: $$Z_i = a \cdot X_i + Y_i$$
 pub fn saxpy(n: usize, a: f32, x: []const f32, y: []const f32, out: []f32) void {
     const num_threads = @min(getNumThreads(), max_threads);
     if (num_threads <= 1 or n < 1024) {
@@ -36,6 +38,8 @@ pub fn saxpy(n: usize, a: f32, x: []const f32, y: []const f32, out: []f32) void 
     for (threads[0..spawned]) |t| t.join();
 }
 
+/// Vectorized kernel for single-precision scalar multiplication and vector addition.
+/// Formula: $$Z_i = a \cdot X_i + Y_i$$
 fn saxpyKernel(a: f32, x: []const f32, y: []const f32, out: []f32) void {
     const VL = 64;
     const Vec = @Vector(VL, f32);
@@ -53,6 +57,8 @@ fn saxpyKernel(a: f32, x: []const f32, y: []const f32, out: []f32) void {
     }
 }
 
+/// Multi-threaded standard matrix multiplication.
+/// Formula: $$C_{i,j} = \sum_{k} A_{i,k} B_{k,j}$$
 pub fn matmul(M: usize, K: usize, N: usize, lhs: []const f32, rhs: []const f32, out: []f32) void {
     const MC = 64;
     const num_threads = @min(getNumThreads(), max_threads);
@@ -91,6 +97,8 @@ pub fn matmul(M: usize, K: usize, N: usize, lhs: []const f32, rhs: []const f32, 
     for (threads[0..spawned]) |t| t.join();
 }
 
+/// Blocked kernel for standard matrix multiplication.
+/// Formula: $$C_{i,j} = \sum_{k} A_{i,k} B_{k,j}$$
 fn matmulKernel(m_start: usize, m_end: usize, K: usize, N: usize, lhs: []const f32, rhs: []const f32, out: []f32) void {
     const NC = 64;
     const KC = 64;
@@ -114,6 +122,8 @@ fn matmulKernel(m_start: usize, m_end: usize, K: usize, N: usize, lhs: []const f
     }
 }
 
+/// Multi-threaded integer matrix multiplication with modulo $Q = 3329$ operation.
+/// Formula: $$C_{i,j} = \left( \sum_{k} A_{i,k} B_{k,j} \right) \pmod{Q}$$
 pub fn mod_matmul(M: usize, K: usize, N: usize, lhs: []const i32, rhs: []const i32, out: []i32) void {
     const MC = 64;
     const num_threads = @min(getNumThreads(), max_threads);
@@ -151,6 +161,8 @@ pub fn mod_matmul(M: usize, K: usize, N: usize, lhs: []const i32, rhs: []const i
     for (threads[0..spawned]) |t| t.join();
 }
 
+/// Vectorized kernel for integer matrix multiplication with modulo $Q = 3329$ operation.
+/// Formula: $$C_{i,j} = \left( \sum_{k} A_{i,k} B_{k,j} \right) \pmod{Q}$$
 fn modMatmulKernel(m_start: usize, m_end: usize, K: usize, N: usize, lhs: []const i32, rhs: []const i32, out: []i32) void {
     const Q: i64 = 3329;
     const VL = 16;
@@ -194,6 +206,8 @@ fn modMatmulKernel(m_start: usize, m_end: usize, K: usize, N: usize, lhs: []cons
     }
 }
 
+/// Multi-threaded simulation of 2D heat transfer across a grid step.
+/// Formula: $$U_{i,j}^{(t+1)} = \frac{1}{4} \left( U_{i-1,j}^{(t)} + U_{i+1,j}^{(t)} + U_{i,j-1}^{(t)} + U_{i,j+1}^{(t)} \right)$$
 pub fn heat_transfer(H: usize, W: usize, grid: []const f32, out: []f32) void {
     const num_threads = @min(getNumThreads(), max_threads);
 
@@ -228,6 +242,8 @@ pub fn heat_transfer(H: usize, W: usize, grid: []const f32, out: []f32) void {
     for (threads[0..spawned]) |t| t.join();
 }
 
+/// Vectorized kernel for 2D heat transfer across a grid step.
+/// Formula: $$U_{i,j}^{(t+1)} = \frac{1}{4} \left( U_{i-1,j}^{(t)} + U_{i+1,j}^{(t)} + U_{i,j-1}^{(t)} + U_{i,j+1}^{(t)} \right)$$
 fn heatTransferKernel(row_start: usize, row_end: usize, W: usize, grid: []const f32, out: []f32) void {
     const VL = 64;
     const Vec = @Vector(VL, f32);
@@ -253,6 +269,7 @@ fn heatTransferKernel(row_start: usize, row_end: usize, W: usize, grid: []const 
     }
 }
 
+/// Vectorized approximation of the standard normal cumulative distribution function.
 fn stdNormalCdf(comptime VL: usize, x: @Vector(VL, f32)) @Vector(VL, f32) {
     const Vec = @Vector(VL, f32);
     const p: Vec = @splat(0.3275911);
@@ -280,6 +297,11 @@ fn stdNormalCdf(comptime VL: usize, x: @Vector(VL, f32)) @Vector(VL, f32) {
     return half * (one + erf);
 }
 
+/// Multi-threaded evaluation of the Black-Scholes pricing model for physical options.
+/// Formulas for European call:
+/// $$C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)$$
+/// $$d_1 = \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma \sqrt{T}}$$
+/// $$d_2 = d_1 - \sigma \sqrt{T}$$
 pub fn black_scholes(n: usize, s: []const f32, k: []const f32, t: []const f32, r: []const f32, sigma: []const f32, call: []f32, put: []f32) void {
     const num_threads = @min(getNumThreads(), max_threads);
     if (num_threads <= 1 or n < 1024) {
@@ -309,6 +331,11 @@ pub fn black_scholes(n: usize, s: []const f32, k: []const f32, t: []const f32, r
     for (threads[0..spawned]) |th| th.join();
 }
 
+/// Vectorized kernel for evaluating the Black-Scholes pricing model.
+/// Formulas for European call:
+/// $$C = S_0 \Phi(d_1) - K e^{-rT} \Phi(d_2)$$
+/// $$d_1 = \frac{\ln(S_0/K) + (r + \sigma^2/2)T}{\sigma \sqrt{T}}$$
+/// $$d_2 = d_1 - \sigma \sqrt{T}$$
 fn blackScholesKernel(n: usize, s: []const f32, k: []const f32, t: []const f32, r: []const f32, sigma: []const f32, call: []f32, put: []f32) void {
     const VL = 64;
     const Vec = @Vector(VL, f32);

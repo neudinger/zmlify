@@ -1,0 +1,56 @@
+load("@rules_zig//zig:defs.bzl", "zig_library", "zig_binary")
+
+zig_library(
+    name = "vk_hash_lib",
+    main = "vk_hash.zig",
+)
+
+zig_library(
+    name = "zk-resnet_lib",
+    main = "main.zig",
+    srcs = [
+        "sampler.zig",
+        "zk_lookup.zig",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@zml//zml",
+        "@stb//:stb",
+        "//resnet-18:resnet-18_lib",
+        ":vk_hash_lib",
+        "//zk-crypto",
+    ],
+)
+
+zig_binary(
+    name = "hash_model_bin",
+    main = "hash_model.zig",
+    deps = ["@zml//zml"],
+)
+
+genrule(
+    name = "generate_vk_hash",
+    outs = ["vk_hash.zig"],
+    cmd = "$(location :hash_model_bin) --model=/Users/kevin/models/resnet-18/model.safetensors --out=$@",
+    tools = [":hash_model_bin"],
+    local = True,
+)
+
+zig_binary(
+    name = "zk-resnet",
+    deps = [
+        ":zk-resnet_lib",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+load("@rules_zig//zig:defs.bzl", "zig_test")
+
+zig_test(
+    name = "sampler_test",
+    main = "sampler_test.zig",
+    srcs = ["sampler.zig"],
+    deps = [
+        "@zml//zml",
+    ],
+)
