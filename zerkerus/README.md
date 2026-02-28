@@ -6,6 +6,7 @@ By bridging ZML (Zig Machine Learning) matrix computations with the **Labrador**
 
 ### 🟢 Current Operational Status
 - **Functional End-to-End Protocol:** The `main.zig` program successfully runs a unified Prover/Verifier Merlin-Arthur sequence locally on Apple Silicon.
+- **Modular Architecture:** The codebase is separated into distinct modules (`params.zig`, `utils.zig`, `math.zig`, `flatbuf_tools.zig`) for clearer separation of cryptographic constants, utilities, ZML/Zig math, and serialization.
 - **Finite Fields Integration:** Fully utilizes the Dilithium/Kyber Prime Field ($Q = 8380417$) for all matrix optimizations, executing bounded mathematical verification flawlessly over the ZML MLIR backend.
 - **Zero-Knowledge Determinism:** Mathematical rejection-sampling correctly handles bounded aborts to ensure no statistical leakage of the witness occurs.
 - **FlatBuffers Serialization:** Accepted proofs are serialized into compact binary FlatBuffers (~12 KB), enabling efficient client–server proof exchange.
@@ -126,5 +127,14 @@ This module operates naturally inside Bazel.
 # Compile and simulate a verifiable execution
 # Uses ZML MLIR Compiler backend for MacOS Apple Silicon execution
 bazel run //zerkerus
+
+# Run unit tests across all project modules at once
+bazel test //zerkerus:zerkerus_test
+
+# Run unit tests for individual modules
+bazel test //zerkerus:zerkerus_utils_test
+bazel test //zerkerus:zerkerus_math_test
+bazel test //zerkerus:zerkerus_flatbuf_test
+
 bazel build //zerkerus:test_iree --sandbox_writable_path=/
 ```

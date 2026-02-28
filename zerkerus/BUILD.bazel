@@ -1,4 +1,4 @@
-load("@rules_zig//zig:defs.bzl", "zig_binary")
+load("@rules_zig//zig:defs.bzl", "zig_binary", "zig_test")
 load("//third_party/flatbuf:defs.bzl", "flatcc_library")
 
 flatcc_library(
@@ -38,12 +38,59 @@ flatcc_library(
 zig_binary(
     name = "zerkerus",
     main = "main.zig",
+    srcs = [
+        "params.zig",
+        "utils.zig",
+        "math.zig",
+        "flatbuf_tools.zig",
+    ],
     deps = [
         "//zk-crypto",
         "@zml//zml",
         ":zerkerus_fbs",
     ],
     visibility = ["//visibility:public"],
+)
+
+zig_test(
+    name = "zerkerus_test",
+    main = "main.zig",
+    srcs = [
+        "params.zig",
+        "utils.zig",
+        "math.zig",
+        "flatbuf_tools.zig",
+    ],
+    deps = [
+        "//zk-crypto",
+        "@zml//zml",
+        ":zerkerus_fbs",
+    ],
+)
+
+zig_test(
+    name = "zerkerus_utils_test",
+    main = "utils.zig",
+)
+
+zig_test(
+    name = "zerkerus_math_test",
+    main = "math.zig",
+    srcs = [
+        "params.zig",
+    ],
+    deps = [
+        "//zk-crypto",
+        "@zml//zml",
+    ],
+)
+
+zig_test(
+    name = "zerkerus_flatbuf_test",
+    main = "flatbuf_tools.zig",
+    deps = [
+        ":zerkerus_fbs",
+    ],
 )
 
 zig_binary(
