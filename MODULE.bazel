@@ -17,22 +17,12 @@ git_override(
     patch_strip = 1,
 )
 
-# IREE uses this but local_path_override is ignored in dependencies
-# See https://github.com/bazelbuild/bazel/issues/21033 etc.
-# But we can't use local_path_override pointing to a non-local directory directly,
-# unless we download it ourselves or use a git_override mapped correctly.
 bazel_dep(name = "llvm-project-overlay", version = "main")
 archive_override(
     module_name = "llvm-project-overlay",
     urls = ["https://github.com/llvm/llvm-project/archive/12d80f913c5a0f13f54610e9b0524137301665e3.tar.gz"],
     strip_prefix = "llvm-project-12d80f913c5a0f13f54610e9b0524137301665e3/utils/bazel",
 )
-
-# IREE expects the root module to provide llvm-raw (the massive LLVM submodule)
-# We map it directly to the submodule checkout in the IREE repository.
-# However, `llvm-raw` is not a Bazel module, it's just a raw repo added via `new_local_repository`.
-# So we can define it using an extension just like IREE does, or `local_repository`.
-# Actually, since it has no MODULE.bazel, we can't `bazel_dep` it. We must inject it via extension.
 
 git_override(
     module_name = "rules_zig",
