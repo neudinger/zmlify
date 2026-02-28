@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-void print_registration_json_stdout(const void *buf, size_t bufsiz);
-void print_commitment_json_stdout(const void *buf, size_t bufsiz);
-void print_challenge_json_stdout(const void *buf, size_t bufsiz);
-void print_response_json_stdout(const void *buf, size_t bufsiz);
+void print_registration_json_stderr(const void *buf, size_t bufsiz);
+void print_commitment_json_stderr(const void *buf, size_t bufsiz);
+void print_challenge_json_stderr(const void *buf, size_t bufsiz);
+void print_response_json_stderr(const void *buf, size_t bufsiz);

@@ -262,21 +262,21 @@ test "serialize phases individually" {
 }
 
 pub fn printJsonRegistration(buf: *const anyopaque, size: usize) void {
-    c_interface.print_registration_json_stdout(buf, size);
+    c_interface.print_registration_json_stderr(buf, size);
     log.info("\n", .{}); // print an empty line to flush properly visually
 }
 
 pub fn printJsonCommitment(buf: *const anyopaque, size: usize) void {
-    c_interface.print_commitment_json_stdout(buf, size);
+    c_interface.print_commitment_json_stderr(buf, size);
     log.info("\n", .{});
 }
 
 pub fn printJsonChallenge(buf: *const anyopaque, size: usize) void {
-    c_interface.print_challenge_json_stdout(buf, size);
+    c_interface.print_challenge_json_stderr(buf, size);
     log.info("\n", .{});
 }
 
 pub fn printJsonResponse(buf: *const anyopaque, size: usize) void {
-    c_interface.print_response_json_stdout(buf, size);
+    c_interface.print_response_json_stderr(buf, size);
     log.info("\n", .{});
 }
