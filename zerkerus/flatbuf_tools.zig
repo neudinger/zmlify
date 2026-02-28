@@ -5,6 +5,10 @@ const c_interface = @import("c");
 pub const FlatbError = error{
     BuilderInitFailed,
     BufferCreationFailed,
+    TableStartFailed,
+    FieldAddFailed,
+    TableEndFailed,
+    VectorCreateFailed,
 };
 
 /// Serialize a complete ZKP proof into a FlatBuffer.
@@ -23,31 +27,35 @@ pub fn serializeProof(
     out_size: *usize,
 ) FlatbError!*anyopaque {
     // --- Registration table (vectors inline via _create) ---
-    _ = c_interface.zerkerus_Registration_start(builder);
-    _ = c_interface.zerkerus_Registration_public_seed_create(builder, public_seed.ptr, public_seed.len);
-    _ = c_interface.zerkerus_Registration_public_key_t_create(builder, t_poly.ptr, t_poly.len);
+    if (c_interface.zerkerus_Registration_start(builder) != 0) return FlatbError.TableStartFailed;
+    if (c_interface.zerkerus_Registration_public_seed_create(builder, public_seed.ptr, public_seed.len) != 0) return FlatbError.VectorCreateFailed;
+    if (c_interface.zerkerus_Registration_public_key_t_create(builder, t_poly.ptr, t_poly.len) != 0) return FlatbError.VectorCreateFailed;
     const registration = c_interface.zerkerus_Registration_end(builder);
+    if (registration == 0) return FlatbError.TableEndFailed;
 
     // --- Commitment table ---
-    _ = c_interface.zerkerus_Commitment_start(builder);
-    _ = c_interface.zerkerus_Commitment_attempt_add(builder, attempt);
-    _ = c_interface.zerkerus_Commitment_w_create(builder, w_poly.ptr, w_poly.len);
+    if (c_interface.zerkerus_Commitment_start(builder) != 0) return FlatbError.TableStartFailed;
+    if (c_interface.zerkerus_Commitment_attempt_add(builder, attempt) != 0) return FlatbError.FieldAddFailed;
+    if (c_interface.zerkerus_Commitment_w_create(builder, w_poly.ptr, w_poly.len) != 0) return FlatbError.VectorCreateFailed;
     const commitment = c_interface.zerkerus_Commitment_end(builder);
+    if (commitment == 0) return FlatbError.TableEndFailed;
 
     // --- Challenge table ---
-    _ = c_interface.zerkerus_Challenge_start(builder);
-    _ = c_interface.zerkerus_Challenge_c_add(builder, challenge);
-    _ = c_interface.zerkerus_Challenge_transcript_hash_create(builder, transcript_hash.ptr, transcript_hash.len);
+    if (c_interface.zerkerus_Challenge_start(builder) != 0) return FlatbError.TableStartFailed;
+    if (c_interface.zerkerus_Challenge_c_add(builder, challenge) != 0) return FlatbError.FieldAddFailed;
+    if (c_interface.zerkerus_Challenge_transcript_hash_create(builder, transcript_hash.ptr, transcript_hash.len) != 0) return FlatbError.VectorCreateFailed;
     const challenge_ref = c_interface.zerkerus_Challenge_end(builder);
+    if (challenge_ref == 0) return FlatbError.TableEndFailed;
 
     // --- Proof table (root) ---
-    _ = c_interface.zerkerus_Proof_start(builder);
-    _ = c_interface.zerkerus_Proof_registration_add(builder, registration);
-    _ = c_interface.zerkerus_Proof_commitment_add(builder, commitment);
-    _ = c_interface.zerkerus_Proof_challenge_add(builder, challenge_ref);
-    _ = c_interface.zerkerus_Proof_verified_add(builder, @intFromBool(verified));
-    _ = c_interface.zerkerus_Proof_z_create(builder, z_poly.ptr, z_poly.len);
+    if (c_interface.zerkerus_Proof_start(builder) != 0) return FlatbError.TableStartFailed;
+    if (c_interface.zerkerus_Proof_registration_add(builder, registration) != 0) return FlatbError.FieldAddFailed;
+    if (c_interface.zerkerus_Proof_commitment_add(builder, commitment) != 0) return FlatbError.FieldAddFailed;
+    if (c_interface.zerkerus_Proof_challenge_add(builder, challenge_ref) != 0) return FlatbError.FieldAddFailed;
+    if (c_interface.zerkerus_Proof_verified_add(builder, @intFromBool(verified)) != 0) return FlatbError.FieldAddFailed;
+    if (c_interface.zerkerus_Proof_z_create(builder, z_poly.ptr, z_poly.len) != 0) return FlatbError.VectorCreateFailed;
     const proof = c_interface.zerkerus_Proof_end(builder);
+    if (proof == 0) return FlatbError.TableEndFailed;
 
     // Create buffer with root pointer framing (create_buffer returns ref_t: 0=failure)
     const buf_ref = c_interface.flatcc_builder_create_buffer(builder, null, 0, proof, 0, 0);

@@ -26,21 +26,21 @@ sequenceDiagram
     Note over Prover (Client): Derived Secret: s<br/>Public Key: t = A*s mod Q
     
     rect rgb(232, 245, 233)
-        Note over Prover (Client): 1. Commitment Phase
+        Note over Prover (Client): 1. Commitment Phase (`commitPhase`)
         Prover (Client)->>Transcript: Generate Random Mask: y
         Note over Prover (Client): w = A*y mod Q
         Prover (Client)->>Verifier (Server): Send Commitment: w
     end
     
     rect rgb(255, 243, 224)
-        Note over Verifier (Server): 2. Challenge Phase
+        Note over Verifier (Server): 2. Challenge Phase (`challengeResponsePhase`)
         Verifier (Server)->>Transcript: Absorb w
         Transcript-->>Verifier (Server): Squeeze Scalar Challenge: c
         Verifier (Server)->>Prover (Client): Send Challenge: c
     end
 
     rect rgb(232, 245, 233)
-        Note over Prover (Client): 3. Response Phase
+        Note over Prover (Client): 3. Response Phase (`challengeResponsePhase`)
         Note over Prover (Client): Generate Vector: z = y + c*s
         opt Rejection Sampling
             Note right of Prover (Client): If z is too large computationally,<br/>abort and restart from Step 1.
@@ -49,7 +49,7 @@ sequenceDiagram
     end
 
     rect rgb(255, 243, 224)
-        Note over Verifier (Server): 4. Verification Phase
+        Note over Verifier (Server): 4. Verification Phase (`verificationPhase`)
         Note over Verifier (Server): Assert A*z == w + c*t (mod Q)
         Note over Verifier (Server): Assert z is structurally small
         Verifier (Server)-->>Prover (Client): SUCCESS! (Cryptography verified)
