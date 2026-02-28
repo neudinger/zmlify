@@ -1,82 +1,190 @@
 const std = @import("std");
 const log = std.log;
 const zml = @import("zml");
-const c = @import("c");
-
 const params = @import("params.zig");
 const utils = @import("utils.zig");
 const math = @import("math.zig");
 const flatbuf_tools = @import("flatbuf_tools.zig");
+const c_interface = flatbuf_tools.c_interface;
 
 pub const std_options: std.Options = .{
     .log_level = .info,
 };
 
-pub fn commitPhase(
+// Client State
+const ClientState = struct {
+    secret_seed: [32]u8,
+    s_poly: []const u64,
+    a_poly: []const u64,
+};
+
+// Server State
+const ServerState = struct {
+    a_poly: []const u64,
+    t_poly: []const u64,
+};
+
+pub fn clientRegistrationPhase(
     allocator: std.mem.Allocator,
     io: std.Io,
     platform: *const zml.Platform,
     mul_exe: *zml.Exe,
-    a_poly: []const u64,
-    secret_seed: [32]u8,
+    fb_builder: *c_interface.flatcc_builder_t,
+) !struct { state: ClientState, reg_buf: *anyopaque } {
+    log.info("=== 1. CLIENT: REGISTRATION ===", .{});
+    const public_seed = utils.extractSeed("PublicSharedMatrixSeed");
+    const a_poly = try math.expandA(allocator, public_seed);
+
+    const secret_seed = utils.extractSeed("UserPasswordSalt");
+    const s_poly = try math.sampleSmall(allocator, secret_seed, params.B);
+
+    const t_poly = try math.matVecMul(io, platform, allocator, mul_exe, a_poly, s_poly);
+    defer allocator.free(t_poly);
+
+    var buf_size: usize = 0;
+    _ = c_interface.flatcc_builder_reset(fb_builder);
+    const reg_buf = try flatbuf_tools.serializeRegistration(fb_builder, &public_seed, t_poly, &buf_size);
+
+    return .{
+        .state = .{
+            .secret_seed = secret_seed,
+            .s_poly = s_poly,
+            .a_poly = a_poly,
+        },
+        .reg_buf = reg_buf,
+    };
+}
+
+pub fn serverReceiveRegistrationPhase(
+    allocator: std.mem.Allocator,
+    reg_buf: *const anyopaque,
+) !ServerState {
+    log.info("=== 2. SERVER: RECEIVE REGISTRATION ===", .{});
+    flatbuf_tools.deserializeAndLogRegistration(reg_buf);
+
+    const parsed = try flatbuf_tools.parseRegistration(allocator, reg_buf);
+    const a_poly = try math.expandA(allocator, parsed.public_seed);
+
+    return .{
+        .a_poly = a_poly,
+        .t_poly = parsed.public_key_t,
+    };
+}
+
+pub fn clientCommitPhase(
+    allocator: std.mem.Allocator,
+    io: std.Io,
+    platform: *const zml.Platform,
+    mul_exe: *zml.Exe,
+    client: *const ClientState,
     attempts: u32,
-) !struct { y_poly: []const u64, w_poly: []const u64 } {
+    fb_builder: *c_interface.flatcc_builder_t,
+) !struct { y_poly: []const u64, com_buf: *anyopaque } {
+    log.info("=== 3. CLIENT: COMMITMENT ===", .{});
     var y_seed_input: [36]u8 = undefined;
-    @memcpy(y_seed_input[0..32], &secret_seed);
+    @memcpy(y_seed_input[0..32], &client.secret_seed);
     std.mem.writeInt(u32, y_seed_input[32..36], attempts, .little);
 
     const iter_seed = utils.extractSeed(&y_seed_input);
     const limit_y = 8192 * params.B;
-    const y_poly = try math.sampleSmall(allocator, iter_seed, limit_y); // Mask
+    const y_poly = try math.sampleSmall(allocator, iter_seed, limit_y);
 
-    // w = A * y mod Q
-    const w_poly = try math.matVecMul(io, platform, allocator, mul_exe, a_poly, y_poly);
+    const w_poly = try math.matVecMul(io, platform, allocator, mul_exe, client.a_poly, y_poly);
+    defer allocator.free(w_poly);
 
-    return .{ .y_poly = y_poly, .w_poly = w_poly };
+    var buf_size: usize = 0;
+    _ = c_interface.flatcc_builder_reset(fb_builder);
+    const com_buf = try flatbuf_tools.serializeCommitment(fb_builder, attempts, w_poly, &buf_size);
+
+    return .{ .y_poly = y_poly, .com_buf = com_buf };
 }
 
-pub fn challengeResponsePhase(
+pub fn serverChallengePhase(
     allocator: std.mem.Allocator,
-    y_poly: []const u64,
-    w_poly: []const u64,
-    s_poly: []const u64,
-) !struct { challenge: u64, z_poly: []const u64, is_safe: bool, actual_max: u64 } {
-    var transcript = params.Transcript.init("LabradorZKP");
-    transcript.appendMessage("w", std.mem.sliceAsBytes(w_poly));
-    const challenge = transcript.getChallengeU64("c") % 2; // Binary challenge for simplicity/safety
+    com_buf: *const anyopaque,
+    fb_builder: *c_interface.flatcc_builder_t,
+) !struct { chal_buf: *anyopaque } {
+    log.info("=== 4. SERVER: CHALLENGE ===", .{});
+    flatbuf_tools.deserializeAndLogCommitment(com_buf);
 
-    // z = y + c * s
-    const z_poly = try math.vecAddScalarMul(allocator, y_poly, challenge, s_poly);
+    const parsed = try flatbuf_tools.parseCommitment(allocator, com_buf);
+    defer allocator.free(parsed.w_poly);
+
+    var transcript = params.Transcript.init("LabradorZKP");
+    transcript.appendMessage("w", std.mem.sliceAsBytes(parsed.w_poly));
+    const challenge = transcript.getChallengeU64("c") % 2;
+
+    var transcript_hash: [32]u8 = undefined;
+    const hash_slice = transcript.getChallenge("hash");
+    @memcpy(&transcript_hash, &hash_slice);
+
+    var buf_size: usize = 0;
+    _ = c_interface.flatcc_builder_reset(fb_builder);
+    const chal_buf = try flatbuf_tools.serializeChallenge(fb_builder, challenge, &transcript_hash, &buf_size);
+
+    return .{ .chal_buf = chal_buf };
+}
+
+pub fn clientResponsePhase(
+    allocator: std.mem.Allocator,
+    client: *const ClientState,
+    y_poly: []const u64,
+    chal_buf: *const anyopaque,
+    fb_builder: *c_interface.flatcc_builder_t,
+) !struct { is_safe: bool, actual_max: u64, resp_buf: ?*anyopaque } {
+    log.info("=== 5. CLIENT: RESPONSE ===", .{});
+    flatbuf_tools.deserializeAndLogChallenge(chal_buf);
+
+    const parsed = try flatbuf_tools.parseChallenge(chal_buf);
+    const challenge = parsed.challenge;
+
+    const z_poly = try math.vecAddScalarMul(allocator, y_poly, challenge, client.s_poly);
+    defer allocator.free(z_poly);
 
     const limit_y = 8192 * params.B;
-    const max_c = 1;
-    const beta = max_c * params.B;
-    const safe_limit = limit_y - beta;
+    const safe_limit = limit_y - (1 * params.B);
 
     var actual_max: u64 = 0;
     const is_safe = math.isSmall(z_poly, safe_limit, &actual_max);
-    return .{ .challenge = challenge, .z_poly = z_poly, .is_safe = is_safe, .actual_max = actual_max };
+
+    if (is_safe) {
+        var buf_size: usize = 0;
+        _ = c_interface.flatcc_builder_reset(fb_builder);
+        const resp_buf = try flatbuf_tools.serializeResponse(fb_builder, z_poly, &buf_size);
+        return .{ .is_safe = is_safe, .actual_max = actual_max, .resp_buf = resp_buf };
+    }
+
+    return .{ .is_safe = is_safe, .actual_max = actual_max, .resp_buf = null };
 }
 
-pub fn verificationPhase(
+pub fn serverVerifyPhase(
     allocator: std.mem.Allocator,
     io: std.Io,
     platform: *const zml.Platform,
     mul_exe: *zml.Exe,
-    a_poly: []const u64,
-    t_poly: []const u64,
-    w_poly: []const u64,
-    z_poly: []const u64,
-    challenge: u64,
+    server: *const ServerState,
+    com_buf: *const anyopaque,
+    chal_buf: *const anyopaque,
+    resp_buf: *const anyopaque,
 ) !bool {
+    log.info("=== 6. SERVER: VERIFICATION ===", .{});
+    flatbuf_tools.deserializeAndLogResponse(resp_buf);
+
+    const parsed_com = try flatbuf_tools.parseCommitment(allocator, com_buf);
+    defer allocator.free(parsed_com.w_poly);
+
+    const parsed_chal = try flatbuf_tools.parseChallenge(chal_buf);
+    const challenge = parsed_chal.challenge;
+
+    const parsed_resp = try flatbuf_tools.parseResponse(allocator, resp_buf);
+    defer allocator.free(parsed_resp.z_poly);
+
     const limit_y = 8192 * params.B;
 
-    // LHS = A * z mod Q
-    const lhs = try math.matVecMul(io, platform, allocator, mul_exe, a_poly, z_poly);
+    const lhs = try math.matVecMul(io, platform, allocator, mul_exe, server.a_poly, parsed_resp.z_poly);
     defer allocator.free(lhs);
 
-    // RHS = w + c * t mod Q
-    const rhs = try math.vecAddScalarMul(allocator, w_poly, challenge, t_poly);
+    const rhs = try math.vecAddScalarMul(allocator, parsed_com.w_poly, challenge, server.t_poly);
     defer allocator.free(rhs);
 
     var is_equal = true;
@@ -91,7 +199,7 @@ pub fn verificationPhase(
     if (!is_equal) {
         log.err("FAILURE: Matrix equation does not hold.", .{});
         return false;
-    } else if (!math.isSmall(z_poly, limit_y + params.B, null)) {
+    } else if (!math.isSmall(parsed_resp.z_poly, limit_y + params.B, null)) {
         log.err("FAILURE: Z vector too large.", .{});
         return false;
     }
@@ -122,82 +230,6 @@ pub fn setupZmlEngine(
     return .{ .platform = platform, .mul_exe = mul_exe };
 }
 
-pub fn registrationPhase(
-    allocator: std.mem.Allocator,
-    io: std.Io,
-    platform: *const zml.Platform,
-    mul_exe: *zml.Exe,
-) !struct { public_seed: [32]u8, a_poly: []const u64, secret_seed: [32]u8, s_poly: []const u64, t_poly: []const u64 } {
-    const public_seed = utils.extractSeed("PublicSharedMatrixSeed");
-    const a_poly = try math.expandA(allocator, public_seed);
-
-    log.info("=== 1. REGISTRATION PHASE ===", .{});
-    // Secret s
-    const secret_seed = utils.extractSeed("UserPasswordSalt");
-    const s_poly = try math.sampleSmall(allocator, secret_seed, params.B);
-
-    // Public key t = A * s mod Q
-    const t_poly = try math.matVecMul(io, platform, allocator, mul_exe, a_poly, s_poly);
-
-    return .{
-        .public_seed = public_seed,
-        .a_poly = a_poly,
-        .secret_seed = secret_seed,
-        .s_poly = s_poly,
-        .t_poly = t_poly,
-    };
-}
-
-pub fn outputProofPhase(
-    w_poly: []const u64,
-    public_seed: [32]u8,
-    t_poly: []const u64,
-    attempts: u32,
-    challenge: u64,
-    z_poly: []const u64,
-) !void {
-    // --- Serialize proof as FlatBuffer ---
-    log.info("=== FLATBUFFER SERIALIZATION ===", .{});
-    var hash_transcript = params.Transcript.init("LabradorZKP");
-    hash_transcript.appendMessage("w", std.mem.sliceAsBytes(w_poly));
-    const transcript_hash = hash_transcript.getChallenge("hash");
-
-    const fb_builder = std.heap.c_allocator.create(c.flatcc_builder_t) catch {
-        log.err("FlatBuffer builder alloc failed", .{});
-        return error.BuilderInitFailed;
-    };
-    defer std.heap.c_allocator.destroy(fb_builder);
-    if (c.flatcc_builder_init(fb_builder) != 0) {
-        log.err("FlatBuffer builder init failed", .{});
-        return error.BuilderInitFailed;
-    }
-    defer c.flatcc_builder_clear(fb_builder);
-
-    var buf_size: usize = 0;
-    const proof_buf = flatbuf_tools.serializeProof(
-        fb_builder,
-        &public_seed,
-        t_poly,
-        w_poly,
-        attempts,
-        challenge,
-        &transcript_hash,
-        z_poly,
-        true,
-        &buf_size,
-    ) catch |err| {
-        log.err("FlatBuffer serialization failed: {}", .{err});
-        return err;
-    };
-    defer std.c.free(proof_buf);
-
-    log.info("[FlatBuf] Proof serialized: {d} bytes", .{buf_size});
-
-    // --- Deserialize and verify round-trip ---
-    log.info("=== FLATBUFFER DESERIALIZATION ===", .{});
-    flatbuf_tools.deserializeAndLogProof(proof_buf);
-}
-
 pub fn main(init: std.process.Init) !void {
     const allocator = init.gpa;
     const io = init.io;
@@ -206,10 +238,21 @@ pub fn main(init: std.process.Init) !void {
     defer setup.platform.deinit(allocator);
     defer setup.mul_exe.deinit();
 
-    const registration = try registrationPhase(allocator, io, setup.platform, &setup.mul_exe);
-    defer allocator.free(registration.a_poly);
-    defer allocator.free(registration.s_poly);
-    defer allocator.free(registration.t_poly);
+    const fb_builder = try std.heap.c_allocator.create(c_interface.flatcc_builder_t);
+    defer std.heap.c_allocator.destroy(fb_builder);
+    if (c_interface.flatcc_builder_init(fb_builder) != 0) return error.BuilderInitFailed;
+    defer c_interface.flatcc_builder_clear(fb_builder);
+
+    // 1. Client creates registration flatbuffer
+    const client_reg = try clientRegistrationPhase(allocator, io, setup.platform, &setup.mul_exe, fb_builder);
+    defer std.c.free(client_reg.reg_buf);
+    defer allocator.free(client_reg.state.a_poly);
+    defer allocator.free(client_reg.state.s_poly);
+
+    // 2. Server processes registration flatbuffer
+    const server_state = try serverReceiveRegistrationPhase(allocator, client_reg.reg_buf);
+    defer allocator.free(server_state.a_poly);
+    defer allocator.free(server_state.t_poly);
 
     var proof_generated = false;
     var attempts: u32 = 0;
@@ -217,32 +260,28 @@ pub fn main(init: std.process.Init) !void {
     log.info("Starting ZKP generation loop...", .{});
     while (!proof_generated) {
         attempts += 1;
-        // 1. Prover: Commitment y and w
-        const commitment = try commitPhase(allocator, io, setup.platform, &setup.mul_exe, registration.a_poly, registration.secret_seed, attempts);
-        defer allocator.free(commitment.y_poly);
-        defer allocator.free(commitment.w_poly);
 
-        // 2 & 3. Verifier: Challenge & Prover: Response
-        const challenge_response = try challengeResponsePhase(allocator, commitment.y_poly, commitment.w_poly, registration.s_poly);
-        defer allocator.free(challenge_response.z_poly);
+        // 3. Client creates commitment flatbuffer
+        const client_com = try clientCommitPhase(allocator, io, setup.platform, &setup.mul_exe, &client_reg.state, attempts, fb_builder);
+        defer allocator.free(client_com.y_poly);
+        defer std.c.free(client_com.com_buf);
 
-        if (challenge_response.is_safe) {
+        // 4. Server creates challenge flatbuffer
+        const server_chal = try serverChallengePhase(allocator, client_com.com_buf, fb_builder);
+        defer std.c.free(server_chal.chal_buf);
+
+        // 5. Client creates response flatbuffer
+        const client_resp = try clientResponsePhase(allocator, &client_reg.state, client_com.y_poly, server_chal.chal_buf, fb_builder);
+        if (client_resp.resp_buf) |resp_buf| {
+            defer std.c.free(resp_buf);
+
             log.info("--- Verification (Attempt {d}) ---", .{attempts});
-            // 4. Verifier: Verify
-            const is_verified = try verificationPhase(allocator, io, setup.platform, &setup.mul_exe, registration.a_poly, registration.t_poly, commitment.w_poly, challenge_response.z_poly, challenge_response.challenge);
+            // 6. Server verifies all flatbuffers
+            const is_verified = try serverVerifyPhase(allocator, io, setup.platform, &setup.mul_exe, &server_state, client_com.com_buf, server_chal.chal_buf, resp_buf);
 
             if (is_verified) {
                 log.info("SUCCESS: Zero Knowledge Proof Accepted. (Attempts: {d})", .{attempts});
                 proof_generated = true;
-
-                try outputProofPhase(
-                    commitment.w_poly,
-                    registration.public_seed,
-                    registration.t_poly,
-                    attempts,
-                    challenge_response.challenge,
-                    challenge_response.z_poly,
-                );
             } else {
                 break;
             }
@@ -250,7 +289,7 @@ pub fn main(init: std.process.Init) !void {
             if (attempts % 10 == 0) {
                 const limit_y = 8192 * params.B;
                 const safe_limit = limit_y - (1 * params.B);
-                log.info("... Client restarted protocol (Rejection Sampling Limit {d}, Max was {d}) ...", .{ safe_limit, resp_res.actual_max });
+                log.info("... Client restarted protocol (Rejection Sampling Limit {d}, Max was {d}) ...", .{ safe_limit, client_resp.actual_max });
             }
         }
     }

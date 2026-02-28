@@ -3,13 +3,19 @@ load("//third_party/flatbuf:defs.bzl", "flatcc_library")
 
 flatcc_library(
     name = "zerkerus_fbs",
-    src = "idl/proof.fbs",
+    src = "idl/all.fbs",
     schema_deps = [
         "idl/registration.fbs",
         "idl/commitment.fbs",
         "idl/challenge.fbs",
+        "idl/response.fbs",
     ],
     outs = [
+        "all_builder.h",
+        "all_reader.h",
+        "all_verifier.h",
+        "all_json_parser.h",
+        "all_json_printer.h",
         "registration_builder.h",
         "registration_reader.h",
         "registration_verifier.h",
@@ -25,15 +31,22 @@ flatcc_library(
         "challenge_verifier.h",
         "challenge_json_parser.h",
         "challenge_json_printer.h",
-        "proof_builder.h",
-        "proof_reader.h",
-        "proof_verifier.h",
-        "proof_json_parser.h",
-        "proof_json_printer.h",
+        "response_builder.h",
+        "response_reader.h",
+        "response_verifier.h",
+        "response_json_parser.h",
+        "response_json_printer.h",
         "flatbuffers_common_builder.h",
         "flatbuffers_common_reader.h",
     ],
 )
+
+cc_library(
+    name = "zerkerus_fbs_wrapper",
+    deps = [":zerkerus_fbs"],
+    defines = ["__building_module(x)=0"],
+)
+
 
 zig_binary(
     name = "zerkerus",
@@ -47,7 +60,7 @@ zig_binary(
     deps = [
         "//zk-crypto",
         "@zml//zml",
-        ":zerkerus_fbs",
+        ":zerkerus_fbs_wrapper",
     ],
     visibility = ["//visibility:public"],
 )
@@ -64,7 +77,7 @@ zig_test(
     deps = [
         "//zk-crypto",
         "@zml//zml",
-        ":zerkerus_fbs",
+        ":zerkerus_fbs_wrapper",
     ],
 )
 
@@ -89,7 +102,7 @@ zig_test(
     name = "zerkerus_flatbuf_test",
     main = "flatbuf_tools.zig",
     deps = [
-        ":zerkerus_fbs",
+        ":zerkerus_fbs_wrapper",
     ],
 )
 

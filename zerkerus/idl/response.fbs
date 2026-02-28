@@ -1,0 +1,9 @@
+// Response phase of the Labrador ZKP sigma protocol
+// Prover sends back z = y + c*s mod Q
+namespace zerkerus;
+
+table Response {
+    z: [ulong];                  // Response vector z (N elements, u64)
+}
+
+root_type Response;

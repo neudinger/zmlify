@@ -1,0 +1,10 @@
+// Wrapper schema to generate headers for all tables safely without conflict
+include "registration.fbs";
+include "commitment.fbs";
+include "challenge.fbs";
+include "response.fbs";
+
+table AllDummy {
+    dummy: int;
+}
+root_type AllDummy;

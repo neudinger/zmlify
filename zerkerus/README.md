@@ -9,13 +9,13 @@ By bridging ZML (Zig Machine Learning) matrix computations with the **Labrador**
 - **Modular Architecture:** The codebase is separated into distinct modules (`params.zig`, `utils.zig`, `math.zig`, `flatbuf_tools.zig`) for clearer separation of cryptographic constants, utilities, ZML/Zig math, and serialization.
 - **Finite Fields Integration:** Fully utilizes the Dilithium/Kyber Prime Field ($Q = 8380417$) for all matrix optimizations, executing bounded mathematical verification flawlessly over the ZML MLIR backend.
 - **Zero-Knowledge Determinism:** Mathematical rejection-sampling correctly handles bounded aborts to ensure no statistical leakage of the witness occurs.
-- **FlatBuffers Serialization:** Accepted proofs are serialized into compact binary FlatBuffers (~12 KB), enabling efficient client–server proof exchange.
+- **FlatBuffers Serialization:** The protocol is serialized sequentially into four distinct binary FlatBuffers components (`Registration`, `Commitment`, `Challenge`, `Response`), enabling step-by-step verification over a simulated network interface.
 
 ---
 
 ## 🚀 The Architecture at a Glance
 
-This project executes a strict dialogue between the Client and the Server to verify secret ownership:
+This project executes a strict dialogue between the Client and the Server to verify secret ownership. To natively simulate a real-world network, the Client and Server share **zero internal memory state**. All phase transitions natively serialize their data into raw FlatBuffer binary blocks (`*const anyopaque`) which are then passed to the receiver for decoding.
 
 ```mermaid
 sequenceDiagram
@@ -26,30 +26,37 @@ sequenceDiagram
     Note over Prover (Client): Derived Secret: s<br/>Public Key: t = A*s mod Q
     
     rect rgb(232, 245, 233)
-        Note over Prover (Client): 1. Commitment Phase (`commitPhase`)
-        Prover (Client)->>Transcript: Generate Random Mask: y
-        Note over Prover (Client): w = A*y mod Q
-        Prover (Client)->>Verifier (Server): Send Commitment: w
-    end
-    
-    rect rgb(255, 243, 224)
-        Note over Verifier (Server): 2. Challenge Phase (`challengeResponsePhase`)
-        Verifier (Server)->>Transcript: Absorb w
-        Transcript-->>Verifier (Server): Squeeze Scalar Challenge: c
-        Verifier (Server)->>Prover (Client): Send Challenge: c
+        Note over Prover (Client): 1. Registration (`clientRegistrationPhase`)
+        Prover (Client)->>Verifier (Server): Serialize: reg_buf
+        Note over Verifier (Server): 2. Processing (`serverReceiveRegistrationPhase`)
     end
 
     rect rgb(232, 245, 233)
-        Note over Prover (Client): 3. Response Phase (`challengeResponsePhase`)
-        Note over Prover (Client): Generate Vector: z = y + c*s
+        Note over Prover (Client): 3. Commitment Phase (`clientCommitPhase`)
+        Prover (Client)->>Transcript: Generate Random Mask: y
+        Note over Prover (Client): w = A*y mod Q
+        Prover (Client)->>Verifier (Server): Serialize: com_buf
+    end
+    
+    rect rgb(255, 243, 224)
+        Note over Verifier (Server): 4. Challenge Phase (`serverChallengePhase`)
+        Verifier (Server)->>Transcript: Parse com_buf, Absorb w
+        Transcript-->>Verifier (Server): Squeeze Scalar Challenge: c
+        Verifier (Server)->>Prover (Client): Serialize: chal_buf
+    end
+
+    rect rgb(232, 245, 233)
+        Note over Prover (Client): 5. Response Phase (`clientResponsePhase`)
+        Note over Prover (Client): Parse chal_buf, Generate z = y + c*s
         opt Rejection Sampling
-            Note right of Prover (Client): If z is too large computationally,<br/>abort and restart from Step 1.
+            Note right of Prover (Client): If z is too large computationally,<br/>abort and restart from step 3.
         end
-        Prover (Client)->>Verifier (Server): Send Safe Response: z
+        Prover (Client)->>Verifier (Server): Serialize: resp_buf
     end
 
     rect rgb(255, 243, 224)
-        Note over Verifier (Server): 4. Verification Phase (`verificationPhase`)
+        Note over Verifier (Server): 6. Verification Phase (`serverVerifyPhase`)
+        Note over Verifier (Server): Parse resp_buf
         Note over Verifier (Server): Assert A*z == w + c*t (mod Q)
         Note over Verifier (Server): Assert z is structurally small
         Verifier (Server)-->>Prover (Client): SUCCESS! (Cryptography verified)
@@ -91,30 +98,33 @@ Accepted ZKP proofs are serialized into compact FlatBuffer payloads using the [f
 
 ### Schema Design (`zerkerus/idl/`)
 
-Four `.fbs` schemas model the Labrador protocol phases:
+Four `.fbs` schemas model the sequential Labrador protocol interactions:
 
 | Schema | Fields | Description |
 |--------|--------|-------------|
-| `registration.fbs` | `public_seed: [ubyte]`, `public_key_t: [ulong]` | Public parameters |
-| `commitment.fbs` | `w: [ulong]`, `attempt: uint` | Commitment vector + attempt counter |
-| `challenge.fbs` | `c: ulong`, `transcript_hash: [ubyte]` | Fiat-Shamir challenge |
-| `proof.fbs` | Nests all above + `z: [ulong]`, `verified: bool` | Root proof table |
+| `registration.fbs` | `public_seed: [ubyte]`, `public_key_t: [ulong]` | Public parameters shared before ZKP begins |
+| `commitment.fbs` | `w: [ulong]`, `attempt: uint` | The commitment vector $W$ + rejection sampling attempt counter |
+| `challenge.fbs` | `c: ulong`, `transcript_hash: [ubyte]` | Fiat-Shamir challenge variable $c$ sent by Verifier |
+| `response.fbs` | `z: [ulong]` | The final response vector $Z$ sent by Prover |
 
 ### Zig ↔ flatcc Integration
 
-The flatcc C builder API is used via the Bazel `flatcc_library` rule, which compiles `.fbs` schemas into C headers accessible through `@import("c")`.
+The `flatcc` builder API is accessed from Zig using a strict explicit `@cImport` block specifying chronological topological macro initialization via `bazel`'s `flatcc_library`. This enforces `#include` compliance and entirely avoids Apple Clang `translate-c` module corruption.
 
 > **Note:** Use the `_create(ptr, len)` API for scalar vectors (`[ubyte]`, `[ulong]`) rather than `_start/_push/_end` — the inline push functions do not translate correctly through Zig's C interop layer.
 
-### Serialized Output
+### Serialized Output Log
 
 ```
-info: [FlatBuf] Proof serialized: 12486 bytes
-info: [FlatBuf] Registration: public_seed length = 32, public_key_t length = 256
+info: === FLATBUFFER: REGISTRATION ===
+info: [FlatBuf] Registration: public_seed length = 32
+info: [FlatBuf] Registration: public_key_t length = 256
+info: === FLATBUFFER: COMMITMENT ===
 info: [FlatBuf] Commitment: attempt = 1, w length = 256
+info: === FLATBUFFER: CHALLENGE ===
 info: [FlatBuf] Challenge: c = 1, transcript_hash length = 32
+info: === FLATBUFFER: RESPONSE ===
 info: [FlatBuf] Response: z length = 1024
-info: [FlatBuf] Verified: true
 ```
 
 ---
