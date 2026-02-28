@@ -3,7 +3,6 @@ const zml = @import("zml");
 const log = std.log;
 
 const ResNet18 = @import("resnet18.zig").ResNet18;
-const c = @import("c");
 
 pub const ResNet18Pipeline = struct {
     allocator: std.mem.Allocator,

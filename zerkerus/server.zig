@@ -5,7 +5,7 @@ const params = @import("params.zig");
 const utils = @import("utils.zig");
 const math = @import("math.zig");
 const flatbuf_tools = @import("flatbuf_tools.zig");
-const c_interface = flatbuf_tools.c_interface;
+const c_interface = @import("c");
 
 // Server State
 // This struct represents the database stored by the Verifier (Server).
@@ -37,7 +37,7 @@ pub fn serverChallengePhase(
     allocator: std.mem.Allocator,
     com_buf: *const anyopaque,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { chal_buf: *anyopaque } {
+) !struct { chal_buf: *anyopaque, chal_buf_size: usize } {
     log.info("=== 4. SERVER: CHALLENGE ===", .{});
     flatbuf_tools.deserializeAndLogCommitment(com_buf);
 
@@ -53,10 +53,10 @@ pub fn serverChallengePhase(
     @memcpy(&transcript_hash, &hash_slice);
 
     var buf_size: usize = 0;
-    _ = c_interface.flatcc_builder_reset(fb_builder);
+    if (c_interface.flatcc_builder_reset(fb_builder) != 0) return flatbuf_tools.FlatbError.BuilderResetFailed;
     const chal_buf = try flatbuf_tools.serializeChallenge(fb_builder, challenge, &transcript_hash, &buf_size);
 
-    return .{ .chal_buf = chal_buf };
+    return .{ .chal_buf = chal_buf, .chal_buf_size = buf_size };
 }
 
 pub fn serverVerifyPhase(

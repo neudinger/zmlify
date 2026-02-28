@@ -113,7 +113,7 @@ Four `.fbs` schemas model the sequential Labrador protocol interactions:
 
 ### Zig ↔ flatcc Integration
 
-The `flatcc` builder API is accessed from Zig using a strict explicit `@cImport` block specifying chronological topological macro initialization via `bazel`'s `flatcc_library`. This enforces `#include` compliance and entirely avoids Apple Clang `translate-c` module corruption.
+The `flatcc` builder API is accessed cleanly via Zig's idiomatic `@import("c")`. Because `flatcc` enforces a strict `#include` topological order, we route the dependency through an explicit `zerkerus_fbs_bridge.h` C-wrapper in `BUILD.bazel`, guaranteeing the Apple Clang `translate-c` module natively parses the structure without macro corruption.
 
 > **Note:** Use the `_create(ptr, len)` API for scalar vectors (`[ubyte]`, `[ulong]`) rather than `_start/_push/_end` — the inline push functions do not translate correctly through Zig's C interop layer.
 
@@ -129,6 +129,21 @@ info: === FLATBUFFER: CHALLENGE ===
 info: [FlatBuf] Challenge: c = 1, transcript_hash length = 32
 info: === FLATBUFFER: RESPONSE ===
 info: [FlatBuf] Response: z length = 1024
+```
+
+### JSON Inspection & Debugging
+
+For deep payload inspection, `flatbuf_tools.zig` exposes native C-wrappers directly into `flatcc`'s JSON printer API via `zerkerus_fbs_bridge.c`. 
+
+During execution in `main.zig`, after generating a serialized payload block, `flatbuf_tools.printJson<Type>(buf, size)` is called to dynamically dump the schema's internal C-memory mapped JSON representation strictly to `stdout` for the exact parameters.
+
+```json
+info: 
+--- Registration JSON ---
+{
+  "public_seed": [108,103,16,108,137,173,...],
+  "public_key_t": [3039904,78572,4080187,...]
+}
 ```
 
 ---

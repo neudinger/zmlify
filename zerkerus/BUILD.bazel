@@ -47,6 +47,13 @@ cc_library(
     defines = ["__building_module(x)=0"],
 )
 
+cc_library(
+    name = "zerkerus_fbs_bridge",
+    srcs = ["zerkerus_fbs_bridge.c"],
+    hdrs = ["zerkerus_fbs_bridge.h"],
+    deps = [":zerkerus_fbs_wrapper"],
+)
+
 
 zig_binary(
     name = "zerkerus",
@@ -63,7 +70,7 @@ zig_binary(
     deps = [
         "//zk-crypto",
         "@zml//zml",
-        ":zerkerus_fbs_wrapper",
+        ":zerkerus_fbs_bridge",
     ],
     visibility = ["//visibility:public"],
 )
@@ -83,7 +90,7 @@ zig_test(
     deps = [
         "//zk-crypto",
         "@zml//zml",
-        ":zerkerus_fbs_wrapper",
+        ":zerkerus_fbs_bridge",
     ],
 )
 
@@ -108,7 +115,7 @@ zig_test(
     name = "zerkerus_flatbuf_test",
     main = "flatbuf_tools.zig",
     deps = [
-        ":zerkerus_fbs_wrapper",
+        ":zerkerus_fbs_bridge",
     ],
 )
 

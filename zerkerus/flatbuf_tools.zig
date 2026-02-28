@@ -1,18 +1,6 @@
 const std = @import("std");
 const log = std.log;
-pub const c_interface = @cImport({
-    // Standard system types first
-    @cInclude("stddef.h");
-    @cInclude("stdint.h");
-
-    // Core flatbuffer generic reader/builder
-    @cInclude("flatbuffers_common_reader.h");
-    @cInclude("flatbuffers_common_builder.h");
-
-    // All schemas
-    @cInclude("all_reader.h");
-    @cInclude("all_builder.h");
-});
+const c_interface = @import("c");
 
 pub const FlatbError = error{
     BuilderInitFailed,
@@ -22,6 +10,7 @@ pub const FlatbError = error{
     TableEndFailed,
     VectorCreateFailed,
     InvalidSeedLength,
+    BuilderResetFailed,
 };
 
 /// Serialize Registration phase data (public seed and key t).
@@ -245,29 +234,49 @@ test "serialize phases individually" {
     // 1. Registration
     const public_seed = [_]u8{ 1, 2, 3 };
     const t_poly = [_]u64{ 10, 20 };
-    _ = c_interface.flatcc_builder_reset(fb_builder);
+    if (c_interface.flatcc_builder_reset(fb_builder) != 0) return error.BuilderResetFailed;
     const reg_buf = try serializeRegistration(fb_builder, &public_seed, &t_poly, &buf_size);
     defer std.c.free(reg_buf);
     deserializeAndLogRegistration(reg_buf);
 
     // 2. Commitment
     const w_poly = [_]u64{ 100, 200, 300 };
-    _ = c_interface.flatcc_builder_reset(fb_builder);
+    if (c_interface.flatcc_builder_reset(fb_builder) != 0) return error.BuilderResetFailed;
     const com_buf = try serializeCommitment(fb_builder, 1, &w_poly, &buf_size);
     defer std.c.free(com_buf);
     deserializeAndLogCommitment(com_buf);
 
     // 3. Challenge
     const transcript_hash = [_]u8{ 5, 6, 7, 8 };
-    _ = c_interface.flatcc_builder_reset(fb_builder);
+    if (c_interface.flatcc_builder_reset(fb_builder) != 0) return error.BuilderResetFailed;
     const chal_buf = try serializeChallenge(fb_builder, 42, &transcript_hash, &buf_size);
     defer std.c.free(chal_buf);
     deserializeAndLogChallenge(chal_buf);
 
     // 4. Response
     const z_poly = [_]u64{ 1000, 2000, 3000 };
-    _ = c_interface.flatcc_builder_reset(fb_builder);
+    if (c_interface.flatcc_builder_reset(fb_builder) != 0) return error.BuilderResetFailed;
     const resp_buf = try serializeResponse(fb_builder, &z_poly, &buf_size);
     defer std.c.free(resp_buf);
     deserializeAndLogResponse(resp_buf);
+}
+
+pub fn printJsonRegistration(buf: *const anyopaque, size: usize) void {
+    c_interface.print_registration_json_stdout(buf, size);
+    log.info("\n", .{}); // print an empty line to flush properly visually
+}
+
+pub fn printJsonCommitment(buf: *const anyopaque, size: usize) void {
+    c_interface.print_commitment_json_stdout(buf, size);
+    log.info("\n", .{});
+}
+
+pub fn printJsonChallenge(buf: *const anyopaque, size: usize) void {
+    c_interface.print_challenge_json_stdout(buf, size);
+    log.info("\n", .{});
+}
+
+pub fn printJsonResponse(buf: *const anyopaque, size: usize) void {
+    c_interface.print_response_json_stdout(buf, size);
+    log.info("\n", .{});
 }

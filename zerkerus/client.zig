@@ -5,7 +5,7 @@ const params = @import("params.zig");
 const utils = @import("utils.zig");
 const math = @import("math.zig");
 const flatbuf_tools = @import("flatbuf_tools.zig");
-const c_interface = flatbuf_tools.c_interface;
+const c_interface = @import("c");
 
 // Client State
 // This struct represents the exclusive memory space of the Prover (Client).
@@ -23,7 +23,7 @@ pub fn clientRegistrationPhase(
     platform: *const zml.Platform,
     mul_exe: *zml.Exe,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { state: ClientState, reg_buf: *anyopaque } {
+) !struct { state: ClientState, reg_buf: *anyopaque, reg_buf_size: usize } {
     log.info("=== 1. CLIENT: REGISTRATION ===", .{});
     // The public_seed is conceptually established ahead of time (e.g. Server's static prime parameter).
     const public_seed = utils.extractSeed("PublicSharedMatrixSeed");
@@ -38,7 +38,7 @@ pub fn clientRegistrationPhase(
     defer allocator.free(t_poly);
 
     var buf_size: usize = 0;
-    _ = c_interface.flatcc_builder_reset(fb_builder);
+    if (c_interface.flatcc_builder_reset(fb_builder) != 0) return flatbuf_tools.FlatbError.BuilderResetFailed;
     const reg_buf = try flatbuf_tools.serializeRegistration(fb_builder, &public_seed, t_poly, &buf_size);
 
     return .{
@@ -48,6 +48,7 @@ pub fn clientRegistrationPhase(
             .a_poly = a_poly,
         },
         .reg_buf = reg_buf,
+        .reg_buf_size = buf_size,
     };
 }
 
@@ -59,7 +60,7 @@ pub fn clientCommitPhase(
     client_state: *const ClientState,
     attempts: u32,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { y_poly: []const u64, com_buf: *anyopaque } {
+) !struct { y_poly: []const u64, com_buf: *anyopaque, com_buf_size: usize } {
     log.info("=== 3. CLIENT: COMMITMENT ===", .{});
     var y_seed_input: [36]u8 = undefined;
     @memcpy(y_seed_input[0..32], &client_state.secret_seed);
@@ -81,10 +82,10 @@ pub fn clientCommitPhase(
     defer allocator.free(w_poly);
 
     var buf_size: usize = 0;
-    _ = c_interface.flatcc_builder_reset(fb_builder);
+    if (c_interface.flatcc_builder_reset(fb_builder) != 0) return flatbuf_tools.FlatbError.BuilderResetFailed;
     const com_buf = try flatbuf_tools.serializeCommitment(fb_builder, attempts, w_poly, &buf_size);
 
-    return .{ .y_poly = y_poly, .com_buf = com_buf };
+    return .{ .y_poly = y_poly, .com_buf = com_buf, .com_buf_size = buf_size };
 }
 
 pub fn clientResponsePhase(
@@ -93,7 +94,7 @@ pub fn clientResponsePhase(
     y_poly: []const u64,
     chal_buf: *const anyopaque,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { is_safe: bool, actual_max: u64, resp_buf: ?*anyopaque } {
+) !struct { is_safe: bool, actual_max: u64, resp_buf: ?*anyopaque, resp_buf_size: usize } {
     log.info("=== 5. CLIENT: RESPONSE ===", .{});
     flatbuf_tools.deserializeAndLogChallenge(chal_buf);
 
@@ -122,10 +123,10 @@ pub fn clientResponsePhase(
 
     if (is_safe) {
         var buf_size: usize = 0;
-        _ = c_interface.flatcc_builder_reset(fb_builder);
+        if (c_interface.flatcc_builder_reset(fb_builder) != 0) return flatbuf_tools.FlatbError.BuilderResetFailed;
         const resp_buf = try flatbuf_tools.serializeResponse(fb_builder, z_poly, &buf_size);
-        return .{ .is_safe = is_safe, .actual_max = actual_max, .resp_buf = resp_buf };
+        return .{ .is_safe = is_safe, .actual_max = actual_max, .resp_buf = resp_buf, .resp_buf_size = buf_size };
     }
 
-    return .{ .is_safe = is_safe, .actual_max = actual_max, .resp_buf = null };
+    return .{ .is_safe = is_safe, .actual_max = actual_max, .resp_buf = null, .resp_buf_size = 0 };
 }
