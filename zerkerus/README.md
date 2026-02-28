@@ -5,8 +5,12 @@ Welcome to the **Zerkerus Zero-Knowledge Password Proof** project. This reposito
 By bridging ZML (Zig Machine Learning) matrix computations with the **Labrador** framework and Lattice-based BDLOP commitments, this system allows a Prover (Client) to convince a Verifier (Server) that they hold a specific secret structure, utilizing the interactive **Merlin-Arthur Protocol**.
 
 ### 🟢 Current Operational Status
-- **Functional End-to-End Protocol:** The `main.zig` program successfully runs a unified Prover/Verifier Merlin-Arthur sequence locally on Apple Silicon.
-- **Modular Architecture:** The codebase is separated into distinct modules (`params.zig`, `utils.zig`, `math.zig`, `flatbuf_tools.zig`) for clearer separation of cryptographic constants, utilities, ZML/Zig math, and serialization.
+- **Functional End-to-End Protocol:** The `main.zig` program successfully executes a unified Prover/Verifier Merlin-Arthur sequence locally on Apple Silicon.
+- **Modular Architecture:** The codebase is separated into explicit domain modules:
+  - **`client.zig` & `server.zig`**: Standalone protocol phase definitions guaranteeing Zero-Knowledge state boundaries natively.
+  - **`engine.zig`**: ZML MLIR Compiler integration binding execution dynamically to Neural Engine matrix operations.
+  - **`math.zig` & `utils.zig`**: Cryptographic prime-field operations and structural constants (e.g. Dilithium parametrizations found in `params.zig`).
+  - **`flatbuf_tools.zig`**: FlatBuffers serialization bridging domain components purely through binary encoding.
 - **Finite Fields Integration:** Fully utilizes the Dilithium/Kyber Prime Field ($Q = 8380417$) for all matrix optimizations, executing bounded mathematical verification flawlessly over the ZML MLIR backend.
 - **Zero-Knowledge Determinism:** Mathematical rejection-sampling correctly handles bounded aborts to ensure no statistical leakage of the witness occurs.
 - **FlatBuffers Serialization:** The protocol is serialized sequentially into four distinct binary FlatBuffers components (`Registration`, `Commitment`, `Challenge`, `Response`), enabling step-by-step verification over a simulated network interface.

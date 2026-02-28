@@ -56,6 +56,9 @@ zig_binary(
         "utils.zig",
         "math.zig",
         "flatbuf_tools.zig",
+        "client.zig",
+        "server.zig",
+        "engine.zig",
     ],
     deps = [
         "//zk-crypto",
@@ -73,6 +76,9 @@ zig_test(
         "utils.zig",
         "math.zig",
         "flatbuf_tools.zig",
+        "client.zig",
+        "server.zig",
+        "engine.zig",
     ],
     deps = [
         "//zk-crypto",
