@@ -280,3 +280,18 @@ pub fn printJsonResponse(buf: *const anyopaque, size: usize) void {
     c_interface.print_response_json_stderr(buf, size);
     std.debug.print("\n", .{});
 }
+
+pub fn encodeBase64(allocator: std.mem.Allocator, buf: *const anyopaque, size: usize) ![]u8 {
+    const byte_slice = @as([*]const u8, @ptrCast(buf))[0..size];
+    const encoded_len = std.base64.standard.Encoder.calcSize(size);
+    const encoded = try allocator.alloc(u8, encoded_len);
+    _ = std.base64.standard.Encoder.encode(encoded, byte_slice);
+    return encoded;
+}
+
+pub fn decodeBase64(allocator: std.mem.Allocator, encoded: []const u8) ![]u8 {
+    const decoded_len = try std.base64.standard.Decoder.calcSizeForSlice(encoded);
+    const decoded = try allocator.alloc(u8, decoded_len);
+    try std.base64.standard.Decoder.decode(decoded, encoded);
+    return decoded;
+}

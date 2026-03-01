@@ -14,6 +14,7 @@ By bridging ZML (Zig Machine Learning) matrix computations with the **Labrador**
 - **Finite Fields Integration:** Fully utilizes the Dilithium/Kyber Prime Field ($Q = 8380417$) for all matrix optimizations, executing bounded mathematical verification flawlessly over the ZML MLIR backend.
 - **Zero-Knowledge Determinism:** Mathematical rejection-sampling correctly handles bounded aborts to ensure no statistical leakage of the witness occurs.
 - **FlatBuffers Serialization:** The protocol is serialized sequentially into four distinct binary FlatBuffers components (`Registration`, `Commitment`, `Challenge`, `Response`), enabling step-by-step verification over a simulated network interface.
+- **Memory Management:** Natively abstracts pointer clearing for protocol phases into explicit, strongly-typed return structs containing standard `.deinit()` methods.
 
 ---
 
@@ -144,6 +145,16 @@ info:
   "public_seed": [108,103,16,108,137,173,...],
   "public_key_t": [3039904,78572,4080187,...]
 }
+```
+
+### Base64 Transport Serialization
+
+For real-world web-transports, the FlatBuffer payloads natively support encoding directly to Base64. Each protocol phase returns a strongly typed structure (e.g., `ClientRegistration`, `ServerChallenge`) exposing a `.toBase64(allocator)` helper method wrapping `std.base64`.
+
+```zig
+const base64_reg = try client_reg.toBase64(allocator);
+defer allocator.free(base64_reg);
+log.info("Registration Base64: {s}", .{base64_reg});
 ```
 
 ---

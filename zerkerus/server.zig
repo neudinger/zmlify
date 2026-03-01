@@ -45,6 +45,10 @@ pub const ServerChallenge = struct {
     pub fn deinit(self: *const ServerChallenge) void {
         std.c.free(self.chal_buf);
     }
+
+    pub fn toBase64(self: *const ServerChallenge, allocator: std.mem.Allocator) ![]u8 {
+        return flatbuf_tools.encodeBase64(allocator, self.chal_buf, self.chal_buf_size);
+    }
 };
 
 pub fn serverChallengePhase(

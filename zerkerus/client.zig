@@ -31,6 +31,10 @@ pub const ClientRegistration = struct {
         self.state.deinit(allocator);
         std.c.free(self.reg_buf);
     }
+
+    pub fn toBase64(self: *const ClientRegistration, allocator: std.mem.Allocator) ![]u8 {
+        return flatbuf_tools.encodeBase64(allocator, self.reg_buf, self.reg_buf_size);
+    }
 };
 
 pub fn clientRegistrationPhase(
@@ -76,6 +80,10 @@ pub const ClientCommitment = struct {
     pub fn deinit(self: *const ClientCommitment, allocator: std.mem.Allocator) void {
         allocator.free(self.y_poly);
         std.c.free(self.com_buf);
+    }
+
+    pub fn toBase64(self: *const ClientCommitment, allocator: std.mem.Allocator) ![]u8 {
+        return flatbuf_tools.encodeBase64(allocator, self.com_buf, self.com_buf_size);
     }
 };
 
@@ -125,6 +133,13 @@ pub const ClientResponse = struct {
         if (self.resp_buf) |buf| {
             std.c.free(buf);
         }
+    }
+
+    pub fn toBase64(self: *const ClientResponse, allocator: std.mem.Allocator) !?[]u8 {
+        if (self.resp_buf) |buf| {
+            return try flatbuf_tools.encodeBase64(allocator, buf, self.resp_buf_size);
+        }
+        return null;
     }
 };
 

@@ -3,10 +3,20 @@ const log = std.log;
 const zml = @import("zml");
 const params = @import("params.zig");
 
+pub const Setup = struct {
+    platform: *zml.Platform,
+    mul_exe: zml.Exe,
+
+    pub fn deinit(self: *Setup, allocator: std.mem.Allocator) void {
+        self.platform.deinit(allocator);
+        self.mul_exe.deinit();
+    }
+};
+
 pub fn setupZmlEngine(
     allocator: std.mem.Allocator,
     io: std.Io,
-) !struct { platform: *zml.Platform, mul_exe: zml.Exe } {
+) !Setup {
     log.info("Initializing ZML engine...", .{});
     const platform: *zml.Platform = try .auto(allocator, io, .{});
 
