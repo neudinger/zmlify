@@ -15,6 +15,11 @@ const c_interface = @import("c");
 pub const ServerState = struct {
     a_poly: []const u64,
     t_poly: []const u64,
+
+    pub fn deinit(self: *const ServerState, allocator: std.mem.Allocator) void {
+        allocator.free(self.a_poly);
+        allocator.free(self.t_poly);
+    }
 };
 
 pub fn serverReceiveRegistrationPhase(
@@ -33,11 +38,20 @@ pub fn serverReceiveRegistrationPhase(
     };
 }
 
+pub const ServerChallenge = struct {
+    chal_buf: *anyopaque,
+    chal_buf_size: usize,
+
+    pub fn deinit(self: *const ServerChallenge) void {
+        std.c.free(self.chal_buf);
+    }
+};
+
 pub fn serverChallengePhase(
     allocator: std.mem.Allocator,
     com_buf: *const anyopaque,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { chal_buf: *anyopaque, chal_buf_size: usize } {
+) !ServerChallenge {
     log.info("=== 4. SERVER: CHALLENGE ===", .{});
     flatbuf_tools.deserializeAndLogCommitment(com_buf);
 

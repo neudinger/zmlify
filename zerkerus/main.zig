@@ -30,18 +30,14 @@ pub fn main(init: std.process.Init) !void {
 
     // 1. Client creates registration flatbuffer
     const client_reg = try client.clientRegistrationPhase(allocator, io, setup.platform, &setup.mul_exe, fb_builder);
+    defer client_reg.deinit(allocator);
 
     log.info("\n--- Registration JSON ---", .{});
     flatbuf_tools.printJsonRegistration(client_reg.reg_buf, client_reg.reg_buf_size);
 
-    defer std.c.free(client_reg.reg_buf);
-    defer allocator.free(client_reg.state.a_poly);
-    defer allocator.free(client_reg.state.s_poly);
-
     // 2. Server processes registration flatbuffer
     const server_state = try server.serverReceiveRegistrationPhase(allocator, client_reg.reg_buf);
-    defer allocator.free(server_state.a_poly);
-    defer allocator.free(server_state.t_poly);
+    defer server_state.deinit(allocator);
 
     var proof_generated = false;
     var attempts: u32 = 0;
@@ -52,30 +48,27 @@ pub fn main(init: std.process.Init) !void {
 
         // 3. Client creates commitment flatbuffer
         const client_com = try client.clientCommitPhase(allocator, io, setup.platform, &setup.mul_exe, &client_reg.state, attempts, fb_builder);
+        defer client_com.deinit(allocator);
 
-        log.info("\n--- Commitment JSON ---", .{});
+        log.info("--- Commitment JSON ---", .{});
         flatbuf_tools.printJsonCommitment(client_com.com_buf, client_com.com_buf_size);
-
-        defer allocator.free(client_com.y_poly);
-        defer std.c.free(client_com.com_buf);
 
         // 4. Server creates challenge flatbuffer
         const server_chal = try server.serverChallengePhase(allocator, client_com.com_buf, fb_builder);
+        defer server_chal.deinit();
 
-        log.info("\n--- Challenge JSON ---", .{});
+        log.info("--- Challenge JSON ---", .{});
         flatbuf_tools.printJsonChallenge(server_chal.chal_buf, server_chal.chal_buf_size);
-
-        defer std.c.free(server_chal.chal_buf);
 
         // 5. Client creates response flatbuffer
         const client_resp = try client.clientResponsePhase(allocator, &client_reg.state, client_com.y_poly, server_chal.chal_buf, fb_builder);
-        if (client_resp.resp_buf) |resp_buf| {
-            defer std.c.free(resp_buf);
+        defer client_resp.deinit();
 
-            log.info("\n--- Response JSON ---", .{});
+        if (client_resp.resp_buf) |resp_buf| {
+            log.info("--- Response JSON ---", .{});
             flatbuf_tools.printJsonResponse(resp_buf, client_resp.resp_buf_size);
 
-            log.info("\n--- Verification (Attempt {d}) ---", .{attempts});
+            log.info("--- Verification (Attempt {d}) ---", .{attempts});
             // 6. Server verifies all flatbuffers
             const is_verified = try server.serverVerifyPhase(allocator, io, setup.platform, &setup.mul_exe, &server_state, client_com.com_buf, server_chal.chal_buf, resp_buf);
 

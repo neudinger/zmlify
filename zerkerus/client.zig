@@ -15,6 +15,22 @@ pub const ClientState = struct {
     secret_seed: [32]u8,
     s_poly: []const u64,
     a_poly: []const u64,
+
+    pub fn deinit(self: *const ClientState, allocator: std.mem.Allocator) void {
+        allocator.free(self.s_poly);
+        allocator.free(self.a_poly);
+    }
+};
+
+pub const ClientRegistration = struct {
+    state: ClientState,
+    reg_buf: *anyopaque,
+    reg_buf_size: usize,
+
+    pub fn deinit(self: *const ClientRegistration, allocator: std.mem.Allocator) void {
+        self.state.deinit(allocator);
+        std.c.free(self.reg_buf);
+    }
 };
 
 pub fn clientRegistrationPhase(
@@ -23,7 +39,7 @@ pub fn clientRegistrationPhase(
     platform: *const zml.Platform,
     mul_exe: *zml.Exe,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { state: ClientState, reg_buf: *anyopaque, reg_buf_size: usize } {
+) !ClientRegistration {
     log.info("=== 1. CLIENT: REGISTRATION ===", .{});
     // The public_seed is conceptually established ahead of time (e.g. Server's static prime parameter).
     const public_seed = utils.extractSeed("PublicSharedMatrixSeed");
@@ -52,6 +68,17 @@ pub fn clientRegistrationPhase(
     };
 }
 
+pub const ClientCommitment = struct {
+    y_poly: []const u64,
+    com_buf: *anyopaque,
+    com_buf_size: usize,
+
+    pub fn deinit(self: *const ClientCommitment, allocator: std.mem.Allocator) void {
+        allocator.free(self.y_poly);
+        std.c.free(self.com_buf);
+    }
+};
+
 pub fn clientCommitPhase(
     allocator: std.mem.Allocator,
     io: std.Io,
@@ -60,7 +87,7 @@ pub fn clientCommitPhase(
     client_state: *const ClientState,
     attempts: u32,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { y_poly: []const u64, com_buf: *anyopaque, com_buf_size: usize } {
+) !ClientCommitment {
     log.info("=== 3. CLIENT: COMMITMENT ===", .{});
     var y_seed_input: [36]u8 = undefined;
     @memcpy(y_seed_input[0..32], &client_state.secret_seed);
@@ -88,13 +115,26 @@ pub fn clientCommitPhase(
     return .{ .y_poly = y_poly, .com_buf = com_buf, .com_buf_size = buf_size };
 }
 
+pub const ClientResponse = struct {
+    is_safe: bool,
+    actual_max: u64,
+    resp_buf: ?*anyopaque,
+    resp_buf_size: usize,
+
+    pub fn deinit(self: *const ClientResponse) void {
+        if (self.resp_buf) |buf| {
+            std.c.free(buf);
+        }
+    }
+};
+
 pub fn clientResponsePhase(
     allocator: std.mem.Allocator,
     client_state: *const ClientState,
     y_poly: []const u64,
     chal_buf: *const anyopaque,
     fb_builder: *c_interface.flatcc_builder_t,
-) !struct { is_safe: bool, actual_max: u64, resp_buf: ?*anyopaque, resp_buf_size: usize } {
+) !ClientResponse {
     log.info("=== 5. CLIENT: RESPONSE ===", .{});
     flatbuf_tools.deserializeAndLogChallenge(chal_buf);
 
