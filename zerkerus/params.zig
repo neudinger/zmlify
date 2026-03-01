@@ -1,17 +1,51 @@
-const std = @import("std");
 const crypto = @import("zk-crypto");
 
-pub const ntt = crypto.MakeNTT(struct {
-    pub const N: usize = 1024;
-    pub const M: usize = 256;
-    pub const Q: u64 = 8380417; // Kyber/Dilithium prime
-    pub const PSI: u64 = 17492915097719143606; // Primitive 4096-th root of unity modulo Q
-    pub const ZETA: u64 = 455906449640507599; // Primitive 2048-th root modulo Q (PSI^2)
-    pub const N_INV: u64 = 18437736870161940481; // Inverse of 2048 mod Q
-});
+/// Debug profile — tiny ring size for fast iteration during development.
+/// N=64, M=16 keeps computation trivially fast; same Kyber prime ensures
+/// all field arithmetic is identical to production.
+pub const debug = struct {
+    pub const ntt = crypto.MakeNTT(struct {
+        pub const N: usize = 64;
+        pub const M: usize = 16;
+        pub const Q: u64 = 8380417; // Kyber/Dilithium prime
+    });
 
-pub const NTTModel = ntt.NTTModel;
-pub const Transcript = crypto.fiat_shamir.Transcript;
-pub const labrador = crypto.MakeLabrador(ntt, 1000);
+    pub const NTTModel = debug.ntt.NTTModel;
+    pub const Transcript = crypto.fiat_shamir.Transcript;
+    pub const labrador = crypto.MakeLabrador(debug.ntt, 64);
 
-pub const B: u64 = 1000; // Infinity norm bound for small vectors
+    /// Loose norm bound — avoids rejection-sampling retries in debug runs.
+    pub const B: u64 = 64;
+};
+
+/// Production profile — full-strength Kyber/Dilithium parameters.
+/// N=1024, M=256, Q=8380417. All NTT constants auto-derived at comptime.
+pub const production = struct {
+    pub const ntt = crypto.MakeNTT(struct {
+        pub const N: usize = 1024;
+        pub const M: usize = 256;
+        pub const Q: u64 = 8380417; // Kyber/Dilithium prime
+    });
+
+    pub const NTTModel = production.ntt.NTTModel;
+    pub const Transcript = crypto.fiat_shamir.Transcript;
+    pub const labrador = crypto.MakeLabrador(production.ntt, 1000);
+
+    /// Tight infinity-norm bound for Zero-Knowledge security.
+    pub const B: u64 = 1000;
+};
+
+// --- Convenience re-exports (default to production) ---
+
+// pub const ntt = production.ntt;
+// pub const NTTModel = production.NTTModel;
+// pub const Transcript = production.Transcript;
+// pub const labrador = production.labrador;
+// pub const B = production.B;
+
+
+pub const ntt = debug.ntt;
+pub const NTTModel = debug.NTTModel;
+pub const Transcript = debug.Transcript;
+pub const labrador = debug.labrador;
+pub const B = debug.B;

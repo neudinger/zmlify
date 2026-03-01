@@ -9,9 +9,9 @@ By bridging ZML (Zig Machine Learning) matrix computations with the **Labrador**
 - **Modular Architecture:** The codebase is separated into explicit domain modules:
   - **`client.zig` & `server.zig`**: Standalone protocol phase definitions guaranteeing Zero-Knowledge state boundaries natively.
   - **`engine.zig`**: ZML MLIR Compiler integration binding execution dynamically to Neural Engine matrix operations.
-  - **`math.zig` & `utils.zig`**: Cryptographic prime-field operations and structural constants (e.g. Dilithium parametrizations found in `params.zig`).
+  - **`math.zig` & `utils.zig`**: Cryptographic prime-field operations and structural constants. The `params.zig` module utilizes `@zk-crypto`'s `comptime` auto-generation to derive mathematically guaranteed roots for the Kyber prime.
   - **`flatbuf_tools.zig`**: FlatBuffers serialization bridging domain components purely through binary encoding.
-- **Finite Fields Integration:** Fully utilizes the Dilithium/Kyber Prime Field ($Q = 8380417$) for all matrix optimizations, executing bounded mathematical verification flawlessly over the ZML MLIR backend.
+- **Finite Fields Integration:** Fully utilizes the Dilithium/Kyber Prime Field ($Q = 8380417$) for all matrix optimizations. All NTT twiddle factors (PSI, ZETA) and scaling inverses (N_INV) are automatically discovered at compile-time. Two named profiles are available: **`debug`** ($N=64$, fast for development) and **`production`** ($N=1024$, full cryptographic strength).
 - **Zero-Knowledge Determinism:** Mathematical rejection-sampling correctly handles bounded aborts to ensure no statistical leakage of the witness occurs.
 - **FlatBuffers Serialization:** The protocol is serialized sequentially into four distinct binary FlatBuffers components (`Registration`, `Commitment`, `Challenge`, `Response`), enabling step-by-step verification over a simulated network interface.
 - **Memory Management:** Natively abstracts pointer clearing for protocol phases into explicit, strongly-typed return structs containing standard `.deinit()` methods.
@@ -76,7 +76,27 @@ At the core of the verification is Lattice-based cryptography. We operate over t
 
 $$T = \mathbf{A} \cdot S \pmod Q$$
 
+The NTT engine exposes two named profiles in `params.zig`. Both share the same Kyber prime, so any bug found in debug is a real bug. All optional NTT constants (PSI, ZETA, N_INV) are automatically derived at `comptime` in both profiles.
+
+| Profile | `N` | `M` | `B` | Use-case |
+|---------|-----|-----|-----|----------|
+| `debug` | 64 | 16 | 64 | Fast iteration; rejection-sampling never retries |
+| `production` | 1024 | 256 | 1000 | Full Zero-Knowledge security |
+
+```zig
+// Use the debug profile (fast, no retries)
+pub const ntt     = debug.ntt;
+pub const labrador = debug.labrador;
+
+// Switch to production by pointing at production instead:
+// pub const ntt     = production.ntt;
+// pub const labrador = production.labrador;
+```
+
+Both profiles are always compiled — switching is a one-line change in `params.zig`. Downstream code (`client.zig`, `server.zig`, etc.) requires no changes.
+
 **Key Implementations:**
+*   **Automatic Constant Generation:** `MakeNTT` uses `comptime` modular arithmetic and trial-based primitive root discovery. Critically, `(Q-1)` must be divisible by `2*N` for a valid $(2N)$-th root of unity to exist — the library emits a `@compileError` otherwise.
 *   **Hardware Matrix Operations:** We completely decouple standard looping vector logic by compiling operations explicitly into ZML `Tensor.dot()`. The ZML compilation layer delegates these tensor products physically to the underlying Apple Silicon matrix accelerators, executing evaluations simultaneously over the strictly enforced Kyber prime ($Q=8380417$).
 *   **Modulo Identity Preservation:** Standard integer evaluations natively overflow memory footprints when executing multi-dimensional dot products constraint layers. Relying purely on ZML scalar definitions safely binds operations natively up to the limit of $\sim10^{19}$ avoiding $2^{64}$ limits prior to modulo reduction.
 
@@ -89,6 +109,16 @@ To explicitly guarantee Zero-Knowledge properties, the mathematical norm of $Z$ 
 The Prover operates a rejection sampling algorithm:
 * The mask $Y$ is uniformly sampled across bounds bounded strictly by $8192 \cdot B$.
 * The generated $Z$ is dynamically profiled. If it crosses the maximum acceptable bounds constraint $Limit_Y - \beta$, the Prover transparently aborts the current interaction, deletes all internal states, and automatically restarts the protocol with a completely new mask computationally preventing statistical degradation.
+
+**Constant-Time Norm Check**
+Both `checkNorm` and `rejectionSample` compute the signed absolute value in $\mathbb{Z}_Q$ using branch-free arithmetic to prevent timing side-channels leaking information about the secret witness:
+
+```zig
+// is_greater = 1 if v > Q/2 (negative element), else 0
+const is_greater = @as(u64, @intFromBool(v > q_half));
+// Select Q-v or v without any branch on secret data
+const abs_v = is_greater * (ntt.Q - v) + (1 - is_greater) * v;
+```
 
 ### 3. Fiat-Shamir Transcript (`@zk-crypto/fiat_shamir.zig`)
 

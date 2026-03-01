@@ -162,7 +162,11 @@ graph TD
 
 *   **Cryptographically Secure Finite Fields (Goldilocks):** Modulo arithmetic natively computes matrix constraints over the 64-bit Goldilocks Prime ($Q = 2^{64} - 2^{32} + 1$). The `@zk-crypto` mathematical matrices $F$ and $F^{-1}$ are bounded securely preventing integer limit analysis on tensor structures.
 *   **Zero-Knowledge Aborts (Rejection Sampling):** The prover will automatically abort during computation (handled natively by `@zk-crypto/labrador.zig`) if bounded response geometries exceed probability conditions. This guarantees no statistical leakage maps to the execution trace.
-*   **Constant-Time Cryptography:** All operations governing structural bounds and polynomial mappings utilize pure bit-wise logic, eliminating branch predictability timing attacks.
+*   **Constant-Time Cryptography:** `checkNorm` and `rejectionSample` compute the signed absolute value in $\mathbb{Z}_Q$ using branch-free arithmetic — no `if` on secret data, preventing CPU branch-predictor timing attacks:
+    ```zig
+    const is_greater = @as(u64, @intFromBool(v > q_half));
+    const abs_v = is_greater * (Q - v) + (1 - is_greater) * v;
+    ```
 *   **Comptime Verification Key (VK):** The ResNet `.safetensors` structure is uniquely determinized during Bazel AST generation. The generated structural hash guarantees that the proof strictly matches the mathematical shape of the user's local network.
 
 ---

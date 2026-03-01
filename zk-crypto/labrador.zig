@@ -9,25 +9,22 @@ pub fn MakeLabrador(comptime ntt: type, comptime B_val: u64) type {
         /// Generates a simple Lattice Commitment (A*s + e) module.
         /// Simulates BDLOP Commitments by mapping a polynomial to a condensed hash binding
         pub const Prover = struct {
-
-            // Checks that the resulting polynomial does not exceed the allowed norm (in constant time)
             pub fn checkNorm(poly: []const u64) bool {
                 var fail_mask: u64 = 0;
                 const q_half = ntt.Q / 2;
 
                 for (poly) |v| {
-                    // Modulo signed mapping (constant time)
-                    // v is bounded [0, Q-1]. Distance from 0 in Z_q
+                    // Constant-time signed absolute value in Z_q.
+                    // is_greater is 1 if v > Q/2 (i.e. v represents a negative element), 0 otherwise.
+                    // Branch-free select: abs_v = is_greater*(Q-v) + (1-is_greater)*v
                     const is_greater = @as(u64, @intFromBool(v > q_half));
-                    _ = is_greater; // autofix
-                    const abs_v = if (v > q_half) ntt.Q - v else v;
+                    const abs_v = is_greater * (ntt.Q - v) + (1 - is_greater) * v;
 
-                    // Check bounds (accumulate failures bitwise)
+                    // Accumulate bound violations bitwise (constant time)
                     const out_of_bounds = @as(u64, @intFromBool(abs_v > B));
                     fail_mask |= out_of_bounds;
                 }
 
-                // Return strictly based on aggregated structural failures
                 return fail_mask == 0;
             }
 
@@ -40,7 +37,9 @@ pub fn MakeLabrador(comptime ntt: type, comptime B_val: u64) type {
                 const strict_bound = B - beta;
 
                 for (z_poly) |v| {
-                    const abs_v = if (v > q_half) ntt.Q - v else v;
+                    // Constant-time signed absolute value (same technique as checkNorm)
+                    const is_greater = @as(u64, @intFromBool(v > q_half));
+                    const abs_v = is_greater * (ntt.Q - v) + (1 - is_greater) * v;
 
                     // Check structural leakage bounds
                     const out_of_bounds = @as(u64, @intFromBool(abs_v > strict_bound));

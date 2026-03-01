@@ -7,11 +7,12 @@ Instead of hardcoding specific structural fields directly into algorithmic logic
 ## 🚀 Features
 
 *   **Comptime Modularity:** Algorithms mathematically map to any $Q$ and $N$ configuration injected at compilation.
+*   **Automatic Constant Generation:** `PSI`, `ZETA`, and `N_INV` are derived automatically at `comptime` via primitive root discovery — no manual calculation needed. You only need to supply `N` and `Q`.
 *   **Dual NTT Backends:**
     *   **`NTTModel`** — ZML graph-compiled matrix NTT, accelerated via MLIR on Apple Silicon / TPUs / GPUs. Works for primes where the dot-product accumulation fits in `u64` (see [Prime Selection](#-prime-selection) below).
     *   **`ButterflyNTT`** — CPU-side Cooley-Tukey butterfly NTT using `u128` intermediate arithmetic. Safe for any prime size, including Goldilocks ($Q = 2^{64} - 2^{32} + 1$). Runs in $O(N \log N)$ versus the matrix approach's $O(N^2)$.
 *   **ZML Buffer Integration:** `ButterflyNTT` provides `forwardBuffer` / `inverseBuffer` helpers for seamless round-trip through ZML Buffers.
-*   **Zero-Knowledge Probabilistic Bounds:** Cryptographic Rejection Sampling strictly guarantees zero structural execution leakage.
+*   **Constant-Time Norm Check:** `checkNorm` and `rejectionSample` in `labrador.zig` compute the signed absolute value in $\mathbb{Z}_Q$ using fully branch-free arithmetic — no `if` on secret data.
 
 ## 📦 Usage
 
@@ -19,15 +20,15 @@ Add `@zk-crypto` to your Bazel dependencies, and import the module dynamically p
 
 ### Example 1: NTTModel (ZML Graph Path)
 
+Only `N` and `Q` are required. All NTT twiddle factors are derived automatically:
+
 ```zig
 const crypto = @import("zk-crypto");
 
 const ntt = crypto.MakeNTT(struct {
     pub const N: usize = 1024;
     pub const Q: u64 = 104857601; // ~27-bit NTT-friendly prime (Q ≡ 1 mod 2048)
-    pub const PSI: u64 = 4354736; // Primitive 2048-th root of unity mod Q
-    pub const ZETA: u64 = 18773644; // Primitive 1024-th root of unity mod Q (PSI²)
-    pub const N_INV: u64 = 104755201; // Inverse of 1024 mod Q
+    // PSI, ZETA, N_INV derived automatically at comptime
 });
 
 // Use NTTModel for ZML graph compilation (hardware-accelerated)
@@ -44,9 +45,7 @@ const crypto = @import("zk-crypto");
 const ntt = crypto.MakeNTT(struct {
     pub const N: usize = 2048;
     pub const Q: u64 = 0xFFFFFFFF00000001; // Goldilocks prime
-    pub const PSI: u64 = 17492915097719143606;
-    pub const ZETA: u64 = 455906449640507599;
-    pub const N_INV: u64 = 18437736870161940481;
+    // PSI, ZETA, N_INV derived automatically at comptime
 });
 
 // Use ButterflyNTT for large primes (CPU-side, u128-safe)
@@ -60,6 +59,32 @@ ButterflyNTT.forward(&poly);
 var result_buf = try ButterflyNTT.forwardBuffer(allocator, platform, io, input_buf);
 ```
 
+### Example 3: Debug vs. Production Profiles
+
+You can define multiple NTT instances in the same file for different environments:
+
+```zig
+// Debug: tiny ring, fast iteration, no rejection-sampling retries
+pub const debug = struct {
+    pub const ntt = crypto.MakeNTT(struct {
+        pub const N: usize = 64;
+        pub const Q: u64 = 8380417;
+    });
+    pub const labrador = crypto.MakeLabrador(ntt, 64);
+    pub const B: u64 = 64;
+};
+
+// Production: full cryptographic strength
+pub const production = struct {
+    pub const ntt = crypto.MakeNTT(struct {
+        pub const N: usize = 1024;
+        pub const Q: u64 = 8380417;
+    });
+    pub const labrador = crypto.MakeLabrador(ntt, 1000);
+    pub const B: u64 = 1000;
+};
+```
+
 ## 🔑 Prime Selection
 
 The ZML `NTTModel` uses a `u64` dot-product internally. To avoid overflow, Q must satisfy:
@@ -67,7 +92,7 @@ The ZML `NTTModel` uses a `u64` dot-product internally. To avoid overflow, Q mus
 $$N \times (Q - 1)^2 < 2^{64}  \implies  Q < \sqrt{2^{64} / N} + 1$$
 
 | N | Max Q for NTTModel | Backend |
-|---|---------------------|---------|
+|---|---------------------|---------| 
 | 1024 | **~134 million** (~27 bit) | `NTTModel` ✅ |
 | 2048 | **~95 million** (~26.5 bit) | `NTTModel` ✅ |
 | Any | **Unlimited** | `ButterflyNTT` ✅ |

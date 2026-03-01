@@ -2,13 +2,93 @@ const std = @import("std");
 const zml = @import("zml");
 
 pub fn MakeNTT(comptime config: type) type {
+    const math = struct {
+        fn modMul(a: u64, b: u64, q: u64) u64 {
+            const prod = @as(u128, a) * @as(u128, b);
+            return @as(u64, @intCast(prod % q));
+        }
+
+        fn modPow(base: u64, exp: u64, q: u64) u64 {
+            var res: u64 = 1;
+            var b = base;
+            var e = exp;
+            while (e > 0) {
+                if (e % 2 == 1) res = modMul(res, b, q);
+                b = modMul(b, b, q);
+                e /= 2;
+            }
+            return res;
+        }
+
+        fn modInv(a: u64, q: u64) u64 {
+            return modPow(a, q - 2, q);
+        }
+
+        fn findPrimitiveRoot(q: u64) u64 {
+            var factors: [64]u64 = undefined;
+            var num_factors: usize = 0;
+
+            var n = q - 1;
+            var i: u64 = 2;
+            while (i * i <= n) : (i += 1) {
+                if (n % i == 0) {
+                    factors[num_factors] = i;
+                    num_factors += 1;
+                    while (n % i == 0) n /= i;
+                }
+            }
+            if (n > 1) {
+                factors[num_factors] = n;
+                num_factors += 1;
+            }
+
+            var g: u64 = 2;
+            while (g < q) : (g += 1) {
+                var is_primitive = true;
+                for (0..num_factors) |k| {
+                    const factor = factors[k];
+                    if (modPow(g, (q - 1) / factor, q) == 1) {
+                        is_primitive = false;
+                        break;
+                    }
+                }
+                if (is_primitive) return g;
+            }
+            unreachable;
+        }
+
+        fn getPrimitiveRootOfUnity(n: u64, q: u64) u64 {
+            const g = findPrimitiveRoot(q);
+            if ((q - 1) % n != 0) @compileError("n does not divide q - 1");
+            return modPow(g, (q - 1) / n, q);
+        }
+    };
+
     return struct {
+        /// Degree of the polynomial ring (length of the NTT vector).
+        /// All NTT operations are performed on vectors of size N.
         pub const N: usize = config.N;
+
+        /// Rank of the module (number of polynomials per vector).
+        /// Used by higher-level primitives like Labrador.
         pub const M: usize = if (@hasDecl(config, "M")) config.M else config.N;
+
+        /// Modular arithmetic prime modulus Q.
         pub const Q: u64 = config.Q;
-        pub const PSI: u64 = config.PSI;
-        pub const ZETA: u64 = config.ZETA;
-        pub const N_INV: u64 = config.N_INV;
+
+        /// Primitive (2*N)-th root of unity modulo Q.
+        /// Primarily used for negacyclic twist factors (psi^j).
+        pub const PSI: u64 = if (@hasDecl(config, "PSI")) config.PSI else math.getPrimitiveRootOfUnity(2 * N, Q);
+
+        /// Primitive N-th root of unity modulo Q (calculated as PSI^2 mod Q).
+        /// Used as the twiddle factor base for the main butterfly stages.
+        pub const ZETA: u64 = if (@hasDecl(config, "ZETA")) config.ZETA else math.modPow(PSI, 2, Q);
+
+        /// Modular inverse of N modulo Q (1/N mod Q).
+        /// Used for scaling the final result of the inverse NTT.
+        pub const N_INV: u64 = if (@hasDecl(config, "N_INV")) config.N_INV else math.modInv(N, Q);
+
+        /// Number of butterfly stages, equal to ctz(N).
         pub const LOG_N: usize = @ctz(@as(usize, N));
 
         // --- Modular Arithmetic Helpers (u128 intermediates, no overflow) ---
@@ -225,8 +305,12 @@ pub fn MakeNTT(comptime config: type) type {
         // =====================================================================
 
         pub const NTTModel = struct {
-            /// Internal shape structure for compilation graph
+            /// Pre-computed N x N forward negacyclic NTT matrix F_fwd.
+            /// result = F_fwd * poly (mod Q)
             F_fwd: zml.Tensor,
+
+            /// Pre-computed N x N inverse negacyclic NTT matrix F_inv.
+            /// result = F_inv * poly (mod Q)
             F_inv: zml.Tensor,
 
             // In ML Frameworks like ZML, we supply the concrete pre-computed Tensors
