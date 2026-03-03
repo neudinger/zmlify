@@ -1,5 +1,7 @@
 const std = @import("std");
-const zml = @import("zml");
+const builtin = @import("builtin");
+const is_wasm = builtin.target.cpu.arch == .wasm32;
+const zml = if (!is_wasm) @import("zml") else struct {};
 const fiat_shamir = @import("fiat_shamir.zig");
 
 pub fn MakeLabrador(comptime ntt: type, comptime B_val: u64) type {
@@ -148,16 +150,16 @@ pub fn MakeLabrador(comptime ntt: type, comptime B_val: u64) type {
             }
         };
 
-        /// BDLOP ZML Compilation Graph
-        pub const BDLOPModel = struct {
+        /// BDLOP ZML Compilation Graph — only available on non-WASM targets.
+        pub const BDLOPModel = if (!is_wasm) struct {
             ntt_def: ntt.NTTModel,
 
-            pub fn init(ntt_def: ntt.NTTModel) BDLOPModel {
+            pub fn init(ntt_def: ntt.NTTModel) @This() {
                 return .{ .ntt_def = ntt_def };
             }
 
             /// Computes t = A * s + e in the finite field using ZML Tensors
-            pub fn commit(self: BDLOPModel, a: zml.Tensor, s: zml.Tensor, e: zml.Tensor) zml.Tensor {
+            pub fn commit(self: @This(), a: zml.Tensor, s: zml.Tensor, e: zml.Tensor) zml.Tensor {
                 // Transform A and s to frequency domain
                 const a_ntt = self.ntt_def.forward(a);
                 const s_ntt = self.ntt_def.forward(s);
@@ -181,7 +183,7 @@ pub fn MakeLabrador(comptime ntt: type, comptime B_val: u64) type {
             /// Computes T = A * s + u * e using ZML Tensors.
             /// This is the Relaxed BDLOP Commitment required for Nova/Sangria folding.
             /// `u` is the scalar accumulator (starts at 1), binding sequential error accumulations.
-            pub fn commitRelaxed(self: BDLOPModel, a: zml.Tensor, s: zml.Tensor, e: zml.Tensor, u: zml.Tensor) zml.Tensor {
+            pub fn commitRelaxed(self: @This(), a: zml.Tensor, s: zml.Tensor, e: zml.Tensor, u: zml.Tensor) zml.Tensor {
                 const a_ntt = self.ntt_def.forward(a);
                 const s_ntt = self.ntt_def.forward(s);
                 const as_ntt = self.ntt_def.poly_mul(a_ntt, s_ntt);
@@ -202,7 +204,7 @@ pub fn MakeLabrador(comptime ntt: type, comptime B_val: u64) type {
 
             /// Homomorphically folds two relaxed commitments: T_new = T_1 + alpha * T_2
             /// In Nova, the Verifier executes this fold algebraically without inspecting the witness.
-            pub fn foldRelaxed(self: BDLOPModel, t1: zml.Tensor, t2: zml.Tensor, alpha: zml.Tensor) zml.Tensor {
+            pub fn foldRelaxed(self: @This(), t1: zml.Tensor, t2: zml.Tensor, alpha: zml.Tensor) zml.Tensor {
                 _ = self;
                 const alpha_broad = alpha.broad(t2.shape());
                 const t2_scaled = t2.mul(alpha_broad);
@@ -213,6 +215,6 @@ pub fn MakeLabrador(comptime ntt: type, comptime B_val: u64) type {
 
                 return t_mod;
             }
-        };
+        } else void;
     };
 }

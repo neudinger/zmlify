@@ -1,5 +1,7 @@
 const std = @import("std");
-const zml = @import("zml");
+const builtin = @import("builtin");
+const is_wasm = builtin.target.cpu.arch == .wasm32;
+const zml = if (!is_wasm) @import("zml") else struct {};
 
 pub fn MakeNTT(comptime config: type) type {
     const math = struct {
@@ -262,39 +264,43 @@ pub fn MakeNTT(comptime config: type) type {
                 }
             }
 
-            /// Run forward butterfly on data inside a ZML Buffer (CPU round-trip).
-            pub fn forwardBuffer(allocator: std.mem.Allocator, platform: *const zml.Platform, io: std.Io, poly_buf: zml.Buffer) !zml.Buffer {
-                const slice = try poly_buf.toSliceAlloc(allocator, io);
-                defer slice.free(allocator);
+            // --- ZML Buffer helpers (requires ZML platform) ---
 
-                const data = try allocator.alloc(u64, N);
-                defer allocator.free(data);
-                @memcpy(data, slice.items(u64));
+            pub const forwardBuffer = if (is_wasm) void else struct {
+                pub fn f(allocator: std.mem.Allocator, platform: *const zml.Platform, io: std.Io, poly_buf: zml.Buffer) !zml.Buffer {
+                    const slice = try poly_buf.toSliceAlloc(allocator, io);
+                    defer slice.free(allocator);
 
-                forward(data);
+                    const data = try allocator.alloc(u64, N);
+                    defer allocator.free(data);
+                    @memcpy(data, slice.items(u64));
 
-                return try zml.Buffer.fromSlice(io, platform, zml.Slice.init(
-                    zml.Shape.init(.{N}, .u64),
-                    std.mem.sliceAsBytes(data),
-                ));
-            }
+                    forward(data);
 
-            /// Run inverse butterfly on data inside a ZML Buffer (CPU round-trip).
-            pub fn inverseBuffer(allocator: std.mem.Allocator, platform: *const zml.Platform, io: std.Io, poly_buf: zml.Buffer) !zml.Buffer {
-                const slice = try poly_buf.toSliceAlloc(allocator, io);
-                defer slice.free(allocator);
+                    return try zml.Buffer.fromSlice(io, platform, zml.Slice.init(
+                        zml.Shape.init(.{N}, .u64),
+                        std.mem.sliceAsBytes(data),
+                    ));
+                }
+            }.f;
 
-                const data = try allocator.alloc(u64, N);
-                defer allocator.free(data);
-                @memcpy(data, slice.items(u64));
+            pub const inverseBuffer = if (is_wasm) void else struct {
+                pub fn f(allocator: std.mem.Allocator, platform: *const zml.Platform, io: std.Io, poly_buf: zml.Buffer) !zml.Buffer {
+                    const slice = try poly_buf.toSliceAlloc(allocator, io);
+                    defer slice.free(allocator);
 
-                inverse(data);
+                    const data = try allocator.alloc(u64, N);
+                    defer allocator.free(data);
+                    @memcpy(data, slice.items(u64));
 
-                return try zml.Buffer.fromSlice(io, platform, zml.Slice.init(
-                    zml.Shape.init(.{N}, .u64),
-                    std.mem.sliceAsBytes(data),
-                ));
-            }
+                    inverse(data);
+
+                    return try zml.Buffer.fromSlice(io, platform, zml.Slice.init(
+                        zml.Shape.init(.{N}, .u64),
+                        std.mem.sliceAsBytes(data),
+                    ));
+                }
+            }.f;
         };
 
         // =====================================================================
@@ -302,9 +308,10 @@ pub fn MakeNTT(comptime config: type) type {
         // Works correctly for small primes (e.g. Kyber Q=8380417) where the
         // dot-product accumulation doesn't overflow u64.
         // For large primes (Goldilocks), use ButterflyNTT instead.
+        // Only available on non-WASM targets.
         // =====================================================================
 
-        pub const NTTModel = struct {
+        pub const NTTModel = if (!is_wasm) struct {
             /// Pre-computed N x N forward negacyclic NTT matrix F_fwd.
             /// result = F_fwd * poly (mod Q)
             F_fwd: zml.Tensor,
@@ -315,7 +322,7 @@ pub fn MakeNTT(comptime config: type) type {
 
             // In ML Frameworks like ZML, we supply the concrete pre-computed Tensors
             // to the execution Host (Cpu, GPU, TPU)
-            pub fn init(allocator: std.mem.Allocator, platform: *const zml.Platform, io: std.Io) !zml.Bufferized(NTTModel) {
+            pub fn init(allocator: std.mem.Allocator, platform: *const zml.Platform, io: std.Io) !zml.Bufferized(@This()) {
                 const host_fwd = try allocator.alloc(u64, N * N);
                 defer allocator.free(host_fwd);
 
@@ -353,7 +360,7 @@ pub fn MakeNTT(comptime config: type) type {
             }
 
             /// Forward ZML Transformation: Time -> Frequency Domain
-            pub fn forward(self: NTTModel, poly: zml.Tensor) zml.Tensor {
+            pub fn forward(self: @This(), poly: zml.Tensor) zml.Tensor {
                 const poly_64 = poly.convert(.u64);
 
                 // F_fwd is generated as row=freq, col=time. Tag as .c (freq) and .n (time)
@@ -373,7 +380,7 @@ pub fn MakeNTT(comptime config: type) type {
             }
 
             /// Inverse ZML Transformation: Frequency -> Time Domain
-            pub fn inverse(self: NTTModel, poly: zml.Tensor) zml.Tensor {
+            pub fn inverse(self: @This(), poly: zml.Tensor) zml.Tensor {
                 const poly_64 = poly.convert(.u64);
 
                 // F_inv is generated as row=time, col=freq. Tag as .n (time) and .c (freq)
@@ -393,13 +400,13 @@ pub fn MakeNTT(comptime config: type) type {
             }
 
             /// Composed Forward and Inverse for testing Identity mapping
-            pub fn identity(self: NTTModel, poly: zml.Tensor) zml.Tensor {
+            pub fn identity(self: @This(), poly: zml.Tensor) zml.Tensor {
                 const fwd = self.forward(poly);
                 return self.inverse(fwd.withTags(.{.c}));
             }
 
             /// Pointwise Matrix Multiplication: Freq * Freq
-            pub fn poly_mul(_: NTTModel, a: zml.Tensor, b: zml.Tensor) zml.Tensor {
+            pub fn poly_mul(_: @This(), a: zml.Tensor, b: zml.Tensor) zml.Tensor {
                 const a_64 = a.convert(.u64);
                 const b_64 = b.convert(.u64);
 
@@ -410,6 +417,6 @@ pub fn MakeNTT(comptime config: type) type {
 
                 return res_mod;
             }
-        };
+        } else void;
     };
 }

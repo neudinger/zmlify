@@ -1,4 +1,5 @@
 load("@rules_zig//zig:defs.bzl", "zig_binary", "zig_test")
+load("@rules_zig//zig:defs.bzl", "zig_shared_library")
 load("//third_party/flatbuf:defs.bzl", "flatcc_library")
 
 flatcc_library(
@@ -127,4 +128,35 @@ zig_binary(
         "@iree_core//runtime/src/iree/base:base",
     ],
     tags = ["local", "no-sandbox"],
+)
+
+# --- WASM Build ---
+# Build client-side ZKP as WebAssembly module.
+# No ZML, no flatcc — pure Zig math only.
+# Build: bazel build //zerkerus:zerkerus_wasm
+
+genrule(
+    name = "zerkerus_wasm",
+    srcs = [
+        "wasm.zig",
+        "params.zig",
+        "utils.zig",
+        "math.zig",
+        "//zk-crypto:zk-crypto-srcs",
+    ],
+    outs = ["zerkerus.wasm"],
+    cmd = "export ZIG_GLOBAL_CACHE_DIR=/tmp/zig; " +
+          "export ZIG_LOCAL_CACHE_DIR=/tmp/zig; " +
+          "ZIP_SRC_DIR=zerkerus_wasm_srcs; " +
+          "mkdir -p $$ZIP_SRC_DIR; " +
+          "for f in $(SRCS); do cp $$f $$ZIP_SRC_DIR/; done; " +
+          "sed -i '' 's/@import(\"zk-crypto-wasm\")/@import(\"crypto.zig\")/' $$ZIP_SRC_DIR/params.zig; " +
+          "zig build-exe $$ZIP_SRC_DIR/wasm.zig " +
+          "-target wasm32-freestanding " +
+          "-fno-entry -rdynamic " +
+          "-O ReleaseSmall " +
+          "--name zerkerus " +
+          "-femit-bin=$@",
+    local = True,
+    visibility = ["//visibility:public"],
 )

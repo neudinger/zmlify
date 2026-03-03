@@ -1,4 +1,6 @@
-const crypto = @import("zk-crypto");
+const builtin = @import("builtin");
+const is_wasm = builtin.target.cpu.arch == .wasm32;
+const crypto = if (is_wasm) @import("zk-crypto-wasm") else @import("zk-crypto");
 
 /// Debug profile — tiny ring size for fast iteration during development.
 /// N=64, M=16 keeps computation trivially fast; same Kyber prime ensures
@@ -42,7 +44,6 @@ pub const production = struct {
 // pub const Transcript = production.Transcript;
 // pub const labrador = production.labrador;
 // pub const B = production.B;
-
 
 pub const ntt = debug.ntt;
 pub const NTTModel = debug.NTTModel;

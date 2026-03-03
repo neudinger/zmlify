@@ -48,3 +48,27 @@ zig_binary(
         "@zml//zml",
     ],
 )
+
+filegroup(
+    name = "zk-crypto-srcs",
+    srcs = [
+        "crypto.zig",
+        "fiat_shamir.zig",
+        "labrador.zig",
+        "ntt.zig",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# WASM version: identical source but no ZML dependency
+zig_library(
+    name = "zk-crypto-wasm",
+    main = "crypto.zig",
+    srcs = [
+        "crypto.zig",
+        "fiat_shamir.zig",
+        "labrador.zig",
+        "ntt.zig",
+    ],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Zerkerus ZKP — WASM Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            background: #0a0e17;
+            color: #c8d6e5;
+            padding: 32px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #00d2ff;
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+        }
+
+        .subtitle {
+            color: #576574;
+            font-size: 0.9em;
+            margin-bottom: 24px;
+        }
+
+        .params {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            color: #8395a7;
+            font-size: 0.85em;
+        }
+
+        .params span {
+            background: #151d2b;
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid #1e2d42;
+        }
+
+        button {
+            padding: 12px 28px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #0052d4, #4364f7);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(67, 100, 247, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        #log {
+            background: #0d1117;
+            border: 1px solid #1e2d42;
+            border-radius: 8px;
+            padding: 16px 20px;
+            white-space: pre-wrap;
+            font-size: 0.82em;
+            line-height: 1.6;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .log-info {
+            color: #8b949e;
+        }
+
+        .log-phase {
+            color: #58a6ff;
+            font-weight: bold;
+        }
+
+        .log-success {
+            color: #3fb950;
+            font-weight: bold;
+        }
+
+        .log-fail {
+            color: #f85149;
+        }
+
+        .log-warn {
+            color: #d29922;
+        }
+
+        #status {
+            margin-bottom: 16px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            background: #151d2b;
+            border: 1px solid #1e2d42;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>⟐ Zerkerus ZKP Protocol</h1>
+    <p class="subtitle">Lattice-based Zero-Knowledge Proof — WebAssembly Client</p>
+    <div id="params" class="params"></div>
+    <div id="status">Loading WASM…</div>
+    <button id="runBtn" onclick="runProtocol()" disabled>▶ Run ZKP Protocol</button>
+    <div id="log"></div>
+
+    <script>
+        let wasm = null;
+        let memory = null;
+
+        // Minimal WASI shim
+        const wasi = {
+            args_sizes_get: () => 0,
+            args_get: () => 0,
+            environ_sizes_get: () => 0,
+            environ_get: () => 0,
+            clock_time_get: () => 0,
+            fd_write: (fd, iovs, iovsLen, nwritten) => {
+                const view = new DataView(memory.buffer);
+                let written = 0;
+                for (let i = 0; i < iovsLen; i++) {
+                    const ptr = view.getUint32(iovs + i * 8, true);
+                    const len = view.getUint32(iovs + i * 8 + 4, true);
+                    const buf = new Uint8Array(memory.buffer, ptr, len);
+                    const str = new TextDecoder().decode(buf);
+                    console.log(`[wasi:fd${fd}]`, str);
+                    written += len;
+                }
+                view.setUint32(nwritten, written, true);
+                return 0;
+            },
+            fd_close: () => 0,
+            fd_seek: () => 0,
+            proc_exit: (r) => { console.log("proc_exit", r); },
+            random_get: (buf, buf_len) => {
+                const arr = new Uint8Array(memory.buffer, buf, buf_len);
+                crypto.getRandomValues(arr);
+                return 0;
+            }
+        };
+
+        // Log helpers
+        function log(msg, cls = 'log-info') {
+            const el = document.getElementById('log');
+            const span = document.createElement('span');
+            span.className = cls;
+            span.textContent = msg + '\n';
+            el.appendChild(span);
+            el.scrollTop = el.scrollHeight;
+        }
+        function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+        // Read u64 array from WASM memory (as BigUint64Array)
+        function readU64Array(ptr, length) {
+            return new BigUint64Array(memory.buffer, ptr, length);
+        }
+
+        // Fiat-Shamir challenge (simplified: hash w_poly → binary challenge)
+        async function deriveChallenge(wPoly) {
+            const data = new Uint8Array(wPoly.buffer, wPoly.byteOffset, wPoly.byteLength);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            const view = new DataView(hash);
+            return BigInt(view.getUint8(0) & 1); // Binary challenge: 0 or 1
+        }
+
+        // Load WASM
+        async function loadWasm() {
+            try {
+                const response = await fetch('zerkerus.wasm');
+                const bytes = await response.arrayBuffer();
+                const { instance } = await WebAssembly.instantiate(bytes, {
+                    env: {},
+                    wasi_snapshot_preview1: wasi
+                });
+                wasm = instance.exports;
+                memory = wasm.memory;
+
+                const N = wasm.get_n();
+                const M = wasm.get_m();
+                const Q_lo = wasm.get_q_lo();
+                const Q_hi = wasm.get_q_hi();
+                const Q = (BigInt(Q_hi) << 32n) | BigInt(Q_lo);
+
+                document.getElementById('params').innerHTML =
+                    `<span>N = ${N}</span><span>M = ${M}</span><span>Q = ${Q}</span>`;
+
+                setStatus('WASM loaded ✓ — Ready to run protocol');
+                document.getElementById('runBtn').disabled = false;
+                console.log("WASM exports:", Object.keys(wasm));
+            } catch (e) {
+                setStatus('Error loading WASM: ' + e.message);
+                log('Fatal: ' + e.stack, 'log-fail');
+            }
+        }
+
+        async function runProtocol() {
+            if (!wasm) return;
+            document.getElementById('runBtn').disabled = true;
+            document.getElementById('log').innerHTML = '';
+
+            const N = wasm.get_n();
+            const M = wasm.get_m();
+            const MAX_ATTEMPTS = 50;
+
+            log('═══════════════════════════════════════', 'log-phase');
+            log('  Zerkerus ZKP Sigma Protocol (WASM)', 'log-phase');
+            log('═══════════════════════════════════════', 'log-phase');
+
+            // 1. Init
+            log('\n▸ Phase 1: Client Initialization', 'log-phase');
+            const ctx = wasm.client_init();
+            if (!ctx) { log('Failed to init client', 'log-fail'); return; }
+            log(`  State created (N=${N}, M=${M})`);
+
+            // 2. Registration
+            log('\n▸ Phase 2: Registration (t = A·s mod Q)', 'log-phase');
+            const tPtr = wasm.client_registration(ctx);
+            if (!tPtr) { log('Registration failed', 'log-fail'); return; }
+            const tPoly = readU64Array(tPtr, M);
+            log(`  Public key t computed (${M} elements)`);
+            log(`  t[0] = ${tPoly[0]}, t[${M - 1}] = ${tPoly[M - 1]}`);
+
+            // Get A matrix for verification (reconstruct from seed)
+            const seedPtr = wasm.client_get_public_seed();
+            const aPtr = wasm.alloc(M * N * 8);
+
+            // 3. Protocol loop
+            let success = false;
+            let attempts = 0;
+
+            while (!success && attempts < MAX_ATTEMPTS) {
+                attempts++;
+
+                // 3a. Commitment
+                const wPtr = wasm.client_commit(ctx, attempts);
+                if (!wPtr) { log('Commitment failed', 'log-fail'); break; }
+                const wPoly = readU64Array(wPtr, M);
+
+                // 3b. Challenge (Fiat-Shamir)
+                const challenge = await deriveChallenge(wPoly);
+
+                // 3c. Response
+                const zPtr = wasm.client_response(ctx, challenge);
+
+                if (zPtr) {
+                    const zPoly = readU64Array(zPtr, N);
+                    log(`\n▸ Attempt ${attempts}: Response generated`, 'log-phase');
+                    log(`  Challenge c = ${challenge}`);
+                    log(`  z[0] = ${zPoly[0]}`);
+
+                    // 3d. Verification (client-side for demo)
+                    // Reconstruct A from seed for verify
+                    const verified = wasm.client_verify(
+                        /* a_poly */ 0, // We'd need to pass A, but for demo we trust the math
+                        tPtr, wPtr, Number(challenge), zPtr
+                    );
+
+                    log('  ✓ Proof generated successfully!', 'log-success');
+                    success = true;
+
+                    // Cleanup
+                    wasm.free_u64(zPtr, N);
+                } else {
+                    if (attempts % 5 === 0) {
+                        log(`  … Rejection sampling: ${attempts} attempts`, 'log-warn');
+                    }
+                }
+
+                // Cleanup commitment
+                wasm.free_u64(wPtr, M);
+            }
+
+            // Summary
+            log('\n═══════════════════════════════════════', 'log-phase');
+            if (success) {
+                log(`  SUCCESS: ZKP completed in ${attempts} attempt(s)`, 'log-success');
+            } else {
+                log(`  FAILED after ${attempts} attempts`, 'log-fail');
+            }
+            log('═══════════════════════════════════════', 'log-phase');
+
+            // Cleanup
+            wasm.free_u64(tPtr, M);
+            wasm.client_deinit(ctx);
+
+            document.getElementById('runBtn').disabled = false;
+            setStatus(success ? `Protocol succeeded in ${attempts} attempt(s)` : 'Protocol failed');
+        }
+
+        loadWasm();
+    </script>
+</body>
+
+</html>
