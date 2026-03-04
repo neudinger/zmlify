@@ -1,5 +1,4 @@
 load("@rules_zig//zig:defs.bzl", "zig_binary", "zig_test")
-load("@rules_zig//zig:defs.bzl", "zig_shared_library")
 load("//third_party/flatbuf:defs.bzl", "flatcc_library")
 
 flatcc_library(
@@ -118,16 +117,6 @@ zig_test(
     deps = [
         ":zerkerus_fbs_bridge",
     ],
-)
-
-zig_binary(
-    name = "test_iree",
-    main = "test_iree.zig",
-    deps = [
-        "@iree_core//runtime/src/iree/hal:hal",
-        "@iree_core//runtime/src/iree/base:base",
-    ],
-    tags = ["local", "no-sandbox"],
 )
 
 # --- WASM Build ---

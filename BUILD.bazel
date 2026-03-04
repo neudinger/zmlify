@@ -1,7 +1,6 @@
 load("@zml//third_party/zls:zls_completion.bzl", "zls_completion")
 
 exports_files([
-    "iree_zig.patch",
     "zml.patch",
     "rules_zig.patch",
 ])
@@ -15,5 +14,6 @@ zls_completion(
         "//zk-resnet",
         "//zk-crypto",
         "//zerkerus",
+        "//iree-executor",
     ],
 )

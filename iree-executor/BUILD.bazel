@@ -1,0 +1,20 @@
+load("@rules_zig//zig:defs.bzl", "zig_binary")
+
+
+
+# bazel run //iree-executor:test_iree
+zig_binary(
+    name = "test_iree",
+    main = "test_iree.zig",
+    deps = [
+        "@iree_core//runtime/src/iree/base:base",
+        # "@iree_core//runtime/src/iree/hal:hal",
+    #     "@iree_core//runtime/src/iree/vm:vm",
+    #     "@iree_core//runtime/src/iree/vm/bytecode:module",
+    #     "@iree_core//runtime/src/iree/modules/hal:hal",
+    #     "@iree_core//runtime/src/iree/hal/drivers/local_task/registration:registration",
+    #     "@iree_core//runtime/src/iree/hal/drivers/local_task:task_driver",
+    ],
+    # tags = ["local", "no-sandbox"],
+    visibility = ["//visibility:public"],
+)
