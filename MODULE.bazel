@@ -8,13 +8,6 @@ bazel_dep(name = "zml", version = "0.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "toolchains_llvm_bootstrapped", version = "0.5.5")
 
-bazel_dep(name = "llvm-project-overlay", version = "main")
-archive_override(
-    module_name = "llvm-project-overlay",
-    strip_prefix = "llvm-project-12d80f913c5a0f13f54610e9b0524137301665e3/utils/bazel",
-    urls = ["https://github.com/llvm/llvm-project/archive/12d80f913c5a0f13f54610e9b0524137301665e3.tar.gz"],
-)
-
 git_override(
     module_name = "rules_zig",
     commit = "553e22f8dcbd7c472ce8fc256c0d06580cd70630",
@@ -36,6 +29,14 @@ local_path_override(
     module_name = "iree_core",
     path = "iree-sources",
 )
+
+non_module_deps = use_extension("//:third_party/non_module_deps.bzl", "non_module_deps")
+use_repo(non_module_deps, "flatcc", "stb",  "llvm-raw")
+
+
+iree_ext = use_extension("@iree_core//build_tools/bazel:extensions.bzl", "iree_extension")
+inject_repo(iree_ext, "llvm-raw")
+
 
 
 ### Zig toolchain
@@ -78,6 +79,11 @@ git_override(
 #     module_name = "zml",
 #     path = "zml-local",
 # )
+bazel_dep(name = "llvm-project-overlay", version = "main")
+local_path_override(
+    module_name = "llvm-project-overlay",
+    path = "iree-sources/third_party/llvm-project/utils/bazel",
+)
 
 zml_non_module_deps = use_extension("@zml//:third_party/non_module_deps.bzl", "non_module_deps")
 use_repo(
@@ -90,9 +96,6 @@ zls = use_extension("@zml//third_party/zls:zls_toolchain.bzl", "zls_toolchains")
 use_repo(zls, "zls_toolchains")
 
 register_toolchains("@zls_toolchains//:all")
-
-non_module_deps = use_extension("//:third_party/non_module_deps.bzl", "non_module_deps")
-use_repo(non_module_deps, "flatcc", "stb",  "llvm-raw")
 
 ### LLVM Bootstrapped toolchains
 register_toolchains(
