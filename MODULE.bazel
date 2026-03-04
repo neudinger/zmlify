@@ -10,10 +10,8 @@ bazel_dep(name = "toolchains_llvm_bootstrapped", version = "0.5.5")
 
 git_override(
     module_name = "rules_zig",
-    commit = "553e22f8dcbd7c472ce8fc256c0d06580cd70630",
-    patch_strip = 1,
-    patches = ["//:rules_zig.patch"],
     remote = "https://github.com/zml/rules_zig.git",
+    commit = "553e22f8dcbd7c472ce8fc256c0d06580cd70630",
 )
 
 bazel_dep(name = "iree_core", version = "0.0.1")
@@ -31,13 +29,11 @@ local_path_override(
 )
 
 non_module_deps = use_extension("//:third_party/non_module_deps.bzl", "non_module_deps")
-use_repo(non_module_deps, "flatcc", "stb",  "llvm-raw")
-
+use_repo(non_module_deps, "flatcc", "llvm-raw", "stb")
 
 iree_ext = use_extension("@iree_core//build_tools/bazel:extensions.bzl", "iree_extension")
 inject_repo(iree_ext, "llvm-raw")
-
-
+inject_repo(iree_ext, com_github_dvidelabs_flatcc = "flatcc")
 
 ### Zig toolchain
 # zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
@@ -60,9 +56,9 @@ inject_repo(iree_ext, "llvm-raw")
 #     "https://ziglang.org/builds/",
 # ])
 # use_repo(zig, "zig_toolchains")
-# 
+#
 # register_toolchains("@rules_zig//zig/target:all")
-# 
+#
 # register_toolchains("@zig_toolchains//:all")
 ###
 
@@ -89,7 +85,6 @@ zml_non_module_deps = use_extension("@zml//:third_party/non_module_deps.bzl", "n
 use_repo(
     zml_non_module_deps,
     "translate-c",
-    # "xla",
 )
 
 zls = use_extension("@zml//third_party/zls:zls_toolchain.bzl", "zls_toolchains")

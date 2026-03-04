@@ -1055,7 +1055,7 @@
     },
     "@@rules_zig+//zig:extensions.bzl%zig": {
       "general": {
-        "bzlTransitiveDigest": "9wjwfGuzxwf4YeP4HCzD6Ym5C71Bi/H8kvBku7PpYD4=",
+        "bzlTransitiveDigest": "UgOGMri7Ezc+fxIEsGl2Yi8r2eye623ogad36uEeuys=",
         "usagesDigest": "rGF9fvQ1LFrwarI5/dbx2xyr9C/Wn9Haw2NgEavWjFM=",
         "recordedFileInputs": {
           "@@rules_zig+//zig/private/versions.json": "3afa7e1c4af939bdb64eff3f65908bb57f2b0e46b5636e6ed15ad79256c9436f",

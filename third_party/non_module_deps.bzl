@@ -6,8 +6,6 @@ def _non_module_deps_impl(mctx):
     stb()
     flatbuf()
 
-    # IREE requires the root module to provide llvm-raw mapping to LLVM Project
-    # Commit used by IREE v3.10.0 submodule: 12d80f913c5a0f13f54610e9b0524137301665e3
     if not bool(native.existing_rule("llvm-raw")):
         http_archive(
             name = "llvm-raw",

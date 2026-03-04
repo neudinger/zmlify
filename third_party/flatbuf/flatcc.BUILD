@@ -72,3 +72,15 @@ cc_library(
     includes = ["include"],
     visibility = ["//visibility:public"],
 )
+
+cc_library(
+    name = "parsing",
+    srcs = [
+        "src/runtime/verifier.c",
+    ],
+    hdrs = glob([
+        "include/**/*.h",
+    ]),
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+)
