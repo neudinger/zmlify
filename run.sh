@@ -3,4 +3,5 @@ bazel build //:completion && \
 ./resnet-18/run.sh && \
 ./simple/run.sh && \
 ./zk-crypto/run.sh && \
-./zk-resnet/run.sh
+./zk-resnet/run.sh && \
+./iree-executor/run.sh
