@@ -418,7 +418,7 @@
     "@@iree_core+//build_tools/bazel:extensions.bzl%iree_extension": {
       "general": {
         "bzlTransitiveDigest": "YLsArK4seL1sptAH1peiSQdk4ng2pTrL8r10lzBSOck=",
-        "usagesDigest": "4JgglmFUQibzE27Zc9STIYi3Q5N3uRS3WUWbFN/Qpgk=",
+        "usagesDigest": "P2aVv7dAoyY+LaGRrz0yN7cQutv7r7C8hf6b5Mofj50=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},

@@ -23,6 +23,21 @@ git_override(
     remote = "https://github.com/zml/rules_zig.git",
 )
 
+bazel_dep(name = "iree_core", version = "0.0.1")
+# git_override(
+#     module_name = "iree_core",
+#     commit = "ae97779f59a81bc56f804927be57749bb22548fa",
+#     remote = "https://github.com/iree-org/iree.git",
+#     recursive_init_submodules = True,
+# )
+
+# git clone --branch v3.10.0 --recursive --depth 1 https://github.com/iree-org/iree.git iree-sources
+local_path_override(
+    module_name = "iree_core",
+    path = "iree-sources",
+)
+
+
 ### Zig toolchain
 # zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
 # zig.index(file = "//bazel:zig_index.json")
@@ -77,37 +92,10 @@ use_repo(zls, "zls_toolchains")
 register_toolchains("@zls_toolchains//:all")
 
 non_module_deps = use_extension("//:third_party/non_module_deps.bzl", "non_module_deps")
-use_repo(non_module_deps, "flatcc", "stb")
-# "llvm-raw"
+use_repo(non_module_deps, "flatcc", "stb",  "llvm-raw")
 
 ### LLVM Bootstrapped toolchains
 register_toolchains(
     "@toolchains_llvm_bootstrapped//toolchain:all",
 )
 ###
-
-
-bazel_dep(name = "iree_core", version = "0.0.1")
-# git_override(
-#     module_name = "iree_core",
-#     commit = "ae97779f59a81bc56f804927be57749bb22548fa",
-#     # patch_strip = 1,
-#     # patches = ["//:iree_zig.patch"],
-#     remote = "https://github.com/iree-org/iree.git",
-# )
-
-# git_repository(
-#         name = "iree_core",
-#         remote = "https://github.com/iree-org/iree.git",
-#         commit = "ae97779f59a81bc56f804927be57749bb22548fa",
-#         recursive_init_submodules = True,  # This solves your problem
-#     )
-
-# git clone https://github.com/iree-org/iree.git my_local_iree
-# git submodule update --init --recursive
-local_path_override(
-    module_name = "iree_core",
-    path = "my_local_iree", # Adjust the relative or absolute path
-)
-iree_ext = use_extension("@iree_core//build_tools/bazel:extensions.bzl", "iree_extension")
-use_repo(iree_ext, "llvm-raw")
