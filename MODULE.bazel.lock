@@ -417,19 +417,12 @@
     },
     "@@iree_core+//build_tools/bazel:extensions.bzl%iree_extension": {
       "general": {
-        "bzlTransitiveDigest": "IUpYurH/YxagAGiCgdia/5QGpLd9rv34ihT9DVgNFQ4=",
-        "usagesDigest": "P2aVv7dAoyY+LaGRrz0yN7cQutv7r7C8hf6b5Mofj50=",
+        "bzlTransitiveDigest": "YLsArK4seL1sptAH1peiSQdk4ng2pTrL8r10lzBSOck=",
+        "usagesDigest": "9FiDg43jB2wZZTP5LaCCSKJWriNAsjPQSMDnMgfxna4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
-          "llvm-raw": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:local.bzl%new_local_repository",
-            "attributes": {
-              "build_file_content": "# empty",
-              "path": "third_party/llvm-project"
-            }
-          },
           "com_google_googletest": {
             "repoRuleId": "@@bazel_tools//tools/build_defs/repo:local.bzl%local_repository",
             "attributes": {

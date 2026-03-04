@@ -37,5 +37,6 @@
     "chat.tools.terminal.autoApprove": {
         "bazel": true
     },
-    "python-envs.pythonProjects": []
+    "python-envs.pythonProjects": [],
+    "git.ignoreLimitWarning": true
 }

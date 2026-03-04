@@ -1,6 +1,11 @@
 const std = @import("std");
 const c_interface = @import("c");
 
+// ADD THESE THREE LINES:
+extern fn shim_create_i32_inputs(a: i32, b: i32, allocator: c_interface.iree_allocator_t, out_list: *?*c_interface.iree_vm_list_t) c_interface.iree_status_t;
+extern fn shim_create_empty_list(capacity: usize, allocator: c_interface.iree_allocator_t, out_list: *?*c_interface.iree_vm_list_t) c_interface.iree_status_t;
+extern fn shim_get_i32_output(list: *c_interface.iree_vm_list_t, index: usize, out_val: *i32) c_interface.iree_status_t;
+
 pub fn main(init: std.process.Init) !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
@@ -13,14 +18,16 @@ pub fn main(init: std.process.Init) !void {
     if (args.vector.len <= 1) {
         std.debug.print("Usage: test_iree <vmfb_path>\n", .{});
         std.debug.print("Defaulting to 'simple_cpu.vmfb'\n", .{});
+        return;
     }
 
     const allocator = c_interface.iree_allocator_system();
 
     // 1. Create IREE instance
     var instance: ?*c_interface.iree_vm_instance_t = null;
-    try checkStatus(c_interface.iree_vm_instance_create(0, allocator, &instance), "iree_vm_instance_create");
+    try checkStatus(c_interface.iree_vm_instance_create(c_interface.IREE_VM_TYPE_CAPACITY_DEFAULT, allocator, &instance), "iree_vm_instance_create");
     defer c_interface.iree_vm_instance_release(instance);
+    try checkStatus(c_interface.iree_hal_module_register_all_types(instance), "iree_hal_module_register_all_types");
 
     // 2. Register HAL drivers and create device
     try checkStatus(c_interface.iree_hal_local_task_driver_module_register(c_interface.iree_hal_driver_registry_default()), "iree_hal_local_task_driver_module_register");
@@ -54,8 +61,7 @@ pub fn main(init: std.process.Init) !void {
     try checkStatus(c_interface.iree_vm_context_create_with_modules(instance, c_interface.IREE_VM_CONTEXT_FLAG_NONE, modules.len, &modules, allocator, &context), "iree_vm_context_create_with_modules");
     defer c_interface.iree_vm_context_release(context);
 
-    // 7. Lookup and invoke function
-    // We'll try to find the first exported function if 'main' isn't found
+    // 7. Lookup the first exported function dynamically
     const module_ptr = bytecode_module.?;
     const signature = c_interface.iree_vm_module_signature(module_ptr);
 
@@ -64,16 +70,35 @@ pub fn main(init: std.process.Init) !void {
     }
 
     var function: c_interface.iree_vm_function_t = undefined;
-    try checkStatus(c_interface.iree_vm_module_lookup_function_by_name(module_ptr, c_interface.IREE_VM_FUNCTION_LINKAGE_EXPORT, c_interface.iree_make_cstring_view("main"), &function), "Lookup main");
 
-    std.debug.print("Executing function 'main'...\n", .{});
+    // Call with 4 arguments (removed &export_name)
+    try checkStatus(c_interface.iree_vm_module_lookup_function_by_ordinal(module_ptr, c_interface.IREE_VM_FUNCTION_LINKAGE_EXPORT, 0, // Get the first exported function (ordinal 0)
+        &function), "Lookup first exported function");
 
+    // Fetch the name using the dedicated API
+    const export_name = c_interface.iree_vm_function_name(&function);
+    const name_slice = export_name.data[0..export_name.size];
+    std.debug.print("Executing function '{s}'...\n", .{name_slice});
+
+    // 8. Prepare Inputs (10 and 32)
+    var inputs: ?*c_interface.iree_vm_list_t = null;
+    try checkStatus(shim_create_i32_inputs(10, 32, allocator, &inputs), "shim_create_i32_inputs");
+    defer c_interface.iree_vm_list_release(inputs);
+
+    // 9. Prepare Outputs (expecting 1 result)
+    var outputs: ?*c_interface.iree_vm_list_t = null;
+    try checkStatus(shim_create_empty_list(1, allocator, &outputs), "shim_create_empty_list");
+    defer c_interface.iree_vm_list_release(outputs);
+
+    // 10. Invoke the function
     try checkStatus(c_interface.iree_vm_invoke(context, function, c_interface.IREE_VM_INVOCATION_FLAG_NONE, null, // policy
-        null, // inputs
-        null, // outputs
-        allocator), "iree_vm_invoke");
+        inputs, outputs, allocator), "iree_vm_invoke");
 
-    std.debug.print("Execution successful!\n", .{});
+    // 11. Read and print the result
+    var result: i32 = 0;
+    try checkStatus(shim_get_i32_output(outputs.?, 0, &result), "shim_get_i32_output");
+
+    std.debug.print("Execution successful! 10 + 32 = {d}\n", .{result});
 }
 
 fn checkStatus(status: c_interface.iree_status_t, context_msg: []const u8) !void {

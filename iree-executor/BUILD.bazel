@@ -1,20 +1,52 @@
 load("@rules_zig//zig:defs.bzl", "zig_binary")
 
+# 1. Inject macros to bypass translate-c limitations
+cc_library(
+    name = "zig_translate_c_fixes",
+    defines = [
+        # Neuter the _Atomic keyword completely (since IREE doesn't use parentheses)
+        "_Atomic=",
+        
+        # Block the system's stdatomic.h from loading so it doesn't try to use the neutered _Atomic
+        "__CLANG_STDATOMIC_H",
+        "_STDATOMIC_H",
+        
+        # Mock the memory orders used in IREE's enums (which stdatomic.h normally provides)
+        "memory_order=int",
+        "memory_order_relaxed=0",
+        "memory_order_consume=1",
+        "memory_order_acquire=2",
+        "memory_order_release=3",
+        "memory_order_acq_rel=4",
+        "memory_order_seq_cst=5",
+        
+        # Delete static asserts
+        "static_assert(cond,msg)=",
+        "_Static_assert(cond,msg)=",
+    ],
+)
 
+cc_library(
+    name = "iree_shim",
+    srcs = ["iree_shim.c"],
+    deps = [
+        "@iree_core//runtime/src/iree/vm:vm",
+    ],
+)
 
 # bazel run //iree-executor:test_iree
 zig_binary(
     name = "test_iree",
     main = "test_iree.zig",
     deps = [
+        ":zig_translate_c_fixes",
+        ":iree_shim",
         "@iree_core//runtime/src/iree/base:base",
-        # "@iree_core//runtime/src/iree/hal:hal",
-    #     "@iree_core//runtime/src/iree/vm:vm",
-    #     "@iree_core//runtime/src/iree/vm/bytecode:module",
-    #     "@iree_core//runtime/src/iree/modules/hal:hal",
-    #     "@iree_core//runtime/src/iree/hal/drivers/local_task/registration:registration",
-    #     "@iree_core//runtime/src/iree/hal/drivers/local_task:task_driver",
+        "@iree_core//runtime/src/iree/hal:hal",
+        "@iree_core//runtime/src/iree/hal/drivers/local_task/registration:registration",
+        "@iree_core//runtime/src/iree/modules/hal:hal",
+        "@iree_core//runtime/src/iree/vm:vm",
+        "@iree_core//runtime/src/iree/vm/bytecode:module",
     ],
-    # tags = ["local", "no-sandbox"],
     visibility = ["//visibility:public"],
 )
