@@ -71,7 +71,8 @@ pub fn matmul(ctx: *Context) !void {
     const lhs_shape = zml.Shape.init(.{ .m = M, .c = K }, .f32);
     const rhs_shape = zml.Shape.init(.{ .c = K, .n = N }, .f32);
 
-    var exe = try ctx.platform.compile(ctx.allocator, ctx.io, SimpleModel{}, .matmul, .{ zml.Tensor.fromShape(lhs_shape), zml.Tensor.fromShape(rhs_shape) });
+    const replicated_sharding = try zml.sharding.replicatedSharding(ctx.platform);
+    var exe = try ctx.platform.compile(ctx.allocator, ctx.io, SimpleModel{}, .matmul, .{ zml.Tensor.fromShape(lhs_shape), zml.Tensor.fromShape(rhs_shape) }, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
     // log.debug("Compiled ZML MatMul model", .{exe});
 
@@ -140,11 +141,12 @@ pub fn saxpy(ctx: *Context) !void {
 
     // 3. ZML Execution
     const shape = zml.Shape.init(.{N}, .f32);
+    const replicated_sharding = try zml.sharding.replicatedSharding(ctx.platform);
     var exe = try ctx.platform.compile(ctx.allocator, ctx.io, SimpleModel{}, .saxpy, .{
         zml.Tensor.init(.{}, .f32),
         zml.Tensor.fromShape(shape),
         zml.Tensor.fromShape(shape),
-    });
+    }, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     var a_buf = try ctx.bufferFromSlice(zml.Shape.scalar(.f32), std.mem.asBytes(&a_val));
@@ -215,10 +217,11 @@ pub fn mod_matmul(ctx: *Context) !void {
     const lhs_shape = zml.Shape.init(.{ .m = K, .c = K }, .i32);
     const rhs_shape = zml.Shape.init(.{ .c = K, .n = K }, .i32);
 
+    const replicated_sharding = try zml.sharding.replicatedSharding(ctx.platform);
     var exe = try ctx.platform.compile(ctx.allocator, ctx.io, SimpleModel{}, .mod_matmul, .{
         zml.Tensor.fromShape(lhs_shape),
         zml.Tensor.fromShape(rhs_shape),
-    });
+    }, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     var lhs_buf = try ctx.bufferFromSlice(lhs_shape, lhs_data);
@@ -293,9 +296,10 @@ pub fn heat_transfer(ctx: *Context) !void {
 
     // 3. ZML
     const shape = zml.Shape.init(.{ .h = H, .w = W }, .f32);
+    const replicated_sharding = try zml.sharding.replicatedSharding(ctx.platform);
     var exe = try ctx.platform.compile(ctx.allocator, ctx.io, SimpleModel{}, .heat_transfer, .{
         zml.Tensor.fromShape(shape),
-    });
+    }, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     var args = try exe.args(ctx.allocator);
@@ -397,13 +401,14 @@ pub fn black_scholes(ctx: *Context) !void {
 
     // 3. ZML
     const shape = zml.Shape.init(.{N}, .f32);
+    const replicated_sharding = try zml.sharding.replicatedSharding(ctx.platform);
     var exe = try ctx.platform.compile(ctx.allocator, ctx.io, SimpleModel{}, .black_scholes, .{
         zml.Tensor.fromShape(shape),
         zml.Tensor.fromShape(shape),
         zml.Tensor.fromShape(shape),
         zml.Tensor.fromShape(shape),
         zml.Tensor.fromShape(shape),
-    });
+    }, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     var s_buf = try ctx.bufferFromSlice(shape, s);

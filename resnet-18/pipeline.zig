@@ -36,8 +36,9 @@ pub const ResNet18Pipeline = struct {
 
         const input: zml.Tensor = .init(.{ 1, 3, 224, 224 }, .f32);
 
+        const replicated_sharding = try zml.sharding.replicatedSharding(platform);
         log.info("Compiling model...", .{});
-        const exe = try platform.compile(allocator, io, model_def, .forward, .{input});
+        const exe = try platform.compile(allocator, io, model_def, .forward, .{input}, .{ .shardings = &.{replicated_sharding} });
         errdefer exe.deinit();
 
         log.info("Loading weights...", .{});
@@ -70,7 +71,8 @@ pub const ResNet18Pipeline = struct {
     }
 
     pub fn generate(self: *ResNet18Pipeline, tensor_data: []const f32) ![]f32 {
-        var input_buffer = try zml.Buffer.fromSlice(self.io, self.platform, zml.Slice.init(zml.Shape.init(.{ 1, 3, 224, 224 }, .f32), std.mem.sliceAsBytes(tensor_data)));
+        const replicated_sharding = try zml.sharding.replicatedSharding(self.platform);
+        var input_buffer = try zml.Buffer.fromSlice(self.io, self.platform, zml.Slice.init(zml.Shape.init(.{ 1, 3, 224, 224 }, .f32), std.mem.sliceAsBytes(tensor_data)), replicated_sharding);
         defer input_buffer.deinit();
 
         log.info("Running inference...", .{});
@@ -117,13 +119,14 @@ pub const ResNet18Pipeline = struct {
         // For demonstration, we break it into coarse stages here.
         // A true Nova integration would break this down to the Conv2d level.
 
-        var input_buffer = try zml.Buffer.fromSlice(self.io, self.platform, zml.Slice.init(zml.Shape.init(.{ 1, 3, 224, 224 }, .f32), std.mem.sliceAsBytes(tensor_data)));
+        const replicated_sharding = try zml.sharding.replicatedSharding(self.platform);
+        var input_buffer = try zml.Buffer.fromSlice(self.io, self.platform, zml.Slice.init(zml.Shape.init(.{ 1, 3, 224, 224 }, .f32), std.mem.sliceAsBytes(tensor_data)), replicated_sharding);
         defer input_buffer.deinit();
 
         log.info("Running inference (Embedder Stage)...", .{});
 
         // --- Embedder Execution ---
-        const embed_exe = try self.platform.compile(self.allocator, self.io, self.model.embedder, .forward, .{zml.Tensor.init(.{ 1, 3, 224, 224 }, .f32)});
+        const embed_exe = try self.platform.compile(self.allocator, self.io, self.model.embedder, .forward, .{zml.Tensor.init(.{ 1, 3, 224, 224 }, .f32)}, .{ .shardings = &.{replicated_sharding} });
         defer embed_exe.deinit();
 
         var embed_args = try embed_exe.args(self.allocator);
@@ -136,7 +139,7 @@ pub const ResNet18Pipeline = struct {
         var x_embed = embed_results.get(zml.Buffer);
 
         log.info("Running inference (Encoder Stage 0)...", .{});
-        const s0_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage0, .forward, .{zml.Tensor.init(x_embed.shape(), .f32)});
+        const s0_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage0, .forward, .{zml.Tensor.init(x_embed.shape(), .f32)}, .{ .shardings = &.{replicated_sharding} });
         defer s0_exe.deinit();
         var s0_args = try s0_exe.args(self.allocator);
         defer s0_args.deinit(self.allocator);
@@ -149,7 +152,7 @@ pub const ResNet18Pipeline = struct {
         x_embed.deinit();
 
         log.info("Running inference (Encoder Stage 1)...", .{});
-        const s1_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage1, .forward, .{zml.Tensor.init(x_s0.shape(), .f32)});
+        const s1_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage1, .forward, .{zml.Tensor.init(x_s0.shape(), .f32)}, .{ .shardings = &.{replicated_sharding} });
         defer s1_exe.deinit();
         var s1_args = try s1_exe.args(self.allocator);
         defer s1_args.deinit(self.allocator);
@@ -162,7 +165,7 @@ pub const ResNet18Pipeline = struct {
         x_s0.deinit();
 
         log.info("Running inference (Encoder Stage 2)...", .{});
-        const s2_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage2, .forward, .{zml.Tensor.init(x_s1.shape(), .f32)});
+        const s2_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage2, .forward, .{zml.Tensor.init(x_s1.shape(), .f32)}, .{ .shardings = &.{replicated_sharding} });
         defer s2_exe.deinit();
         var s2_args = try s2_exe.args(self.allocator);
         defer s2_args.deinit(self.allocator);
@@ -175,7 +178,7 @@ pub const ResNet18Pipeline = struct {
         x_s1.deinit();
 
         log.info("Running inference (Encoder Stage 3)...", .{});
-        const s3_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage3, .forward, .{zml.Tensor.init(x_s2.shape(), .f32)});
+        const s3_exe = try self.platform.compile(self.allocator, self.io, self.model.encoder.stage3, .forward, .{zml.Tensor.init(x_s2.shape(), .f32)}, .{ .shardings = &.{replicated_sharding} });
         defer s3_exe.deinit();
         var s3_args = try s3_exe.args(self.allocator);
         defer s3_args.deinit(self.allocator);
@@ -205,7 +208,7 @@ pub const ResNet18Pipeline = struct {
             .classifier_bias = self.model.classifier_bias,
         };
 
-        const clf_exe = try self.platform.compile(self.allocator, self.io, classifier, .forward, .{zml.Tensor.init(x_s3.shape(), .f32)});
+        const clf_exe = try self.platform.compile(self.allocator, self.io, classifier, .forward, .{zml.Tensor.init(x_s3.shape(), .f32)}, .{ .shardings = &.{replicated_sharding} });
         defer clf_exe.deinit();
         var clf_args = try clf_exe.args(self.allocator);
         defer clf_args.deinit(self.allocator);

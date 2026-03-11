@@ -22,7 +22,8 @@ pub fn MakeZKLookup(comptime ntt: type) type {
                     table_host[i] = val;
                 }
 
-                const table_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{T_size}, .u64), std.mem.sliceAsBytes(table_host)));
+                const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+                const table_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{T_size}, .u64), std.mem.sliceAsBytes(table_host)), replicated_sharding);
                 return .{
                     .table = table_buf,
                 };

@@ -1,8 +1,8 @@
 diff --git a/zml/module.zig b/zml/module.zig
-index 3163785..14d35cb 100644
+index c65017a..1421cd9 100644
 --- a/zml/module.zig
 +++ b/zml/module.zig
-@@ -305,7 +305,7 @@ fn collectInputInfo(allocator: std.mem.Allocator, v: anytype) !InputInfo {
+@@ -366,7 +366,7 @@ fn collectInputInfo(allocator: std.mem.Allocator, partitioning: Partitioning, v:
      };
  }
  
@@ -11,7 +11,7 @@ index 3163785..14d35cb 100644
      func: *mlir.Operation,
      input_info: InputInfo,
      output_info: OutputInfo,
-@@ -319,7 +319,7 @@ fn finalizeAttributeList(allocator_: std.mem.Allocator, mlir_ctx: *mlir.Context,
+@@ -380,7 +380,7 @@ fn finalizeAttributeList(allocator_: std.mem.Allocator, mlir_ctx: *mlir.Context,
      return res;
  }
  
@@ -20,20 +20,20 @@ index 3163785..14d35cb 100644
      var arena = std.heap.ArenaAllocator.init(compilation_context.allocator);
      defer arena.deinit();
  
-@@ -434,7 +434,7 @@ fn setXlaOverrideFlag(map: *c.upb_Map, flag: []const u8, value: anytype, upb_are
+@@ -510,7 +510,7 @@ fn setXlaOverrideFlag(map: *c.upb_Map, flag: []const u8, value: anytype, upb_are
      }
  }
  
--fn compileModuleToPjrtExecutable(arena: std.mem.Allocator, io: std.Io, platform: *const Platform, module: *const mlir.Module, xla_dump_to_: ?[]const u8) !*pjrt.LoadedExecutable {
-+pub fn compileModuleToPjrtExecutable(arena: std.mem.Allocator, io: std.Io, platform: *const Platform, module: *const mlir.Module, xla_dump_to_: ?[]const u8) !*pjrt.LoadedExecutable {
-     //const tracer = Tracer.init("ai.zml.compilation");
-     //const compile_frame = tracer.frameStart("pjrt compilation");
-     //defer tracer.frameEnd(compile_frame, "pjrt compilation");
+-fn compileModuleToPjrtExecutable(arena: std.mem.Allocator, io: std.Io, platform: *const Platform, module: *const mlir.Module, partitioning: Partitioning, opts: CompilationOptions) !*pjrt.LoadedExecutable {
++pub fn compileModuleToPjrtExecutable(arena: std.mem.Allocator, io: std.Io, platform: *const Platform, module: *const mlir.Module, partitioning: Partitioning, opts: CompilationOptions) !*pjrt.LoadedExecutable {
+     var upb_alloc: upb.Allocator = .init(arena);
+     const upb_arena = c.upb_Arena_Init(null, 0, upb_alloc.inner());
+     defer c.upb_Arena_Free(upb_arena);
 diff --git a/zml/tensor.zig b/zml/tensor.zig
-index 1b2f873..e78e950 100644
+index edbadf8..fe11d30 100644
 --- a/zml/tensor.zig
 +++ b/zml/tensor.zig
-@@ -62,6 +62,9 @@ pub const Tensor = struct {
+@@ -63,6 +63,9 @@ pub const Tensor = struct {
          return self._shape.byteSize();
      }
  
@@ -43,7 +43,7 @@ index 1b2f873..e78e950 100644
      /// Internal use
      ///
      /// Creates a tensor from a Shape and an mlir.Value.
-@@ -78,6 +81,10 @@ pub const Tensor = struct {
+@@ -79,6 +82,10 @@ pub const Tensor = struct {
              stdx.debug.internalAssert(sh.eql(other._shape), "Created a {f} from Mlir value but expected {f}", .{ other._shape, res._shape });
          }
  

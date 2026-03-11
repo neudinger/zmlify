@@ -38,7 +38,8 @@ pub const Context = struct {
 
     /// Creates a ZML Buffer object from a Zig slice of memory.
     pub fn bufferFromSlice(self: Context, shape: zml.Shape, data: anytype) !zml.Buffer {
-        return zml.Buffer.fromSlice(self.io, self.platform, zml.Slice.init(shape, std.mem.sliceAsBytes(data)));
+        const replicated_sharding = try zml.sharding.replicatedSharding(self.platform);
+        return zml.Buffer.fromSlice(self.io, self.platform, zml.Slice.init(shape, std.mem.sliceAsBytes(data)), replicated_sharding);
     }
 
     /// Copies contents from a ZML Buffer back into a Zig slice.

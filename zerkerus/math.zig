@@ -47,10 +47,12 @@ pub fn isSmall(poly: []const u64, limit: u64, out_max: ?*u64) bool {
 // Compute A * x mod Q in ZML (GPU-accelerated, non-WASM only)
 pub const matVecMul = if (!is_wasm) struct {
     pub fn call(io: std.Io, platform: *const zml.Platform, allocator: std.mem.Allocator, exe: *zml.Exe, a_mat: []const u64, x_poly: []const u64) ![]u64 {
-        var a_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ params.ntt.M, params.ntt.N }, .u64), std.mem.sliceAsBytes(a_mat)));
+        const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+
+        var a_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ params.ntt.M, params.ntt.N }, .u64), std.mem.sliceAsBytes(a_mat)), replicated_sharding);
         defer a_buf.deinit();
 
-        var x_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{params.ntt.N}, .u64), std.mem.sliceAsBytes(x_poly)));
+        var x_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{params.ntt.N}, .u64), std.mem.sliceAsBytes(x_poly)), replicated_sharding);
         defer x_buf.deinit();
 
         var args = try exe.args(allocator);

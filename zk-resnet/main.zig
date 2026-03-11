@@ -195,7 +195,8 @@ pub const Server = struct {
             }
         };
 
-        var current_input_buffer = try zml.Buffer.fromSlice(self.pipeline.io, self.pipeline.platform, zml.Slice.init(zml.Shape.init(.{ 1, 3, 224, 224 }, .f32), std.mem.sliceAsBytes(input_data)));
+        const replicated_sharding = try zml.sharding.replicatedSharding(self.pipeline.platform);
+        var current_input_buffer = try zml.Buffer.fromSlice(self.pipeline.io, self.pipeline.platform, zml.Slice.init(zml.Shape.init(.{ 1, 3, 224, 224 }, .f32), std.mem.sliceAsBytes(input_data)), replicated_sharding);
 
         var transcript = Transcript.init("zkResNet18");
         transcript.appendMessage("vk_hash", &self.vk_hash);
@@ -226,10 +227,10 @@ pub const Server = struct {
             var exe: zml.Exe = undefined;
             if (stage_idx == 0) {
                 const trace_embedder = TraceWrapper_Embedder{ .model = self.pipeline.model, .alloc = self.allocator };
-                exe = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, trace_embedder, .forward, .{zml.Tensor.init(current_input_buffer.shape(), .f32)});
+                exe = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, trace_embedder, .forward, .{zml.Tensor.init(current_input_buffer.shape(), .f32)}, .{ .shardings = &.{replicated_sharding} });
             } else {
                 const trace_stage = TraceWrapper_Stage{ .model = self.pipeline.model, .stage_idx = stage_idx - 1, .alloc = self.allocator };
-                exe = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, trace_stage, .forward, .{zml.Tensor.init(current_input_buffer.shape(), .f32)});
+                exe = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, trace_stage, .forward, .{zml.Tensor.init(current_input_buffer.shape(), .f32)}, .{ .shardings = &.{replicated_sharding} });
             }
             defer exe.deinit();
 
@@ -250,7 +251,7 @@ pub const Server = struct {
                 .F_fwd = zml.Tensor.init(.{ ntt.N, ntt.N }, .u64).withTags(.{ ._, .c }),
                 .F_inv = zml.Tensor.init(.{ ntt.N, ntt.N }, .u64).withTags(.{ ._, .c }),
             };
-            var ntt_exe = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, ntt_def, .forward, .{zml.Tensor.init(trace_buf.shape(), .u64).withTags(.{ .b, .n })});
+            var ntt_exe = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, ntt_def, .forward, .{zml.Tensor.init(trace_buf.shape(), .u64).withTags(.{ .b, .n })}, .{ .shardings = &.{replicated_sharding} });
             defer ntt_exe.deinit();
 
             var ntt_args = try ntt_exe.args(self.allocator);
@@ -273,10 +274,10 @@ pub const Server = struct {
 
             log.info("Server: Compiling Lookup Argument specific to {s} trace shape...", .{stage_name});
             const alpha_val: u64 = alpha1 % ntt.Q;
-            var alpha_buf = try zml.Buffer.fromSlice(self.pipeline.io, self.pipeline.platform, zml.Slice.init(zml.Shape.init(.{}, .u64), std.mem.sliceAsBytes(&[_]u64{alpha_val})));
+            var alpha_buf = try zml.Buffer.fromSlice(self.pipeline.io, self.pipeline.platform, zml.Slice.init(zml.Shape.init(.{}, .u64), std.mem.sliceAsBytes(&[_]u64{alpha_val})), replicated_sharding);
             defer alpha_buf.deinit();
 
-            var lookup_exe_inst = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, LookupModel{}, .forward, .{ zml.Tensor.init(trace_buf.shape(), .u64).withTags(.{ .b, .n }), zml.Tensor.init(.{}, .u64) });
+            var lookup_exe_inst = try self.pipeline.platform.compile(self.allocator, self.pipeline.io, LookupModel{}, .forward, .{ zml.Tensor.init(trace_buf.shape(), .u64).withTags(.{ .b, .n }), zml.Tensor.init(.{}, .u64) }, .{ .shardings = &.{replicated_sharding} });
             defer lookup_exe_inst.deinit();
 
             var lookup_args = try lookup_exe_inst.args(self.allocator);

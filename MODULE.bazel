@@ -36,38 +36,38 @@ inject_repo(iree_ext, "llvm-raw")
 inject_repo(iree_ext, com_github_dvidelabs_flatcc = "flatcc")
 
 ### Zig toolchain
-# zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
-# zig.index(file = "//bazel:zig_index.json")
-# zig.toolchain(zig_version = "0.16.0-dev.2611+f996d2866")
-# zig.mirrors(urls = [
-#     "https://pkg.machengine.org/zig",
-#     "https://zigmirror.hryx.net/zig",
-#     "https://zig.linus.dev/zig",
-#     "https://zig.squirl.dev",
-#     "https://zig.florent.dev",
-#     "https://zig.mirror.mschae23.de/zig",
-#     "https://zigmirror.meox.dev",
-#     "https://ziglang.freetls.fastly.net",
-#     "https://zig.tilok.dev",
-#     "https://zig-mirror.tsimnet.eu/zig",
-#     "https://zig.karearl.com/zig",
-#     "https://pkg.earth/zig",
-#     "https://fs.liujiacai.net/zigbuilds",
-#     "https://ziglang.org/builds/",
-# ])
-# use_repo(zig, "zig_toolchains")
-#
-# register_toolchains("@rules_zig//zig/target:all")
-#
-# register_toolchains("@zig_toolchains//:all")
+zig = use_extension("@rules_zig//zig:extensions.bzl", "zig")
+zig.index(file = "//bazel:zig_index.json")
+zig.toolchain(zig_version = "0.16.0-dev.2722+f16eb18ce")
+zig.mirrors(urls = [
+    "https://pkg.machengine.org/zig",
+    "https://zigmirror.hryx.net/zig",
+    "https://zig.linus.dev/zig",
+    "https://zig.squirl.dev",
+    "https://zig.florent.dev",
+    "https://zig.mirror.mschae23.de/zig",
+    "https://zigmirror.meox.dev",
+    "https://ziglang.freetls.fastly.net",
+    "https://zig.tilok.dev",
+    "https://zig-mirror.tsimnet.eu/zig",
+    "https://zig.karearl.com/zig",
+    "https://pkg.earth/zig",
+    "https://fs.liujiacai.net/zigbuilds",
+    "https://ziglang.org/builds/",
+])
+use_repo(zig, "zig_toolchains")
+
+register_toolchains("@rules_zig//zig/target:all")
+
+register_toolchains("@zig_toolchains//:all")
 ###
 
 git_override(
     module_name = "zml",
-    commit = "6be028f873dba5683f131f549c153e8081c9db39",
+    remote = "https://github.com/zml/zml.git",
+    commit = "70e4c9953d758d7a5dd7c54c179423b28072c415",
     patch_strip = 1,
     patches = ["//:zml.patch"],
-    remote = "https://github.com/zml/zml.git",
 )
 
 # Keep for local development

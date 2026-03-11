@@ -17,7 +17,6 @@ pub fn main(init: std.process.Init) !void {
 
     if (args.vector.len <= 1) {
         std.debug.print("Usage: test_iree <vmfb_path>\n", .{});
-        std.debug.print("Defaulting to 'simple_cpu.vmfb'\n", .{});
         return;
     }
 

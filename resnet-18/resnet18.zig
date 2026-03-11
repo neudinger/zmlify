@@ -8,7 +8,7 @@ const Conv2d = struct {
 
     pub fn init(store: zml.io.TensorStore.View, stride: usize, padding: usize) Conv2d {
         return .{
-            .weight = store.createTensorWithTags("weight", .{ .out, .c, .kh, .kw }),
+            .weight = store.createTensor("weight", .{ .out, .c, .kh, .kw }, .{}),
             .stride = stride,
             .padding = padding,
         };
@@ -30,10 +30,10 @@ const BatchNorm2d = struct {
 
     pub fn init(store: zml.io.TensorStore.View) BatchNorm2d {
         return .{
-            .weight = store.createTensor("weight"),
-            .bias = store.createTensor("bias"),
-            .running_mean = store.createTensor("running_mean"),
-            .running_var = store.createTensor("running_var"),
+            .weight = store.createTensor("weight", .{.c}, .{}),
+            .bias = store.createTensor("bias", .{.c}, .{}),
+            .running_mean = store.createTensor("running_mean", .{.c}, .{}),
+            .running_var = store.createTensor("running_var", .{.c}, .{}),
         };
     }
 
@@ -187,8 +187,8 @@ pub const ResNet18 = struct {
         return .{
             .embedder = ResNetEmbedder.init(store.withPrefix("resnet.embedder")),
             .encoder = ResNetEncoder.init(store.withPrefix("resnet.encoder")),
-            .classifier_weight = store.createTensorWithTags("classifier.1.weight", .{ .out, .c }),
-            .classifier_bias = store.createTensorWithTags("classifier.1.bias", .{.out}),
+            .classifier_weight = store.createTensor("classifier.1.weight", .{ .out, .c }, .{}),
+            .classifier_bias = store.createTensor("classifier.1.bias", .{.out}, .{}),
         };
     }
 
@@ -199,11 +199,13 @@ pub const ResNet18 = struct {
         platform: *const zml.Platform,
         store: *const zml.io.TensorStore,
     ) !zml.Bufferized(ResNet18) {
+        const replicated_sharding = try zml.sharding.replicatedSharding(platform);
         return zml.io.load(ResNet18, self, allocator, io, platform, .{
             .store = store,
             .parallelism = 1, // resnet is tiny
             .dma_chunks = 1,
             .dma_chunk_size = 16 * 1024 * 1024,
+            .shardings = &.{replicated_sharding},
         });
     }
 

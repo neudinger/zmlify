@@ -277,10 +277,11 @@ pub fn MakeNTT(comptime config: type) type {
 
                     forward(data);
 
+                    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
                     return try zml.Buffer.fromSlice(io, platform, zml.Slice.init(
                         zml.Shape.init(.{N}, .u64),
                         std.mem.sliceAsBytes(data),
-                    ));
+                    ), replicated_sharding);
                 }
             }.f;
 
@@ -295,10 +296,11 @@ pub fn MakeNTT(comptime config: type) type {
 
                     inverse(data);
 
+                    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
                     return try zml.Buffer.fromSlice(io, platform, zml.Slice.init(
                         zml.Shape.init(.{N}, .u64),
                         std.mem.sliceAsBytes(data),
-                    ));
+                    ), replicated_sharding);
                 }
             }.f;
         };
@@ -350,8 +352,9 @@ pub fn MakeNTT(comptime config: type) type {
                 }
 
                 // Push constants to accelerator memory
-                const F_fwd_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ N, N }, .u64), std.mem.sliceAsBytes(host_fwd)));
-                const F_inv_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ N, N }, .u64), std.mem.sliceAsBytes(host_inv)));
+                const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+                const F_fwd_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ N, N }, .u64), std.mem.sliceAsBytes(host_fwd)), replicated_sharding);
+                const F_inv_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ N, N }, .u64), std.mem.sliceAsBytes(host_inv)), replicated_sharding);
 
                 return .{
                     .F_fwd = F_fwd_buf,

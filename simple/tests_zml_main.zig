@@ -14,24 +14,25 @@ pub fn main(init: std.process.Init) !void {
     const r: f32 = 0.05;
     const sigma: f32 = 0.2;
 
+    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
     var exe = try platform.compile(init.gpa, init.io, model, .black_scholes, .{
         zml.Tensor.init(.{}, .f32),
         zml.Tensor.init(.{}, .f32),
         zml.Tensor.init(.{}, .f32),
         zml.Tensor.init(.{}, .f32),
         zml.Tensor.init(.{}, .f32),
-    });
+    }, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
-    var s_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&s)));
+    var s_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&s)), replicated_sharding);
     defer s_buf.deinit();
-    var k_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&k)));
+    var k_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&k)), replicated_sharding);
     defer k_buf.deinit();
-    var t_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&t)));
+    var t_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&t)), replicated_sharding);
     defer t_buf.deinit();
-    var r_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&r)));
+    var r_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&r)), replicated_sharding);
     defer r_buf.deinit();
-    var sigma_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&sigma)));
+    var sigma_buf = try zml.Buffer.fromSlice(init.io, platform, zml.Slice.init(zml.Shape.scalar(.f32), std.mem.asBytes(&sigma)), replicated_sharding);
     defer sigma_buf.deinit();
 
     var args = try exe.args(init.gpa);

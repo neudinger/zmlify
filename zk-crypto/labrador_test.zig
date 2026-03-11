@@ -135,7 +135,8 @@ fn testBDLOPCommitmentGraph(allocator: std.mem.Allocator, platform: *zml.Platfor
     const s_tensor = zml.Tensor.init(.{ntt.N}, .u64).withTags(.{.c});
     const e_tensor = zml.Tensor.init(.{ntt.N}, .u64).withTags(.{.c});
 
-    const exe = try platform.compile(allocator, io, bdlop, .commit, .{ a_tensor, s_tensor, e_tensor });
+    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+    const exe = try platform.compile(allocator, io, bdlop, .commit, .{ a_tensor, s_tensor, e_tensor }, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     // If it compiled, the graph is structurally valid!

@@ -109,10 +109,11 @@ fn testButterflyBufferRoundTrip(allocator: std.mem.Allocator, platform: *zml.Pla
         poly_host[i] = @as(u64, @intCast(i));
     }
 
+    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
     var poly_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(
         zml.Shape.init(.{ntt.N}, .u64),
         std.mem.sliceAsBytes(poly_host),
-    ));
+    ), replicated_sharding);
     defer poly_buf.deinit();
 
     // Forward via ZML Buffer helper
@@ -160,7 +161,8 @@ fn testNTTModelForward(allocator: std.mem.Allocator, platform: *zml.Platform, io
     };
 
     const input_tensor = zml.Tensor.init(.{ntt_small.N}, .u64).withTags(.{.c});
-    const exe = try platform.compile(allocator, io, ntt_def, .forward, .{input_tensor});
+    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+    const exe = try platform.compile(allocator, io, ntt_def, .forward, .{input_tensor}, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     // Init buffers
@@ -175,7 +177,7 @@ fn testNTTModelForward(allocator: std.mem.Allocator, platform: *zml.Platform, io
     defer allocator.free(poly_host);
     @memset(poly_host, 1);
 
-    var poly_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ntt_small.N}, .u64), std.mem.sliceAsBytes(poly_host)));
+    var poly_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ntt_small.N}, .u64), std.mem.sliceAsBytes(poly_host)), replicated_sharding);
     defer poly_buf.deinit();
 
     var args = try exe.args(allocator);
@@ -211,7 +213,8 @@ fn testNTTModelIdentity(allocator: std.mem.Allocator, platform: *zml.Platform, i
     };
 
     const input_tensor = zml.Tensor.init(.{ntt_small.N}, .u64).withTags(.{.c});
-    const exe = try platform.compile(allocator, io, ntt_def, .identity, .{input_tensor});
+    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+    const exe = try platform.compile(allocator, io, ntt_def, .identity, .{input_tensor}, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     // Init buffers
@@ -228,7 +231,7 @@ fn testNTTModelIdentity(allocator: std.mem.Allocator, platform: *zml.Platform, i
         poly_host[i] = @as(u64, @intCast(i));
     }
 
-    var poly_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ntt_small.N}, .u64), std.mem.sliceAsBytes(poly_host)));
+    var poly_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ntt_small.N}, .u64), std.mem.sliceAsBytes(poly_host)), replicated_sharding);
     defer poly_buf.deinit();
 
     var args = try exe.args(allocator);
@@ -273,7 +276,8 @@ fn testCrossValidation(allocator: std.mem.Allocator, platform: *zml.Platform, io
         .F_inv = zml.Tensor.init(.{ ntt_small.N, ntt_small.N }, .u64).withTags(.{ ._, .c }),
     };
     const input_tensor = zml.Tensor.init(.{ntt_small.N}, .u64).withTags(.{.c});
-    const exe = try platform.compile(allocator, io, ntt_def, .forward, .{input_tensor});
+    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+    const exe = try platform.compile(allocator, io, ntt_def, .forward, .{input_tensor}, .{ .shardings = &.{replicated_sharding} });
     defer exe.deinit();
 
     var buffers = try NTTModel.init(allocator, platform, io);
@@ -288,7 +292,7 @@ fn testCrossValidation(allocator: std.mem.Allocator, platform: *zml.Platform, io
         poly_host[i] = @as(u64, @intCast(i % ntt_small.Q));
     }
 
-    var poly_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ntt_small.N}, .u64), std.mem.sliceAsBytes(poly_host)));
+    var poly_buf = try zml.Buffer.fromSlice(io, platform, zml.Slice.init(zml.Shape.init(.{ntt_small.N}, .u64), std.mem.sliceAsBytes(poly_host)), replicated_sharding);
     defer poly_buf.deinit();
 
     var args = try exe.args(allocator);

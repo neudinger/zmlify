@@ -32,7 +32,9 @@ pub fn setupZmlEngine(
         }
     };
     log.info("Compiling ZML Graph for A * x mod Q...", .{});
-    const mul_exe = try platform.compile(allocator, io, Model{}, .forward, .{ zml.Tensor.init(.{ params.ntt.M, params.ntt.N }, .u64), zml.Tensor.init(.{params.ntt.N}, .u64) });
+     
+    const replicated_sharding = try zml.sharding.replicatedSharding(platform);
+    const mul_exe = try platform.compile(allocator, io, Model{}, .forward, .{ zml.Tensor.init(.{ params.ntt.M, params.ntt.N }, .u64), zml.Tensor.init(.{params.ntt.N}, .u64) } , .{ .shardings = &.{replicated_sharding} });
 
     return .{ .platform = platform, .mul_exe = mul_exe };
 }
